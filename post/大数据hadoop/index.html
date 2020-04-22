@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>大数据和Hadoop&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="大数据和Hadoop" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">大数据和Hadoop</h1><p class="article date">2020-04-18</p></section><article class="article markdown-body"><h1 id="大数据概述">大数据概述</h1>
+<h2 id="大数据时代">大数据时代</h2>
+<p><code>大数据</code>、<code>云计算</code>、<code>物联网</code>共同促成了第三次信息化浪潮。（第一次：1980左右，IBM公司制定PC标准；第二次：1995左右，互联网迅速普及）。</p>
+<p>技术支撑：</p>
+<ul>
+<li>存储，存储能力越来越大，个人、公司数据越来越多。</li>
+<li>计算，CPU处理性能大幅提升。</li>
+<li>网络，网络带宽不断增加。</li>
+</ul>
+<p>数据产生方式变革：运营式系统——&gt;用户原创内容阶段——&gt;感知式系统阶段（物联网loT）。</p>
+<h2 id="大数据概念和影响">大数据概念和影响</h2>
+<p>大数据，指的是传统数据处理应用软件不足以处理（存储和计算）它们的大或复杂的数据集。数据量最小的基本单位是 bit，按顺序给出所有单位：bit、Byte、KB、MB、GB、TB、PB、EB、ZB、YB、BB、NB、DB。</p>
+<p>大数据特性（4V）：</p>
+<ul>
+<li>大量化（Volume），数据量快速增长。</li>
+<li>快速化（Velocity），处理速度快，秒级响应。</li>
+<li>多样化（Variety），非结构化数据（文本图像视频等）占比大（90%）。</li>
+<li>价值密度低（Value）。</li>
+</ul>
+<p>研究方式演变：实验——&gt;理论——&gt;计算——&gt;数据。</p>
+<p>思维方式转变：</p>
+<ul>
+<li>全样而非抽样。</li>
+<li>效率而非精确，抽样计算结果误差放到总体上误差会被放大，因此追求精度的提高，全样计算追求效率。</li>
+<li>相关而非因果，关注相关性而不是因果关系。</li>
+</ul>
+<h2 id="大数据的关键技术">大数据的关键技术</h2>
+<p>数据采集、<code>数据存储与管理</code>、<code>数据处理与分析</code>、数据隐私与安全。</p>
+<p>两大核心技术：<code>分布式存储</code>和<code>分布式处理</code>。</p>
+<p>大数据技术以谷歌公司技术为代表：</p>
+<ul>
+<li>分布式数据库BigTable。</li>
+<li>分布式文件系统GFS。</li>
+<li>分布式并行处理技术MapReduce。</li>
+</ul>
+<p>不同的计算模式需要不同产品，典型的计算模式：</p>
+<ul>
+<li>批处理，对大量数据一起处理，MapReduce式批处理计算模式的典型代表，还有Spark等。</li>
+<li>流计算，针对流数据的计算，实时处理给出响应，Storm Flume等。</li>
+<li>图计算，处理图结构数据，如社交网络数据。Pregel、GraphX等。</li>
+<li>查询分析计算（交互式查询），海量数据存储管理和查询分析，Dremel、Hive、Cassandra、Impala等。</li>
+</ul>
+<h2 id="大数据与云计算物联网">大数据与云计算、物联网</h2>
+<p>云计算通过网络以服务的方式为用户提供非常廉价的IT资源。企业不需要自建IT基础设置可租用云端资源。<br>
+云计算典型特征：<code>虚拟化</code>、<code>多租户</code>。</p>
+<ul>
+<li>公有云，大型企业构建平台面向公众服务。</li>
+<li>私有云，企业内部构建使用。</li>
+<li>混合云</li>
+</ul>
+<p>云服务层次：</p>
+<ul>
+<li>IaaS（Infrastructure as a Service），基础设置即服务，面向网络架构师；将基础设置作为服务出租。</li>
+<li>PaaS（Platform as a Service），平台即服务，面向应用开发者；可在平台上开发云应用。</li>
+<li>SaaS（Software as a Service），软件即服务，面向用户；将软件出售给用户，如云财务软件。</li>
+</ul>
+<p>数据中心，包含大量的刀片服务器，云计算的各种数据和应用都位于数据中心</p>
+<h1 id="大数据处理架构hadoop">大数据处理架构Hadoop</h1>
+<h2 id="概述">概述</h2>
+<p>Hadoop是Apache软件基金会旗下开源软件，顶级项目。降低了使用复杂度，对普通用户屏蔽底层实现细节，可根据提供的高层接口实现操作由Java语言开发，有很好的跨平台性。Hadoop支持多种语言编写应用。广义上来说，Hadoop通常是指一个更广泛的概念——Hadoop 生态圈。</p>
+<p>Hadoop核心组件：</p>
+<ul>
+<li>Common（基础组件）（工具包，RPC 框架）JNDI 和 RPC</li>
+<li>HDFS（Hadoop Distributed File System）分布式文件系统</li>
+<li>MapReduce分布式运算编程框架</li>
+<li>YARN（Yet Another Resources N） 运算资源调度系统</li>
+</ul>
+<p>特性：</p>
+<ul>
+<li>高可靠性，采用冗余副本机制实现可靠性。</li>
+<li>高效性，利用许多服务器做分布式并行处理。</li>
+<li>高可扩展性，可以不断向集群中增加机器。</li>
+<li>成本低，不同于高性能计算（High Performance Computing，HPC），Hadoop可使用普通PC机构成集群。</li>
+</ul>
+<p>应用架构：</p>
+<div align=center><img src="/bdimg/Hadoop应用.png" width = "60%" /></div> 
+<p><strong>Hadoop版本</strong></p>
+<div align=center><img src="/bdimg/hadoop版本.png" width = "60%" /></div> 
+<ul>
+<li>1.0版本MapReduce负责数据处理和资源调度，2.0中由Yarn负责资源调度</li>
+<li>Yarn还支持其他计算框架，如strom、spark</li>
+<li>1.0的HDFS可扩展性不好，当数据量大时单个namenode扩展性差，2.0使用NN Federation技术，设置多个NameNode进行分区管理；引入HA高可用性，对NameNode进行热备份。</li>
+</ul>
+<p>Hadoop的其他版本，即企业根据开源的Hadoop研究更优的版本。</p>
+<ul>
+<li>Hortonworks</li>
+<li>Cloudera发行版，CDH：Cloudera Distribution Hadoop</li>
+<li>MapR</li>
+<li>星环</li>
+</ul>
+<p>Apache开源版本易用性和性能最差。</p>
+<p><strong>Hadoop项目结构</strong></p>
+<div align=center><img src="/bdimg/hadoop结构.png" width = "60%" /></div> 
+<h2 id="hadoop安装单机和伪分布式">Hadoop安装（单机和伪分布式）</h2>
+<p><strong>Linux的选择</strong>：当前使用比例较高的发行版是<code>CentOS</code>和<code>Ubuntu</code>，Hadoop学习上，建议使用Ubuntu，相对来讲是一个轻量级的。电脑大于4G建议使用64位系统。配置较高建议安装虚拟机。</p>
+<p><strong>Hadoop安装方式</strong></p>
+<ul>
+<li>默认为单机模式（非分布式），无需进行其他配置即可运行非分布式Java进程，读取磁盘上的文件。</li>
+<li>伪分布式，将单节点即作为NameNode也作为DataNode，同时读取的是HDFS上的文件。</li>
+<li>分布式，使用多个节点构成集群环境。</li>
+</ul>
+<p>Ubuntu系统：<br>
+<strong>（1）创建Hadoop用户</strong><br>
+创建可登录用户hadoop，并使用/bin/bash作为shell</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo useradd -m hadoop -s /bin/bash
+</code></pre></div><p>设置hadoop用户密码，按提示输入两次：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo passwd hadoop
+</code></pre></div><p>可为hadoop用户增加管理员权限，避免新手碰到权限问题。</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo adduser hadoop sudo
+</code></pre></div><p><strong>（2）更新apt，安装vim</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo apt-get update
+
+sudo apt-get install vim
+</code></pre></div><p><strong>（3）SSH登录权限设置</strong><br>
+SSH（Secure Shell）建立在应用层和传输层基础上的传输协议。SSH由客户端和服务端组成，服务的是一个守护进程（deamon），它在后台运行并响应客户端的连接请求。客户端包括ssh程序和其他应用程序。配置SSH的原因：Hadoop名称节点需要启动集群中所有机器的Hadoop守护进程，需要SSH登录实现，Hadoop并没有提供SSH输入密码登录的形式，因此需要将所有机器配置为名称节点可以无密码登录它们。<br>
+默认安装了SSH client，安装SSH server：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo apt-get install openssh-server
+</code></pre></div><p>可使用命令登录本机，选择yes：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">ssh localhost
+</code></pre></div><p>利用 ssh-keygen 生成密钥，并将密钥加入到授权中，在 Linux 系统中，<code>~</code>代表的是用户的主文件夹，即 “/home/用户名” 这个目录。</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">exit</span>                           <span class="c1"># 退出刚才的 ssh localhost</span>
+<span class="nb">cd</span> ~/.ssh/                     <span class="c1"># 若没有该目录，请先执行一次ssh localhost</span>
+ssh-keygen -t rsa              <span class="c1"># 会有提示，都按回车就可以</span>
+cat ./id_rsa.pub &gt;&gt; ./authorized_keys  <span class="c1"># 加入授权</span>
+</code></pre></div><p>再尝试ssh localhost则不需要密码直接登录。</p>
+<p><strong>（4）安装Java环境</strong><br>
+可选择Oracle的JDK 或者OpenJDK，然后配置<code>JAVA_HOME</code>环境变量。Hadoop3.1.3需要jdk1.8以上。下载JDK安装包放入~/Downloads中。</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> /usr/lib
+sudo mkdir jvm <span class="c1">#创建/usr/lib/jvm目录用来存放JDK文件</span>
+<span class="nb">cd</span> ~ <span class="c1">#进入hadoop用户的主目录</span>
+<span class="nb">cd</span> Downloads  <span class="c1">#注意区分大小写字母，刚才已经通过FTP软件把JDK安装包jdk-8u162-linux-x64.tar.gz上传到该目录下</span>
+sudo tar -zxvf ./jdk-8u162-linux-x64.tar.gz -C /usr/lib/jvm  <span class="c1">#把JDK文件解压到/usr/lib/jvm目录下</span>
+</code></pre></div><p>设置环境变量：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> ~
+vim ~/.bashrc
+</code></pre></div><p>开头位置添加：</p>
+<pre><code>export JAVA_HOME=/usr/lib/jvm/jdk1.8.0_162
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:$PATH
+</code></pre><p>让配置文件生效，并检查是否安装成功。</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> ~/.bashrc
+java -version
+</code></pre></div><p><strong>（4）安装hadoop</strong><br>
+下载hadoop3.1.3然后上传到Linux系统中，或直接使用wget<a href="https://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-3.1.3/hadoop-3.1.3.tar.gz"target="_blank">下载</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo tar -zxf ~/Downloads/hadoop-3.1.3.tar.gz -C /usr/local    <span class="c1"># 解压到/usr/local中</span>
+<span class="nb">cd</span> /usr/local/
+sudo mv ./hadoop-3.1.3/ ./hadoop            <span class="c1"># 将文件夹名改为hadoop</span>
+sudo chown -R hadoop ./hadoop       <span class="c1"># 修改文件权限</span>
+
+<span class="nb">cd</span> /usr/local/hadoop  <span class="c1"># 检查是否可用</span>
+./bin/hadoop version 
+</code></pre></div><p><strong>单机配置</strong>：默认为非分布式，无需其他配置即可运行，方便进行调试。</p>
+<p><strong>伪分布式</strong>：<br>
+Hadoop 的配置文件位于 /usr/local/hadoop/etc/hadoop/ 中，伪分布式需要修改2个配置文件 <code>core-site.xml</code>和 <code>hdfs-site.xml</code> 。Hadoop的配置文件是 xml 格式，每个配置以声明 property 的 name 和 value 的方式来实现。<br>
+修改配置文件 core-site.xml，将当中的</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;configuration&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div><p>修改为：</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;configuration&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>hadoop.tmp.dir<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>file:/usr/local/hadoop/tmp<span class="nt">&lt;/value&gt;</span>
+        <span class="nt">&lt;description&gt;</span>Abase for other temporary directories.<span class="nt">&lt;/description&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>fs.defaultFS<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>hdfs://localhost:9000<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div><p>修改配置文件 hdfs-site.xml：</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;configuration&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>dfs.replication<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>1<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>dfs.namenode.name.dir<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>file:/usr/local/hadoop/tmp/dfs/name<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+    <span class="nt">&lt;property&gt;</span>
+        <span class="nt">&lt;name&gt;</span>dfs.datanode.data.dir<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;value&gt;</span>file:/usr/local/hadoop/tmp/dfs/data<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div><p>伪分布式虽然只需要配置 fs.defaultFS 和 dfs.replication 就可以运行（官方教程如此），不过若没有配置 hadoop.tmp.dir 参数，则默认使用的临时目录为 /tmp/hadoo-hadoop，而这个目录在重启时有可能被系统清理掉，导致必须重新执行 format 才行。所以我们进行了设置，同时也指定 dfs.namenode.name.dir 和 dfs.datanode.data.dir，否则在接下来的步骤中可能会出错。</p>
+<p>执行 NameNode 的格式化:</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> /usr/local/hadoop
+./bin/hdfs namenode -format
+</code></pre></div><p>接着开启 NameNode 和 DataNode 守护进程。</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">./sbin/start-dfs.sh  <span class="c1">#start-dfs.sh是个完整的可执行文件，中间没有空格</span>
+</code></pre></div><p>若出现SSH提示，输入yes即可。成功启动后，可以访问 Web 界面 http://localhost:9870 查看 NameNode 和 Datanode 信息，还可以在线查看 HDFS 中的文件。</p>
+<p>要使用 HDFS，首先需要在 HDFS 中创建用户目录：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">./bin/hdfs dfs -mkdir -p /user/hadoop
+</code></pre></div><p>有三种shell命令方式。</p>
+<ul>
+<li>hadoop fs,适用于任何不同的文件系统，比如本地文件系统和HDFS文件系统</li>
+<li>hadoop dfs,只能适用于HDFS文件系统</li>
+<li>hdfs dfs,跟hadoop dfs的命令作用一样，也只能适用于HDFS文件系统</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">./bin/hdfs dfs -mkdir input
+./bin/hdfs dfs -put ./etc/hadoop/*.xml input
+
+<span class="c1"># 伪分布式运行 MapReduce 作业的方式跟单机模式相同，区别在于伪分布式读取的是HDFS中的文件</span>
+./bin/hadoop jar ./share/hadoop/mapreduce/hadoop-mapreduce-examples-3.1.3.jar grep input output <span class="s1">&#39;dfs[a-z.]+&#39;</span>
+
+./bin/hdfs dfs -cat output/* <span class="c1"># 查看运行结果</span>
+
+./bin/hdfs dfs -get output ./output     <span class="c1"># 将 HDFS 上的 output 文件夹拷贝到本机</span>
+cat ./output/*
+
+./bin/hdfs dfs -rm -r output    <span class="c1"># 多次运行时，删除 output 文件夹</span>
+</code></pre></div><p>关闭Hadoop运行：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">./sbin/stop-dfs.sh
+</code></pre></div><p>可以添加环境变量：</p>
+<pre><code>export HADOOP_HOME=/usr/local/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+</code></pre><p>阿里云机器可设置web端远程查看hdfs，内网ip通过hosts文件查看，配置core-site.xml：fs.defaultFS为hdfs://内网ip:9000；hdfs-site.xml：dfs.namenode.http-address为内网ip:50070。开放防火墙和安全组，浏览器输入http:阿里云ip:50070访问。</p>
+<h2 id="hadoop集群的部署和使用">Hadoop集群的部署和使用</h2>
+<h2 id="机架感知">机架感知</h2>
+<p>在默认情况下，HDFS 集群是没有机架感知的，也就是说所有服务器节点在同一个默认机架中。配置机架感知通过修改 core-site.xml文件，设置<code>topology.script.file.name</code>，值为一个可执行文件（脚本），该脚本接收datanode 节点的 IP 地址，输出datanode 节点所在的机架配置信息，需要一个数据文件存放实际的机架信息。<br>
+<code>hdfs dfsadmin -printTopology </code>可用来查看集群拓扑。</p>
+<h2 id="高可用ha">高可用HA</h2>
+<p>在 Hadoop 2.0 之前，存在单点故障 (SPOF：A single point of failure)。对于只有一个 NameNode 的集群，如果 NameNode 机器出现故障(比如宕机或是软件、硬件升级)，那么整个集群将无法使用，直到 NameNode 重新启动。</p>
+<p>HDFS 的 HA 功能通过配置 Active/Standby 两个 NameNodes 实现在集群中对 NameNode 的热备来解决上述问题。出现故障时可通过此种方式将 NameNode 很快的切换到另外一台机器。一个典型的 HDFS(HA) 集群中，使用两台单独的机器配置为 NameNodes 。在任何时间点，确保 NameNodes 中只有一个处于 Active 状态，其他的处在 Standby 状态。其中ActiveNameNode 负责集群中的所有客户端操作，StandbyNameNode 仅仅充当备机，保证一旦 ActiveNameNode 出现问题能够快速切换。</p>
+<p>为了能够实时同步 Active 和 Standby 两个 NameNode 的元数据信息（实际上 editlog），需提供一个共享存储系统，可以是 NFS、QJM（Quorum Journal Manager）或者 Zookeeper，ActiveNamenode 将数据写入共享存储系统，而 Standby 监听该系统，一旦发现有新数据写入，则读取这些数据，并加载到自己内存中，以保证自己内存状态与 Active NameNode 保持基本一致。</p>
+<h2 id="hadoop-fedaration联邦">Hadoop Fedaration联邦</h2>
+<p>HDFS Federation 是指 HDFS 集群可同时存在多个 NameNode。这些 NameNode 分别管理一部分数据，且共享所有 DataNode 的存储资源。优点：</p>
+<ul>
+<li>
+<p>HDFS 集群扩展性。多个 NameNode 分管一部分目录，使得一个集群可以扩展到更多节点，不再像 1.0 中那样由于内存的限制制约文件存储数目。</p>
+</li>
+<li>
+<p>性能更高效。多个 NameNode 管理不同的数据，且同时对外提供服务，将为用户提供更高的读写吞吐率。</p>
+</li>
+<li>
+<p>良好的隔离性。用户可根据需要将不同业务数据交由不同 NameNode 管理，这样不同业务之间影响很小。</p>
+</li>
+</ul>
+<p>HDFS Federation 并不能解决单点故障问题，也就是说，每个 NameNode 都存在在单点故障问题。</p>
+</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hadoop/>Hadoop</a></section></div><section class="article navigation"><p><a class="link" href="/post/hdfs/"><span class="li">&larr;</span>分布式文件系统HDFS</a></p><p><a class="link" href="/post/java%E7%B1%BB%E4%B8%8E%E5%AF%B9%E8%B1%A1/"><span class="li">&rarr;</span>Java类与对象</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>

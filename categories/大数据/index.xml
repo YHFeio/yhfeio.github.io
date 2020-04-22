@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>大数据 on YHFeio</title>
+    <link>/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/</link>
+    <description>Recent content in 大数据 on YHFeio</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>©2020 Notepadium.</copyright>
+    <lastBuildDate>Wed, 22 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>分布式文件系统HDFS</title>
+      <link>/post/hdfs/</link>
+      <pubDate>Wed, 22 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/hdfs/</guid>
+      <description>分布式文件系统HDFS HDFS（Hadoop Distributed File System）将大文件切割为小数据块，分别存储在不同的机器上联合管理，每个数据块做冗余备份分</description>
+      
+    </item>
+    
+    <item>
+      <title>大数据和Hadoop</title>
+      <link>/post/%E5%A4%A7%E6%95%B0%E6%8D%AEhadoop/</link>
+      <pubDate>Sat, 18 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/%E5%A4%A7%E6%95%B0%E6%8D%AEhadoop/</guid>
+      <description>大数据概述 大数据时代 大数据、云计算、物联网共同促成了第三次信息化浪潮。（第一次：1980左右，IBM公司制定PC标准；第二次：1995左右，</description>
+      
+    </item>
+    
+  </channel>
+</rss>

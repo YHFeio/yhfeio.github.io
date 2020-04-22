@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>Java类与对象&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Java类与对象" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">Java类与对象</h1><p class="article date">2020-04-16</p></section><article class="article markdown-body"><h1 id="java类与对象">Java类与对象</h1>
+<h2 id="面向对象程序设计概述">面向对象程序设计概述</h2>
+<p><em>面向对象程序设计（简称 OOP)</em> 已经取代了 20 世纪 70年代的“ 结构化” 过程化程序设计（面向过程）开发技术。Java 是完全面向对象的。面向对象的程序是由对象组成的， 每个对象包含对用户公开的特定功能部分和隐藏的实现部分。<br>
+传统的结构化程序设计通过设计一系列的过程（即算法）来求解问题。一旦确定了这些过程，就要开始考虑存储数据的方式。OOP却调换了这个次序，将数据放在第一位，然后再考虑操作数据的算法。对于一些规模较小的问题， 将其分解为过程的开发方式比较理想。而面向对象更加适用于解决规模较大的问题。</p>
+<p>面向过程与面向对象:</p>
+<ul>
+<li>在面向过程编程语言中，是由函数组成的，功能通过调用函数来实现。而面向对象编程语言中，以对象为主体，动作是由对象发出的。</li>
+<li>面向对象编程语言可以体现主+谓+宾结构，更符合现实中的设计。</li>
+<li>面向对象编程语言可以体现出动作的发出者与承受者。</li>
+</ul>
+<h3 id="类和对象">类和对象</h3>
+<p>可以把对象理解成一个事物。对象具有如下两个特征：</p>
+<ul>
+<li>属性：对象区别于其他对象的表现。</li>
+<li>行为：事物能够做什么，具有什么能力。</li>
+</ul>
+<p><code>类（class）</code>是现实世界事物的抽象，是具有相同属性与行为的对象集合。 类与对象的关系：</p>
+<ul>
+<li>类是设计蓝图，对象是蓝图设计的产物。</li>
+<li>类是对象的抽象，对象是类的具体表现形式。</li>
+</ul>
+<p><strong>面对对象三大特性</strong>：<em>封装性</em>，<em>继承性</em>，<em>多态性</em>。</p>
+<p><strong>封装</strong>即隐藏具体的实现细节，只提供给外界调用的接口。这样，底层细节改变的时候，不会对外界造成影响，只要提供给外界的接口不变即可。</p>
+<p><strong>继承</strong>：当两个类存在一般与特殊的关系时，我们就称特殊的类继承了一般的类。特殊类具有一般类的一切特征，并且还具有自己专有的特征。Java语言在类上只支持单继承。继承的作用：</p>
+<ul>
+<li>更好地进行抽象与分类。</li>
+<li>减少代码和数据的冗余，实现代码的复用。</li>
+<li>提高可维护性。</li>
+</ul>
+<p><strong>多态</strong>就是通过同一个引用，调用不同的方法，在运行时可以表现为不同的形态。多态性是表现在继承的基础上的。也就是说，如果要实现多态，则必须要先实现继承。</p>
+<h2 id="使用预定义类">使用预定义类</h2>
+<h3 id="实例与变量关系">实例与变量关系</h3>
+<p>由类<code>构造（construct)</code> 对象的过程称为创建类的<code>实例(instance)</code>。对象中的属性（数据）称为<code>实例域(instance field)</code>, 操纵数据的过程称为<code>方法(method)</code> 对于每个特定的类实例（对象）都有一组特定的实例域值。</p>
+<p>在Java中，使用<code>构造器（constructor )</code> 构造新实例，构造器是一个特殊的方法用于构造并初始化实例，其名字应该与类名相同。创建一个类实例使用new操作符。如Date类，创建一个Date类实例并赋值给一个变量：<code>Data day1 = new Date();</code>。创建对象后，可以使<em>引用.成员</em>来访问类中声明的成员。</p>
+<p>类实例和变量之间的连系：声明引用类型的变量与创建对象是两个完全不同的概念，如果仅仅声明了引用变量，而没有创建对象，则无法通过引用来访问类的成员。考虑语句:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Date</span> <span class="n">birthday</span><span class="o">;</span>
+</code></pre></div><p>该语句声明了一个Date类型的变量，可以引用一个Date类型实例，但当前并未引用，此时该变量不能应用Date的任何方法。必须首先初始化变量：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 可以创建一个新变量
+</span><span class="c1"></span><span class="n">birthday</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Date</span><span class="o">();</span>
+<span class="c1">// 或引用一个已存在的实例
+</span><span class="c1"></span><span class="n">birthdy</span> <span class="o">=</span> <span class="n">day1</span><span class="o">;</span>
+</code></pre></div><p>在Java中，任何对象变量的值都是对存储在另外一个地方的一个实例的引用。new操作符的返回值也是一个引用。</p>
+<p>可以显式地将对象变量设置为 null， 表明这个对象变量目前没有引用任何对象，如果使用值为null的引用去访问对象的成员，可以通过编译，但会在运行时产生空指针异常。</p>
+<p><strong>对象的内存分配</strong></p>
+<ul>
+<li>对象与数组一样，是使用new创建的（实际上数组也是对象），对于使用new创建的对象，会分配在堆内存中。</li>
+<li>局部变量分配在栈内存中。栈内存随方法的执行而创建，当方法结束时，栈内存也会随之销毁。</li>
+<li>每创建一个对象时，就会在堆中分配一块独立的空间。这意味着，每个对象都有自己的成员变量（实例），彼此之间不受影响。</li>
+<li>类中声明的方法，是由所有对象所共享的。</li>
+</ul>
+<h3 id="localdate类">LocalDate类</h3>
+<ul>
+<li><code>static LocalTime now()</code>，构造一个表示当前日期的对象。</li>
+<li><code>static LocalTime of(int year, int month, int day)</code>，构造一个表示给定日期的对象。</li>
+<li><code>int getYear()</code>,<code>int getMonthValue()</code>,<code>int getDayOfMonth()</code>，得到当前日期的年、 月和日。</li>
+<li><code>DayOfWeek getDayOfWeek</code>，得到当前日期是星期几， 作为 DayOfWeek 类的一个实例返回。 调用 getValue 来得到1 ~ 7 之间的一个数， 表示这是星期几。</li>
+<li><code>Local Date piusDays(int n)</code>,<code>Local Date minusDays(int n)</code>，生成当前日期之后或之前 n 天的日期。</li>
+</ul>
+<h2 id="用户自定义类">用户自定义类</h2>
+<p>现在设计复杂应用程序所需要各种<code>主力类(workhorse class)</code>，通常这些类没有main方法， 却有自己的实例域和实例方法。 创建一个完整的程序， 该将若干类组合在一起，其中只有一个类有 main 方法。</p>
+<p>现实与程序的映射：属性—&gt;成员变量（实例域）；行为—&gt;方法。</p>
+<p><strong>声明类</strong>，同时声明类的特征(属性)、行为（方法）。类的声明包括两个部分：类声明和类体，其格式如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="o">[</span><span class="n">类修饰符</span><span class="o">]</span> <span class="kd">class</span> <span class="nc">类名</span> <span class="o">{</span>
+    <span class="n">类体</span>
+<span class="o">}</span>
+</code></pre></div><p><strong>声明方法</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="o">[</span><span class="n">方法修饰符</span><span class="o">]</span> <span class="n">返回类型</span> <span class="nf">方法名</span><span class="o">([</span><span class="n">参数1</span><span class="o">]</span><span class="err">，</span><span class="o">[</span><span class="n">参数2</span><span class="o">]</span><span class="err">，…</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">方法体</span>
+<span class="o">}</span>
+</code></pre></div><p>返回类型可以是基本数据类型，也可以是引用类型。此时需要使用<code>return</code>返回一个值。当返回类型是void时，方法没有返回值。</p>
+<p>下面是一个示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.time.*</span><span class="o">;</span>
+
+<span class="cm">/**
+</span><span class="cm">* This program tests the Employee class.
+</span><span class="cm">* ©version 1.12 2015-05-08
+</span><span class="cm">* author Cay Horstmann
+</span><span class="cm">*/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeeTest</span><span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+    <span class="c1">// fill the staff array with three Employee objects
+</span><span class="c1"></span>    <span class="n">Employee</span><span class="o">[]</span> <span class="n">staff</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">[</span><span class="n">3</span><span class="o">];</span>
+    
+    <span class="n">staff</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="s">&#34;Carl Cracker&#34;</span><span class="o">,</span> <span class="n">75000</span><span class="o">,</span> <span class="n">1987</span><span class="o">,</span> <span class="n">12</span><span class="o">,</span> <span class="n">15</span><span class="o">);</span>
+    <span class="n">staff</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="s">&#34;Harry Hacker&#34;</span><span class="o">,</span> <span class="n">50000</span><span class="o">,</span> <span class="n">1989</span><span class="o">,</span> <span class="n">10</span><span class="o">,</span> <span class="n">1</span><span class="o">);</span>
+    <span class="n">staff</span><span class="o">[</span><span class="n">2</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="s">&#34;Tony Tester&#34;</span><span class="o">,</span> <span class="n">40000</span><span class="o">,</span> <span class="n">1990</span><span class="o">,</span> <span class="n">3</span><span class="o">,</span> <span class="n">15</span><span class="o">);</span>
+    
+    <span class="c1">// raise everyone&#39;s salary by 5%
+</span><span class="c1"></span>    <span class="k">for</span><span class="o">(</span><span class="n">Employee</span> <span class="n">e</span><span class="o">:</span> <span class="n">staff</span><span class="o">)</span>
+      <span class="n">e</span><span class="o">.</span><span class="na">raiseSalary</span><span class="o">(</span><span class="n">5</span><span class="o">);</span>
+      
+    <span class="c1">// print out information about all Employee objects
+</span><span class="c1"></span>    <span class="k">for</span><span class="o">(</span><span class="n">Employee</span> <span class="n">e</span><span class="o">:</span> <span class="n">staff</span><span class="o">)</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;name=&#34;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">&#34;,salary=&#34;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getSalary</span><span class="o">()</span> <span class="o">+</span> <span class="s">&#34;,hireDay=&#34;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getHireDay</span><span class="o">());</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">Employee</span><span class="o">{</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kt">double</span> <span class="n">salary</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="n">Local</span> <span class="n">Date</span> <span class="n">hireDay</span><span class="o">;</span>
+  
+  <span class="c1">// 构造器
+</span><span class="c1"></span>  <span class="kd">public</span> <span class="nf">Employee</span><span class="o">(</span><span class="n">String</span> <span class="n">n</span> <span class="o">,</span> <span class="kt">double</span> <span class="n">s</span><span class="o">,</span> <span class="kt">int</span> <span class="n">year</span><span class="o">,</span> <span class="kt">int</span> <span class="n">month</span> <span class="o">,</span> <span class="kt">int</span> <span class="n">day</span><span class="o">){</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">n</span><span class="o">;</span>
+    <span class="n">salary</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+    <span class="n">hireDay</span> <span class="o">=</span> <span class="n">LocalDate</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">year</span><span class="o">,</span> <span class="n">month</span><span class="o">,</span> <span class="n">day</span><span class="o">);</span>
+  <span class="o">}</span>
+  
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">({</span>
+    <span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+  <span class="o">}</span>
+  
+  <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getSalary</span><span class="o">(){</span>
+    <span class="k">return</span> <span class="n">salary</span><span class="o">;</span>
+  <span class="o">}</span>
+  
+  <span class="kd">public</span> <span class="n">Local</span> <span class="n">Date</span> <span class="nf">getHireDay</span><span class="o">(){</span>
+    <span class="k">return</span> <span class="n">hireDay</span><span class="o">;</span>
+  <span class="o">}</span>
+  
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">raiseSalary</span><span class="o">(</span><span class="kt">double</span> <span class="n">byPercent</span><span class="o">){</span>
+    <span class="kt">double</span> <span class="n">raise</span> <span class="o">=</span> <span class="n">salary</span> <span class="o">*</span> <span class="n">byPercent</span> <span class="o">/</span> <span class="n">100</span><span class="o">;</span>
+    <span class="n">salary</span> <span class="o">+=</span> <span class="n">raise</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>这个示例程序中包含两个类：Employee类和带有 public 访问修饰符的 EmployeeTest类。源文件名是 EmployeeTest.java，编译这段源代码时，编译器将在目录下创建两个类文件：EmployeeTest.class 和 Employee.class。</p>
+<p>习惯于将每一个类存在一个单独的源文件中。例如，上述两个类分别放入Employee.java 和 EmployeeTest.java 中。通过<br>
+<code>javac Employee*.java</code><br>
+命令编译所有代码。或<br>
+<code>javac EmployeeTest.java</code><br>
+编译器发现 EmployeeTest.java 使用了 Employee 类时会查找名为 Employee.class 的文件。没有找到就会自动地搜索 Employee.java, 然后对它进行编译。更重要的是：如果 Employee.java 版本较已有的 Employee.cass 文件版本新，Java 编译器就会自动地重新编译这个文件。</p>
+<p>类的定义主要包括三个方面：</p>
+<p><strong>成员变量（字段或域）</strong>：直接声明在类中的变量，用于表示对象的某种特征或属性。 示例中定义了私有的name，salary和hireDay分别表示姓名，工资和入职日期</p>
+<p><strong>方法</strong>用于操作对象以及存取它们的实例域。</p>
+<p><strong>构造器</strong>用于创建一个类实例。</p>
+<ul>
+<li>构造器在类中声明，在使用new创建对象的时候，会自动调用构造器。但不能对一个已存在的对象调用构造器重新初始化。</li>
+<li>优点：创建，初始化一体化，无需在创建对象后再次对成员变量进行赋值操作。</li>
+<li>构造器的名字与类名相同，并且没有返回类型。（没有返回类型，与返回类型为空（void）是两个不同的概念）</li>
+<li>访问权限和参数列表与普通方法相同，没有限制。</li>
+<li>每个类可以有多个构造器。</li>
+</ul>
+<h3 id="变量的作用域">变量的作用域</h3>
+<p><strong>变量的作用域</strong>：可访问变量的有效区域，根据变量声明的位置，可以将变量分为：</p>
+<ul>
+<li>局部变量（方法，语句块{}中声明的变量）</li>
+<li>成员变量（类中声明的变量）</li>
+</ul>
+<p>成员变量的作用域是整个类。局部变量的作用域为从局部变量声明的位置起，到其所在的最小语句块止。语句块决定了局部变量的作用域，在作用域之外，局部变量是不可访问的。 <br>
+如果两个局部变量同名，则两个局部变量的作用域不允许有交集。</p>
+<p>如果局部变量与成员变量同名，在局部变量的作用域内，局部变量将会遮蔽（隐藏）同名的成员变量。可以使用this来调用被局部变量隐藏的成员变量。</p>
+<h2 id="方法">方法</h2>
+<h3 id="隐式参数与显式参数">隐式参数与显式参数</h3>
+<p>方法用于操作对象以及存取对象的实例域（成员变量），如<code>raiseSalary()</code>方法，将salary实例域设置为新值。该方法有两个参数，第一为<strong>隐式参数</strong>，式“引用.方法”中“引用”所表示的Employee类对象。第二个位于方法括号中为<strong>显式参数</strong>，其明显地列在方法声明中。</p>
+<p>关键字<strong>this</strong>表示隐式参数，也可用以下语句编写<code>raiseSalary()</code>方法：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">raiseSalary</span><span class="o">(</span><span class="kt">double</span> <span class="n">byPercent</span><span class="o">){</span>
+  <span class="kt">double</span> <span class="n">raise</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">salary</span> <span class="o">*</span> <span class="n">byPercent</span> <span class="o">/</span> <span class="n">100</span><span class="o">;</span>
+  <span class="k">this</span><span class="o">.</span><span class="na">sal</span> <span class="n">ary</span> <span class="o">+=</span> <span class="n">raise</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><p>这种风格的写法可以将成员变量（实例域）与局部变量明显地区分开来。</p>
+<h3 id="参数传递">参数传递</h3>
+<p>Java语言总是采用按值调用，方法得到的是所有参数值的一个 <strong>拷
+贝</strong>，特别是，方法不能修改传递给它的任何参数变量的内容。</p>
+<p>两个概念：</p>
+<ul>
+<li>形参：方法中用于接受传入参数值的变量</li>
+<li>实参：实际传入方法的参数变量</li>
+</ul>
+<p>如方法：<code>aiseSalary(double byPercent)</code>中byPercent为形参，调用时<code>n=5;e.raiseSalary(n)</code>中n为实参。</p>
+<p>Java中的参数传递可以分为两种情况：</p>
+<ul>
+<li>参数的类型是基本数据类型</li>
+<li>参数的类型是引用类型</li>
+</ul>
+<p>当参数是基本数据类型时，形参的改变无法反作用于实参。当参数是引用类型时，传给形参的是“引用值”（可以理解为指向对象的地址）的拷贝，此时形参和实参指向同一个对象，可以更改指向对象的数据。但不能让实参引用一个新的对象。</p>
+<h3 id="方法重载">方法重载</h3>
+<p>我们把<em>方法名字相同，参数列表（形式参数）不同</em>的两个（或多个）方法称为重载方法。而这种现象称为<strong>方法重载</strong>。</p>
+<p>参数列表的不同体现为以下两点：</p>
+<ul>
+<li>参数列表的个数不同。</li>
+<li>参数列表所对应的参数类型不同。</li>
+</ul>
+<p>方法重载的优点：</p>
+<ul>
+<li>在声明方法时，可以把功能相似的方法定义为重载方法，而无需为每一个方法取不同的名字。（服务端）</li>
+<li>在调用方法时，只需通过一个方法名，即可实现不同方法的调用，进而实现相似的功能。（客户端）</li>
+</ul>
+<p>重载方法的调用原则：</p>
+<ul>
+<li>多个方法构成重载时，为了能够实现代码重用，便于以后程序的维护，应该尽可能让重载方法实现级联调用，而不是每个重载方法完成各自的事情。</li>
+<li>重载方法调用的原则为：参数少的重载方法调用参数多的重载方法。</li>
+</ul>
+<p>例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+  <span class="n">info</span><span class="o">(</span><span class="s">&#34;I&#34;</span><span class="o">);</span>
+  <span class="n">info</span><span class="o">(</span><span class="s">&#34;Y&#34;</span><span class="o">,</span> <span class="n">3</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">info</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">){</span>
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;姓名：&#34;</span> <span class="o">+</span> <span class="n">name</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">info</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">){</span>
+  <span class="n">info</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;年龄：&#34;</span> <span class="o">+</span> <span class="n">age</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>编译器通过用各个重载方法给出的参数类型与调用方法所使用的值类型进行匹配来挑选出应该执行那个具体方法。如果编译器找不到匹配的参数， 就会产生编译时错误。这个过程被称为<em>重载解析</em>（overloading resolution)。</p>
+<h2 id="静态域与静态方法static">静态域与静态方法<code>static</code></h2>
+<p>static可以修饰类（内部类），方法，成员变量。</p>
+<ul>
+<li>当static修饰成员类时，该类为静态成员类。</li>
+<li>当static修饰方法时，该方法为静态方法。无static修饰的方法为实例方法。</li>
+<li>当static修饰成员变量时，该变量为静态成员变量。无static
+修饰的成员变量称为实例成员变量。</li>
+<li>static不能修饰局部变量。</li>
+</ul>
+<h3 id="静态成员变量">静态成员变量</h3>
+<p>如：<code>private static int nextld = 1;</code></p>
+<ul>
+<li>静态成员变量为类所有，而实例成员变量为对象所有。</li>
+<li>静态成员变量在内存中仅分配一份空间，由所有对象所共享。而实例成员变量是每创建一个对象，就会分配一份空间。</li>
+<li>当一个对象修改了静态成员变量的值，其他对象访问静态成员变量时，得到的将是修改后的结果。而实例变量为对象所有，各个对象之间互不干扰。</li>
+<li>静态成员变量会在第一次使用类之前得到初始化，而实例成员变量在创建对象时才会初始化。</li>
+<li>静态成员变量可以通过类名访问，也可以通过引用访问（强烈不推荐），实例成员变量仅能通过引用访问。</li>
+</ul>
+<h3 id="静态方法">静态方法</h3>
+<p>如：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">getNextld</span><span class="o">(){</span>
+  <span class="k">return</span> <span class="n">nextld</span><span class="o">;</span> <span class="c1">// returns static field
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><ul>
+<li>静态方法可以通过类名访问，也可以通过引用访问。（强烈不推荐），实例方法仅能通过引用访问。</li>
+<li>静态方法中仅能访问静态成员（静态方法与静态成员变量），而实例方法既可以访问静态成员，也可以访问实例成员。</li>
+<li>静态方法中不能使用this与super，而实例方法中可以使用。</li>
+</ul>
+<p><strong>工厂方法</strong><br>
+静态方法还有另外一种常见的用途。类似 LocalDate 和 NumberFormat 的类使用静态工厂方法 (factory methocO 来构造对象。</p>
+<p><strong>main()方法</strong>也是一个静态方法，不需要创建一个对象即可使用。</p>
+<h3 id="final">final</h3>
+<p>final可以修饰成员变量，局部变量，方法，类。</p>
+<ul>
+<li>final修饰变量时，该变量仅能初始化（赋值）一次，以后便不能修改。通常我们也称其为常量。当final修饰基本数据类型时，变量本身的值不可更改。当final修饰引用类型时，引用本身的值不可更改，但引用指向的对象（对象的内部数据）是可以改变的。</li>
+<li>final修饰方法时，该方法不能被子类重写（或隐藏）。</li>
+<li>final修饰类时，该类为终极类，不可被子类所继承。</li>
+</ul>
+<p>通常final 和static一块使用，定义一个静态常量，如Math 类中定义的PI：<code>public static final double PI = 3.14159265358979323846;</code></p>
+<h2 id="访问权限">访问权限</h2>
+<h3 id="包">包</h3>
+<p>包(package)类似于操作系统上的文件夹，提供一个独立的命名
+空间。具有如下作用：</p>
+<ul>
+<li>包可以将相关的类组织在一起。</li>
+<li>包可以提供独立的命名空间，解决命名冲突。</li>
+<li>包可以提供访问权限的控制。</li>
+</ul>
+<p>**声明方式：**<code>package name;</code>，<code>package</code>为声明包的关键字。<code>name</code> 为指定的包名，可以分层次，不同的层次用点号“. ”
+分隔。package语句作为Java源文件的<em>第一行语句</em>，指明该类所在
+的包。一个源文件<em>只能有一条包的声明</em>。</p>
+<p>类没有声明包，则默认会将类存放在无名包中。建议将类放在包中。按照惯例，<em>包名使用小写字母组成</em>。建议包名采用“域名的倒写.项目名.模块名”的形式，以确保包名的唯一性，例如：com.bnis.business.action。</p>
+<p>当类声明了包后，如<code>com.java.test;</code>，可在com文件夹的父目录使用<code>javac com/java/test/文件名.java</code>编译，使用<code>java com.java.test.类名</code>运行。</p>
+<p><strong>包的引入</strong>
+在Java程序中，不能直接访问包外的类，需要访问包外的类时，可用两种方式：</p>
+<ul>
+<li>使用类的全限定名（包含包名），如：
+ch3.src.TestPackage test = new ch3.src.TestPackage();</li>
+<li>用import关键字引入包，然后使用。
+说明：package需要在import前使用，import需要在类声明前使用。</li>
+</ul>
+<p>引入方式：<code>import pkg1[.pkg2].(classname|*);</code>，一个Java源文件中可以有多条import语句。</p>
+<p>import 使用*时：</p>
+<ul>
+<li>导入包中所有的类，这会增加编译时间，但不会增加运行时间。因为类的确定是在编译期间完成的。</li>
+<li>如果引入的两个包中有同名类，当我们试图运行其中一个，则会导致一个编译时的错误。</li>
+<li>会导入包中的所有类，但不会级联的导入其子包（如果存在的话）中的类。</li>
+</ul>
+<p><strong>import static</strong></p>
+<ul>
+<li>可以使用import static来导入指定类中的静态成员。</li>
+<li>import static也分为明确导入与按需导入。</li>
+<li>使用import static导入类的静态成员时，类需要使用全限定名来指定</li>
+</ul>
+<h3 id="访问修饰符">访问修饰符</h3>
+<p>信息隐藏是（封装） OOP最重要的功能之一，也是使用访问修饰符的原因。信息隐藏的原因包括：</p>
+<ul>
+<li>对任何实现细节所作的更改不会影响使用该类的代码</li>
+<li>防止用户意外删除数据</li>
+<li>此类易于使用</li>
+</ul>
+<p>访问修饰符用来声明访问权限，可以修饰类（接口），方法，成员变量，构造器。访问权限由高到低为：</p>
+<ul>
+<li><code>public</code> 共有权限，全部对外开发。</li>
+<li><code>protected</code> 保护权限，对本包开放，对包外的子类开放。(继承中介绍)</li>
+<li><code>不加修饰符限定</code> 默认权限，对本包开放。</li>
+<li><code>private</code> 私有权限，仅对本类开放。</li>
+</ul>
+<p>顶层类可以声明为public或默认访问权限。内部类可以是任意访问权限。方法，成员变量，构造器可以是任意访问权限。局部变量不能使用访问修饰符。</p>
+<h3 id="私有方法">私有方法</h3>
+<p>有时希望将一个计算代码划分成若干个独立的辅助方法。通常这些辅助方法不应该成为公有接口的一部分，这是由于它们往往与当前的实现机制非常紧
+密， 或者需要一个特别的协议以及一个特别的调用次序。最好将这样的方法设计为 private 的。<br>
+对于私有方法， 如果改用其他方法实现相应的操作， 则不必保留原有的方法。如果数据的表达方式发生了变化，这个方法可能会变得难以实现， 或者不再需要。然而，只要方法是私有的，类的设计者就可以确信：它不会被外部的其他类操作调用，可以将其删去。如果方法是公有的， 就不能将其删去，因为其他的代码很可能依赖它。</p>
+<h3 id="基于类的访问权限">基于类的访问权限</h3>
+<p>类方法可以访问所属类的私有成员变量，即访问调用该方法的所属类对象的私有数据（这个对象即this）。类方法还可以访问类的任何一个对象的私有域。如：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">class</span> <span class="nc">Employee</span><span class="o">{</span>
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Employee</span> <span class="n">other</span><span class="o">){</span>
+    <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">other</span><span class="o">.</span><span class="na">name</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>典型的调用方式是<code>if(harry.equals(boss))...</code>。即equals方法访问了调用该方法的harry对象的私有类，还可以访问boss的私有属性。</p>
+<h3 id="封装的优点">封装的优点</h3>
+<p>我们在设计类时，不应该对外界暴露过多的实现细节，而是应该将其隐藏。隐藏的方式就是尽可能将类的成员变量访问权限最小化，也就是使用private来修饰。细节全部隐藏了，我们接下来需要提供类与外界交互的接口，这种接口是通过方法来实现的。我们将方法声明为public。
+我们习惯上使用getX与setX的方式。（getter与setter）。也就是说，我们不直接访问类的成员变量，而是通过方法来间接的操作变量。</p>
+<p>示例代码中将三个成员变量访问权限设置为私有，<code>getName()</code>,<code>getSalary()</code>,<code>getHireDay()</code>这些都是典型的访问器方法。由于它们只返回实例域值，因此又称为域访问器。</p>
+<p>通常获得或设置实例域的值，应该提供下面三项内容：</p>
+<ul>
+<li>一个私有的数据域</li>
+<li>一个公有的域访问器方法</li>
+<li>一个公有的域更改器方法</li>
+</ul>
+<p>相比提供一个简单的公有数据域：</p>
+<ul>
+<li>可以改变内部实现，除了该类的方法之外，不会影响其他代码。</li>
+<li>更改器方法可以执行错误检查， 然而直接对域进行赋值将不会进行这些处理。</li>
+</ul>
+<p><em>注意不要编写返回引用可变对象的访问器方法</em>。如果需要返回一个可变对象的引用， 应该首先对它进行克隆（clone )。</p>
+<h2 id="对象构造">对象构造</h2>
+<p>对象构造非常重要，Java 提供了多种编写构造器的机制。</p>
+<p><strong>构造器参数的命名</strong><br>
+通常在成员变量名称前加一个“a”作为构造器参数名称。或者利用同名的参数名称屏蔽成员变量，然后利用this调用成员变量。</p>
+<h3 id="关于变量的默认值">关于变量的默认值</h3>
+<ul>
+<li>如果没有显式为成员变量初始化，成员变量有默认的初始值（false，相应类型的0，引用类型为null）。</li>
+<li>如果没有为局部变量显式的初始化，则局部变量不会具有任何默认值，尝试使用未初始化的局部变量将会引发编译错误。</li>
+<li>数组类型也是通过new来创建的，所以创建的数组类型也是对象。从数组元素默认值的角度讲，数组元素可以近似的认为是类中的成员变量，其具有默认值，并且与成员变量的默认值一致。</li>
+</ul>
+<h3 id="无参构造器">无参构造器</h3>
+<p>无参构造器没有参数，可以显示地声明一个无参构造器，并将成员变量赋值为特定的值。</p>
+<p>如果在类中没有显示的声明构造器，则编译器会自动的为该类创建一个无参构造器（声明了则不自动创建）。其访问权限与类的访问权限相同，参数列表为空，并将所有的成员变量设置为默认值。</p>
+<p>如果类中提供了至少一个构造器， 但是没有提供无参数的构造器， 则在构造对象时如果没有提供参数就会被视为不合法。</p>
+<h3 id="构造器重载">构造器重载</h3>
+<p>类似于方法重载，有些类有多个构造器，来实现不同的对象实例化方式。</p>
+<p>关键字 <code>this</code> 用于引用方法的隐式参数。this关键字还有另外一个含义，如果构造器的第一个语句形如 this(&hellip;)，这个构造器将调用同一个类的另一个构造器。</p>
+<ul>
+<li>假如在一个构造器中使用了this语句，那么它必须作为构造器的第一条语句。</li>
+<li>只能在一个构造器中用this语句来调用类的其他构造器，而不能在构造器外用this语句来调用类的其他构造器。</li>
+<li>只能用this语句来调用其他构造器，而不能通过构造器名来直接调用构造器。</li>
+</ul>
+<h3 id="成员变量的初始化">成员变量的初始化</h3>
+<p>（1）构造器中初始化</p>
+<p>（2）<strong>显式初始化</strong>：即在类定义中，直接对成员变量赋值。值不仅可以是常量，也可以是静态方法。</p>
+<p>（3）<strong>初始化块</strong><br>
+在一个类的声明中，可以包含多个代码块。只要构造类的对象，这些块就会被执行。另外对于静态成员变量，可以使用静态初始化块。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Employee</span><span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">num</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+
+  <span class="c1">// 初始化块
+</span><span class="c1"></span>  <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;初始化块&#34;</span><span class="o">);</span>
+    <span class="n">age</span> <span class="o">=</span> <span class="n">10</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 静态初始化块
+</span><span class="c1"></span>  <span class="kd">static</span><span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;静态初始化块&#34;</span><span class="o">);</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="n">100</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="nf">Employee</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">){</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;构造器&#34;</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Employee</span> <span class="n">e</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="s">&#34;I&#34;</span><span class="o">,</span><span class="n">12</span><span class="o">);</span>
+  <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div><p>执行顺序：<br>
+初始化为默认值-&gt;静态初始化块-&gt;声明处初始化-&gt;初始化块-&gt;构造器。<br>
+静态变量和初始化块随着类的加载只执行一次，非静态成员变量和初始化块随着对象实例化执行。</p>
+</article><section class="article labels"><a class="category" href=/categories/java/>Java</a></section></div><section class="article navigation"><p><a class="link" href="/post/%E5%A4%A7%E6%95%B0%E6%8D%AEhadoop/"><span class="li">&larr;</span>大数据和Hadoop</a></p><p><a class="link" href="/post/java%E5%9F%BA%E6%9C%AC%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%BB%93%E6%9E%84/"><span class="li">&rarr;</span>Java基本程序设计结构</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>

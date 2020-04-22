@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>Java基本程序设计结构&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Java基本程序设计结构" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">Java基本程序设计结构</h1><p class="article date">2020-04-15</p></section><article class="article markdown-body"><h1 id="java基本程序设计结构">Java基本程序设计结构</h1>
+<h2 id="java语言概述">Java语言概述</h2>
+<p>Java语言的前身为Oak语言，来源于SUN公司的Green计划。Oak语言改名为Java，于1995年诞生。2009年04月20日，Oracle公司以74亿美元收购SUN公司。</p>
+<h3 id="java白皮书的关键术语">Java白皮书的关键术语</h3>
+<ul>
+<li>简单性</li>
+<li>面向对象</li>
+<li>分布式</li>
+<li>健壮性，具有多方面的可靠性</li>
+<li>安全性</li>
+<li>体系结构中立</li>
+<li>可移植性</li>
+<li>解释型</li>
+<li>高性能</li>
+<li>多线程</li>
+<li>动态性</li>
+</ul>
+<p>在网页中运行的Java程序称为applet。要使用applet，需要启用Java的Web浏览器执行字节码。不需要安装任何软件。</p>
+<h3 id="java开发环境">Java开发环境</h3>
+<ul>
+<li>JDK (JavaSE Development Kit)是整个Java的核心，包括Java运行环境(JRE)、Java工具、Java基础API等等。</li>
+<li>JDK是用于程序员开发Java程序的Java开发工具包。</li>
+<li>JDK包含JRE，JRE包含JVM。</li>
+<li>JDK安装目录下的文件夹：
+<ul>
+<li>bin目录：存放可执行文件；</li>
+<li>lib目录：存放Java的类库文件；</li>
+<li>include目录：存放用于本地方法的文件；</li>
+<li>demo目录：存放演示程序；</li>
+<li>jre目录：存放Java运行环境文件。</li>
+</ul>
+</li>
+</ul>
+<p><code>Java虚拟机</code>：可运行Java字节码的虚拟计算机系统，它有一个解释器组件，可以实现Java字节码和计算机操作系统之间的通信。</p>
+<div align=center><img src="/javaimg/Java结构.png" width = "60%" /></div> 
+<p>由类加载器负责把类文件（.class文件）加载到java虚拟机中，并检验该类文件是否符合类文件规范。字节码校验器检查该类文件的代码中是否存在着某些非法操作。由解释器解析翻译为计算机可以执行的二进制指令。</p>
+<p><strong>跨平台原理：</strong><br>
+Java虚拟机通过将平台无关的字节码文件转换为具体平台可执行的机器指令，从而实现跨平台的特征。</p>
+<p><strong>Java SE（Standard Edition）</strong><br>
+用于桌面或简单服务器应用的Java平台，相对于Java EE（Enterprise Edition）和 Java ME（Micro Edition），它是 Java的标准版。</p>
+<h3 id="安装java开发工具包">安装Java开发工具包</h3>
+<ul>
+<li>下载JDK <a href="https://www.oracle.com/cn/java/technologies/javase-downloads.html">https://www.oracle.com/cn/java/technologies/javase-downloads.html</a></li>
+<li>安装JDK 并将如jdk安装路径/bin目录添加到环境变量，命令行java -version 测试是否安装成功。</li>
+<li>安装库源文件和文档。在主目录中建立一个目录javasrc，将jdk安装目录中的src.zip文件解压缩到javasrc目录。src.zip文件中包含了所有公共类库的源代码。文档可从jdk下载网址下载对应版本文档。</li>
+</ul>
+<h3 id="jdk常用命令">JDK常用命令：</h3>
+<ul>
+<li><code>javac</code>编译， <code>javac &lt;文件名.java&gt;</code>;</li>
+<li><code>java</code> 运行， <code>java &lt;文件名&gt;</code>;</li>
+<li><code>javap</code> 反编译，<code>javap &lt;.class文件&gt;</code>;</li>
+<li><code>javadoc</code> 文档生成器，<code>javadoc &lt;文件名&gt;</code></li>
+</ul>
+<h2 id="hello-world">Hello World</h2>
+<div class="highlight"><pre class="chroma"><code class="language-Java" data-lang="Java"><span class="c1">// 文件名称必须为FirstSample.java 
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FirstSample</span><span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Hello, World!&#34;</span><span class="o">);</span>
+  <span class="o">}</span> 
+<span class="o">}</span> 
+<span class="c1">// 编译：javac FirstSample.java 
+</span><span class="c1">// 执行：java FirstSample 
+</span></code></pre></div><p>Java中使用关键字<code>class</code>来声明类。<code>public static void main(String[] args)</code>方法是该类被JVM解释器执行的入口。<code>System.out.println(&quot;&quot;)</code>是标准的输出语句，可将信息显示在控制台上。如果类声明时加了public修饰符则类名必须和文件名一致。否则类名和文件名可以随意。一个源文件中可以声明多个class类，但最多只能有一个public class类。</p>
+<h3 id="hello-world程序分析">Hello World程序分析</h3>
+<ul>
+<li>大括号划分程序的各个部分（通常称为块)。其标志着类的开始和结束。</li>
+<li>() 用于调用方法。Java使用的通用语法是<code>object.method(parameters)</code></li>
+<li>程序从main()方法开始执行。</li>
+<li>关键字public是一个访问说明符，控制类及其成员的可见度和作用域。</li>
+<li>关键字static允许调用main()方法，而无需创建类的实例。</li>
+<li>关键字void告诉编译器main()方法在执行时不返回任何值。</li>
+</ul>
+<h3 id="注释">注释</h3>
+<ul>
+<li>单行注释： <code>// </code>；</li>
+<li>多行注释：  <code>/*  */</code>；</li>
+<li>文档注释：<code> /**  */</code>  。</li>
+</ul>
+<p>多行注释与文档注释的不同之处在于，文档注释可以使用javadoc命令进行提取。/* */ 注释不能嵌套.</p>
+<h3 id="标识符">标识符</h3>
+<p>标识符用于给程序中的类，方法，变量等命名的符号。命名规则：</p>
+<ul>
+<li>标识符由字符，数字，下划线_，货币符号($,￥等)组成。并且首字符不能是数字。</li>
+<li>标识符不能与Java中的关键字同名。</li>
+<li>标识符不能与Java中的直接常量同名。（true，false，null）</li>
+<li>区分大小写。</li>
+</ul>
+<h3 id="命名惯例">命名惯例</h3>
+<ul>
+<li>类名和接口名中每一个单词的首字母均大写，例如：ClassOrInterfaceName。</li>
+<li>变量名和方法名中第一个单词的首字母小写，后续单词的首字母大写，例如：variableOrMethodName。</li>
+<li>常量全部大写并用下划线分隔，例如：ALL_CAPS。</li>
+</ul>
+<h2 id="数据类型">数据类型</h2>
+<p>Java是一种强类型语言，这就意味着必须为每一个变量声明一种类型。Java中数据类型可分为：<strong>基本数据类型</strong>、<strong>引用类型</strong>。</p>
+<p>基本数据类型：<code>byte, char, boolean, short, int, long, float, doouble</code>。<br>
+引用类型有：<code>数组，类，接口</code>。</p>
+<h3 id="基本数据类型的取值范围">基本数据类型的取值范围</h3>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">大小</th>
+<th align="left">类型取值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">boolean</td>
+<td align="left"></td>
+<td align="left">true, false</td>
+</tr>
+<tr>
+<td align="left">byte</td>
+<td align="left">1字节8位有符号整数</td>
+<td align="left">-128~127</td>
+</tr>
+<tr>
+<td align="left">char</td>
+<td align="left">2字节16位Unicode字符</td>
+<td align="left">Unicode 0~Unicode $$2^{16}$$ - 1</td>
+</tr>
+<tr>
+<td align="left">short</td>
+<td align="left">2字节16位有符号整数</td>
+<td align="left">-32768 (-$$2^{15}$$)~ +32767 ($$2^{15}$$-1)</td>
+</tr>
+<tr>
+<td align="left">int</td>
+<td align="left">4字节32位有符号整数</td>
+<td align="left">-$$2^{31}$$~$$2^{31}-1$$（正好超过20亿）</td>
+</tr>
+<tr>
+<td align="left">long</td>
+<td align="left">8字节64位有符号整数</td>
+<td align="left">$$-2^{63}$$~$$2^{63}-1$$</td>
+</tr>
+<tr>
+<td align="left">float</td>
+<td align="left">4字节32位浮点数</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">double</td>
+<td align="left">8字节64位浮点数</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="整型">整型</h3>
+<p>包括byte、short、int、long。int类型最常用，byte和short类型主要用于特定的应用场合，如底层的文件处理或者需要控制占用存储空间量的大数组。整型的范围与运行Java代码的机器无关，避免不同平台程序移植带来问题。</p>
+<p>长整型有一个<code>L或l</code>后缀；十六进制前缀<code>0x或0X</code>，8进制前缀为<code>0</code>（8进制容易混肴比建议使用），二进制前缀<code>0b或0B</code>（可加下划线如1_0010_10）。</p>
+<h3 id="浮点类型">浮点类型</h3>
+<p>包括float和double，绝大多数应用程序采用double类型，很少情况如需要单精度数据的库，或者需要存储大量数据时才使用float。float类型数值有一个<code>F或f</code>后缀， 没有后缀F的默认为double类型。浮点数值不适用于无法接受舍入误差的金融计算中（可用<code>BigDecimal</code>类）。</p>
+<p>下面是用于表示溢出和出错情况的三个特殊的浮点数值：</p>
+<ul>
+<li>正无穷，Double.POSITIVE_INFINITY 还有float</li>
+<li>负无穷，Double.NEGATIVE_INFINITY</li>
+<li>NaN，Double.NaN</li>
+</ul>
+<p>所有“ 非数值” 的值都认为是不相同的，<code>if(x == Double.NaN)</code>总是等于False，可以使用<code>if(Double.isNaN(x))</code>。<br>
+使用浮点类型应避免数量级相差巨大的数之间的加减运算，避免等量判断。</p>
+<h3 id="char类型">char类型</h3>
+<p>字面常量用单引号括起来，char类型的值可以表示为十六进制值，其范围从 \u0000 到\uffff。转义序列<code>\u</code>还可以出现在加引号的字符常量或字符串之外，例<code>public static void main(String\u005B\u00SD args)</code>。</p>
+<p><code>关于Unicode编码和char类型？</code></p>
+<h3 id="转义序列">转义序列</h3>
+<p>Java中提供三种转义序列：</p>
+<ul>
+<li>八进制转义( \0~ \377)</li>
+<li>Unicode转义(\u0000~ \uffff)</li>
+<li>转义字符：<code>\b</code> 退格符，<code>\n</code> 换行符，<code>\r</code> 回车符，<code>\t</code> 制表符，<code>\’</code> 单引号， <code>\f</code> 换页符，<code>\”</code> 双引号，<code>\\</code> 反斜扛\</li>
+</ul>
+<p>Unicode转义序列会在解析代码之前处理，注释中的\u会转换为一个换行符。</p>
+<p><strong>boolean类型</strong>有false 和 true两个值，不能和整型之间转换。</p>
+<h2 id="变量">变量</h2>
+<ul>
+<li>变量声明：<code>变量类型 变量名;</code></li>
+<li>初始化（赋值）：<code>变量名称 = 值;</code></li>
+<li>声明并赋值：<code>变量类型 变量名 = 值;</code></li>
+<li>可以一行声明多个变量但不推荐。</li>
+</ul>
+<p>Java中不可使用未初始化的变量，必须显式的初始化变量。</p>
+<p><strong>常量</strong><br>
+利用关键字final，只能被赋值一次，变量名称常用全大写。在类中的多个方法中使用一个常量，可使用static final 设置一个类常量，注意定义到main函数的外部。</p>
+<h2 id="运算符">运算符</h2>
+<ul>
+<li><code>+、-、 *、/</code> 表示加、减、 乘、除运算，当参与<code>/</code>运算的两个操作数都是整数时，表示整数除法；否则表示浮点除法。</li>
+<li><code>%</code>表示整数的求余操作（有时称为取模)。</li>
+</ul>
+<p><code>关于运算的可以移植性？strictfj？</code></p>
+<h3 id="数学函数与常量">数学函数与常量</h3>
+<p>在<code>Math</code>类中，包含了各种各样的数学函数。</p>
+<ul>
+<li>Math.sqrt(x)：平方根</li>
+<li>Math.pow(x, a)：x的a次幂</li>
+<li>Math.sin、cos、tan、atan、paiatan2：三角函数</li>
+<li>Math.exp()、log、log10：指数函数、对数函数e为底、10为底</li>
+<li>Math.PI、Math.E：常量pai和e的近似值</li>
+</ul>
+<p><code>import static java.1ang.Math.*;</code>则方法和常量不用加Math前缀。Math类为了达到最快的性能，所有的方法都使用计算机浮点单元中的例程。如果得到一个完全可预测的结果比运行速度更重要的话，那么就应该使用StrictMath类，它使用“自由发布的Math库”（fdlibm）实现算法，以确保在所有平台上得到相同的结果。</p>
+<h3 id="类型转换">类型转换</h3>
+<p>在赋值或运算时，要求数据类型相同，否则要进行类型转换。转换方式可分为：</p>
+<ul>
+<li>自动转换（宽向类型转换）</li>
+<li>强制转换（窄向类型转换）</li>
+</ul>
+<p>将低类型赋值给高类型时，就会执行自动类型转换，这种转换由编译器自动完成。将高类型赋值给低类型时，则必须使用类型转换运算符，因为这种转换是不安全的，可能会造成数据的丢失。</p>
+<p>boolean类型不可与其他类型转换，而其余七种数据类型，根据取值范围的不同，由低到高为：<br>
+<code>byte -&gt; short -&gt; int -&gt; long -&gt; float -&gt; double</code>  （char与short同级）</p>
+<p><em>类型提升（自动转换）</em><br>
+数据类型自动提升规则：</p>
+<ul>
+<li>byte,short,char类型提升为int类型</li>
+<li>表达式（运算）的结果类型与参与运算的操作数中类型最高的操作数一致。</li>
+</ul>
+<p>说明：如果操作数没有参与运算（没有运算符存在），则类型不会提升。</p>
+<p><em>强制类型转换</em><br>
+强制类型转换的语法格式是在圆括号中给出想要转换的目标类型，后面紧跟待转换的变量名。如:</p>
+<div class="highlight"><pre class="chroma"><code class="language-Java" data-lang="Java"><span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="n">9</span><span class="o">.</span><span class="na">9</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">x</span><span class="o">;</span>
+</code></pre></div><p>强制类型转换通过截断小数部分将浮点值转换为整型。如果想进行舍入运算可利用round方法，其返回的结果为 long 类型：</p>
+<div class="highlight"><pre class="chroma"><code class="language-Java" data-lang="Java"><span class="kt">double</span> <span class="n">x</span> <span class="o">=</span> <span class="n">9</span><span class="o">.</span><span class="na">9</span><span class="o">;</span>
+<span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span><span class="n">Math</span><span class="o">.</span><span class="na">round</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+</code></pre></div><p>强制转换的值超出了目标类型的表示范围，则会进行截断成一个完全不同的值。</p>
+<p><strong>赋值和运算符的结合</strong><br>
+在赋值中使用二元运算符：<code>x += 4</code>等价于<code>x = x + 4</code>。还有<code>-=</code>、<code>*=</code>等。</p>
+<h3 id="自增与自减运算符">自增与自减运算符</h3>
+<ul>
+<li>后缀式：<code>x++</code>、<code>x--</code></li>
+<li>前缀式：<code>++x</code>、<code>--x</code></li>
+</ul>
+<p>都会将x增加1或减少1，区别在于用在表达式中时，前缀形式会先完成加1; 而后缀形式会使用变量原来的值。例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-Java" data-lang="Java"><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="n">2</span>
+<span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="n">2</span>
+<span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">2</span> <span class="o">*</span> <span class="n">a</span><span class="o">++;</span> <span class="c1">//此时c为4 a为3
+</span><span class="c1"></span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">2</span> <span class="o">*</span> <span class="o">++</span><span class="n">a</span><span class="o">;</span> <span class="c1">//此时c为6 a为3
+</span></code></pre></div><p>不建议在表达式中使用自增自减操作，不易理解。</p>
+<h3 id="关系和布尔运算符">关系和布尔运算符</h3>
+<ul>
+<li><code>==</code>，判断相等</li>
+<li><code>!=</code>，判断不相等</li>
+<li><code>&gt;</code>、<code>&lt;</code>、<code>&gt;=</code>、<code>&lt;=</code>，判断大于、小于、大于等于、小于等于</li>
+<li><code>&amp;&amp;</code>，逻辑“与”</li>
+<li><code>||</code>，逻辑“或”</li>
+<li><code>!</code>，逻辑“非”</li>
+<li><code>condition ? expression1 : expression2</code>，三元运算符，若condition为true则结果为expression1的值，否则为expression2的值。</li>
+</ul>
+<p><code>&amp;&amp;</code>和<code>||</code>运算符是按照“短路”方式来求值：如果第一个操作数已经能够确定表达式的值，第二个操作数就不必计算了。</p>
+<h3 id="位运算符">位运算符</h3>
+<p>处理整型类型时，可以直接对组成整型数值的各个位完成操作。这意味着可以使用掩码技术得到整数中的各个位。</p>
+<ul>
+<li><code>&amp;(&quot;and&quot;)</code>、<code>|(&quot;or&quot;)</code>、<code>^(&quot;xor&quot;)</code>、<code>~(&quot;not&quot;)</code></li>
+</ul>
+<p>这些运算符按位模式处理。例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// n为一个整数且利用二进制表示
+</span><span class="c1"></span><span class="kt">int</span> <span class="n">fourthBitFromRight</span> <span class="o">=</span> <span class="o">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="n">0b1000</span><span class="o">)</span> <span class="o">/</span> <span class="n">0b1000</span><span class="o">;</span>
+<span class="c1">// 若n的右数第四位为1则返回1，否则返回0
+</span><span class="c1">// 即按位进行“与”运算，右数三个为肯定为0，若n第四个为1则分母结果为0b1000，最终结果为1
+</span></code></pre></div><p>利用<code>&amp;</code>并结合使用适当的 2 的幂， 可以把其他位掩掉， 而只保留其中的某一位。<br>
+另外，还有<code>&gt;&gt;</code>和<code>&lt;&lt;</code>运算符将位模式左移或右移。需要建立位模式来完成位掩码时， 这两个运算符会很方便：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">fourthBitFromRight</span> <span class="o">=</span> <span class="o">(</span><span class="n">n</span> <span class="o">&amp;</span> <span class="o">(</span><span class="n">1</span><span class="err">«</span> <span class="n">3</span><span class="o">))</span> <span class="err">»</span> <span class="n">3</span><span class="o">;</span>
+</code></pre></div><p>最后，<code>&gt;&gt;&gt;</code>运算符会用 0 填充高位，这与<code>&gt;&gt;</code>不同，它会用符号位填充高位。不存在<code>&lt;&lt;&lt;</code>运算符。</p>
+<p><strong>括号与运算符级别</strong></p>
+<h2 id="字符串">字符串</h2>
+<p>从概念上讲，Java字符串就是Unicode字符序列，Java 没有内置的字符串类型，而是在标准 Java 类库中提供了一个预定义类，很自然地叫做 String。每个用双引号括起来的字符串都是 String类的一个实例。</p>
+<p><strong>子串</strong>：<code>String.substring(a, b)</code>; 截取String的[a, b)，左闭右开。</p>
+<p><strong>拼接</strong>：</p>
+<ul>
+<li>Java允许使用<code>+</code>号连接（拼接）两个字符串。</li>
+<li>字符串与非字符串的值进行拼接时，后者被转换成字符串（任何一个 Java 对象都可以转换成字符串）。</li>
+<li>多个字符串放在一起，用一个定界符分隔，可以使用静态 <code>join</code> 方法：</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">String_all</span> <span class="o">=</span> <span class="n">String</span><span class="o">.</span><span class="na">join</span><span class="o">(</span><span class="s">&#34;/&#34;</span><span class="o">,</span><span class="s">&#34;A&#34;</span><span class="o">,</span><span class="s">&#34;B&#34;</span><span class="o">,</span><span class="s">&#34;C&#34;</span><span class="o">);</span>
+<span class="c1">// 输出“A/B/C&#34;
+</span></code></pre></div><p><strong>不可变字符串</strong><br>
+String类对象为<em>不可变字符串</em>，即不能修改字符串，但可以修改字符串变量的引用使它指向另一个字符串对象。不可变字符串有一个优点：<em>编译器可以让字符串共享</em>。</p>
+<p><strong>判断字符串相等</strong></p>
+<ul>
+<li><code>s.equals(t)</code>，s和t是否相等，s和t可以是字符串也可以是字符串字面量。</li>
+<li><code>s.equalsIgnoreCase(t)</code>，忽略大小写。</li>
+<li>不要使用<code>==</code>运算符检测两个字符串是否相等，这个运算符只能够确定两个字串是否放置在同一个位置上。</li>
+</ul>
+<p><strong>空串与Null串</strong></p>
+<p>空串 &quot;&rdquo; 是长度为 0 的字符串。检查为空：<code>if(str.length() == 0)</code>或<code>if(str.equals(&quot;&quot;))</code>。空串是一个Java对象，有自己的串长度（ 0 ) 和内容（空）。<br>
+Null串存放特殊值null，表示目前没有任何对象与该变量关联，<code>if(str == null)</code>。</p>
+<p><strong>码点与代码单元</strong></p>
+<p>？？？</p>
+<p><strong>String API</strong></p>
+<ul>
+<li><code>int compareTo(String other)</code>：按照字典顺序，字符串位于other之前返回一个负数；之后返回一个正数；两个字符串相等返回0。</li>
+<li><code>boolean startsWith/endsWith(String fix)</code>：判断字符串是否以？？开头或结尾。</li>
+<li><code>int indexOf(String str, int fromlndex)</code>：返回与字符串str匹配的第一个子串的开始位置，从索引0或fromlndex 开始计算。不存在返回-1。</li>
+<li><code>int lastIndexOf(String str, int fromlndex)</code>：匹配的最后一个字串的开始位置。</li>
+<li><code>String replace(CharSequence oldString,CharSequence newString)</code>：返回新字符串，用 newString代替原始字符串中所有的 oldString。可以用 String 或 StringBuilder 对象作为 CharSequence 参数。</li>
+<li><code>String toLowerCase/toUpperCase()</code>：返回新字符串，全部变成小写/大写。</li>
+<li><code>String trim()</code>：返回一个新字符串。这个字符串将删除了原始字符串头部和尾部的空格。</li>
+</ul>
+<p><strong>API文档</strong><br>
+API文档是 JDK 的一部分， 它是HTML格式的。让浏览器指向安装 JDK 的 docs/api/index.html子目录。</p>
+<p><strong>构建字符串</strong></p>
+<p>如果需要用许多小段的字符串构建一个字符串，字符串连接的方式每次连接都构建一个新的String对象，效率较低。可使用 <code>StringBuilder</code>类:</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+
+<span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">ch</span><span class="o">);</span> <span class="c1">// appends a single character
+</span><span class="c1"></span><span class="n">bui1der</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">str</span><span class="o">);</span> <span class="c1">// appends a string
+</span><span class="c1"></span>
+<span class="n">String</span> <span class="n">completedString</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+</code></pre></div><ul>
+<li><code>void setCharAt(int i ,char c)</code>：将第 i 个代码单元设置为 c。</li>
+<li><code>StringBuilder insert(int offset,String str)</code>：在 offset 位置插入一个字符串并返回 this。</li>
+<li><code>StringBuilder insert(int offset,Char c)</code>：在 offset 位置插入一个代码单元并返回 this。</li>
+<li><code>StringBuilder delete(int startindex,int endlndex)</code>：删除偏移量从 startindex 到 -endlndex-1 的代码单元并返回 this。</li>
+</ul>
+<h2 id="输入输出">输入输出</h2>
+<h3 id="输入">输入</h3>
+<p>通过控制台进行输人，首先需要构造一个<code>Scanner</code>对象，并与“标准输人流” <code>System.in</code>关联。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Scanner</span> <span class="n">in</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Scanner</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">in</span><span class="o">);</span>
+
+<span class="n">String</span> <span class="n">name</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">nextLine</span><span class="o">();</span> <span class="c1">// 读取一行
+</span><span class="c1"></span><span class="n">String</span> <span class="n">word</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">next</span><span class="o">();</span>  <span class="c1">// 读取一个单词（以空白符作为分隔符）
+</span><span class="c1"></span><span class="kt">int</span> <span class="n">age</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">nextInt</span><span class="o">();</span>  <span class="c1">// 读取一个整数
+</span><span class="c1"></span><span class="kt">double</span> <span class="n">b</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">nextDouble</span><span class="o">();</span> <span class="c1">//读取一个浮点数
+</span></code></pre></div><p>Scanner类定义在java.util 包中。因此需要首先<code>import java.util.*;</code>。<code>hasNext()</code>、<code>hasNextInt()</code>、<code>hasNextDouble()</code>，检查是否还有下一个输入。</p>
+<h3 id="格式化输出">格式化输出</h3>
+<p><code>System.out.printf()</code>用于格式化输出，每一个以<code>％</code>字符开始的格式说明符都用相应的参数替换，格式说明符尾部的转换符将指示被格式化的数值类型，常用：f 表示浮点数，s 表示字符串，d 表示十进制整数。<br>
+还可以给出控制格式化输出的各种标志，如：</p>
+<ul>
+<li><code>+</code>，打印正数和负数的符号</li>
+<li><code>空格</code>，在整数之前添加空格</li>
+<li><code>0</code>，在数字前面补0</li>
+<li><code>(</code>，将负数括在括号内</li>
+</ul>
+<p>例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Systen</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&#34;%,.2f&#34;</span><span class="o">,</span> <span class="n">10000</span><span class="o">.</span><span class="na">0</span> <span class="o">/</span> <span class="n">3</span><span class="o">.</span><span class="na">0</span><span class="o">)</span> <span class="c1">//打印输出 3,333.33
+</span></code></pre></div><p>可以使用 s 转换符格式化任意的对象，实现了 Formattable 接口的对象都将调用 <code>formatTo</code> 方法；否则将调用 <code>toString</code> 方法。</p>
+<p>可以使用静态的 String.format 方法创建一个格式化的字符串， 而不打印输出：<br>
+<code>String message = String.format(&quot;Hello, %s. Next year, you'll be %d&quot;, name , age);</code></p>
+<h3 id="文件输入与输出">文件输入与输出</h3>
+<p>对文件进行读取，需要一个用 File 对象构造一个 Scanner 对象，如下所示：<br>
+<code>Scanner in = new Scanner(Paths.get(&quot;niyflle.txt&quot;), &quot;UTF-8&quot;);</code></p>
+<p>写入文件，需要构造一个 PrintWriter 对象。在构造器中，只需要提供文件名：<br>
+<code>PrintWriter out = new PrintWriter(&quot;myfile.txt&quot;, &quot;UTF-8&quot;);</code><br>
+如果文件不存在，创建该文件。 可以像输出到 System.out—样使用 print、 println 以及 printf命令。</p>
+<h2 id="流程控制">流程控制</h2>
+<h3 id="条件语句">条件语句</h3>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="k">if</span><span class="o">(</span><span class="n">condition1</span><span class="o">){</span>
+  <span class="n">statements</span><span class="o">;</span>
+<span class="o">}</span><span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="n">condition2</span><span class="o">){</span>
+  <span class="n">statements</span><span class="o">;</span>
+<span class="o">}</span><span class="k">else</span><span class="o">{</span>
+  <span class="n">statements</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><p>当statements仅一行时可不用{}，不推荐。</p>
+<h3 id="循环">循环</h3>
+<p><strong>while循环</strong></p>
+<p><code>while(condition){statement}</code><br>
+while 循环语句首先检测循环条件。因此循环体中的代码有可能不被执行。</p>
+<p><strong>do-while循环</strong><br>
+<code>do{statement} while(condition);</code><br>
+do-while循环首先执行循环体语句再进行判断。</p>
+<p><strong>for循环</strong><br>
+for 循环语句是支持迭代的一种通用结构， 利用每次迭代之后更新的计数器或类似的变量来控制迭代次数。例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+</code></pre></div><p>1.对计数器初始化；2.新一轮循环执行前要检测的循环条件；3.如何更新计数器。在循环中，检测两个浮点数是否相等需要格外小心。for 循环语句只不过是 while 循环的一种简化形式。</p>
+<h3 id="多重选择switch语句">多重选择switch语句</h3>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// 变量x
+</span><span class="c1"></span><span class="k">switch</span><span class="o">(</span><span class="n">x</span><span class="o">){</span>
+  <span class="k">case</span> <span class="n">value1</span><span class="o">:</span> <span class="n">statement</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+  <span class="k">case</span> <span class="n">value2</span><span class="o">:</span> <span class="n">statement</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+  <span class="o">...</span>
+  <span class="k">case</span> <span class="n">valuen</span><span class="o">:</span> <span class="n">statement</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span>
+
+  <span class="k">default</span><span class="o">:</span> <span class="n">statement</span><span class="o">;</span> <span class="k">break</span><span class="o">;</span> <span class="c1">//可以没有default
+</span><span class="c1"></span><span class="o">}</span>
+
+</code></pre></div><p>switch语句将从与选项值相匹配的 case 标签处开始执行直到遇到 break 语句，或者执行到switch 语句的结束处为止。如果没有相匹配的 case 标签， 而有 default 子句， 就执行这个子句。<br>
+case标签可以是：</p>
+<ul>
+<li>类型为 char、byte、 short 或 int 的常量表达式。</li>
+<li>枚举常量。</li>
+<li>从 Java SE 7开始， case 标签还可以是字符串字面量。</li>
+</ul>
+<h3 id="中断控制流程语句">中断控制流程语句</h3>
+<p>在循环中执行<code>break;</code>语句会跳出循环。</p>
+<p><strong>带标签的 break语句</strong>用于跳出多重嵌套的循环语句。标签必须放在希望跳出的最外层循环之前， 并且必须紧跟一个冒号。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="nl">label:</span>
+  <span class="k">for</span><span class="o">....</span>
+    <span class="k">for</span><span class="o">....</span>
+      <span class="k">break</span> <span class="n">label</span><span class="o">;</span>
+</code></pre></div><p><code>continue;</code>语句用于中止当次循环，不执行该次循环的后续语句直接进行下轮次循环。</p>
+<h2 id="大数值">大数值</h2>
+<p>用<code>java.math</code> 包中的<code>Biglnteger</code> 和 <code>BigDecimaL</code> 这两个类可以处理包含任意长度数字序列的数值。Biglnteger 类实现了任意精度的整数运算， BigDecimal 实现了任意精度的浮点数运算。使用静态的 <code>valueOf</code>方法可以将普通的数值转换为大数值。大数值不能使用+ *等运算方法，需要使用如add(),multiply()方法。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">BigInteger</span> <span class="n">a</span> <span class="o">=</span> <span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">100</span><span class="o">);</span>
+<span class="n">BigInteger</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">b</span><span class="o">);</span> <span class="c1">// c = a + b
+</span><span class="c1"></span><span class="n">BigInteger</span> <span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="na">multiply</span><span class="o">(</span><span class="n">b</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">BigInteger</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">2</span><span class="o">)));</span> <span class="c1">// d = c * (b + 2)
+</span></code></pre></div><ul>
+<li>subtract(other) 减</li>
+<li>divide(other), 除</li>
+<li>mod(other),余数</li>
+<li>compareTo(other)，比较，相等返回0，小于other返回负数，大于返回正数</li>
+</ul>
+<h2 id="数组">数组</h2>
+<p>数组是一种数据结构， 用来存储<em>同一类型值</em>的集合。</p>
+<p><strong>数组声明</strong>，需要指出数组类型（数据元素类型紧跟<code>[]</code>）和数组变量的名字。例：<code>int[] a;</code>。使用<code>new</code>运算符创建数组，声明并初始化：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kt">int</span><span class="o">[]</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">10</span><span class="o">];</span> 
+<span class="c1">// 10 为数组长度， 一旦创建了数组， 就不能再改变它的大小
+</span><span class="c1">// 数组中声明了一个length属性常量，通过该常量可以获取数组的长度，即数组元素的个数。
+</span><span class="c1">// 也可以使用int a[] = ...;但不推荐
+</span></code></pre></div><p>通过整型下标可以访问数组中的每一个值。如a[i] 就是数组a中下标为i的值，下标从0开始,若i超过了数组的实际下标则会出现<code>array index out of bounds</code>异常。<br>
+创建一个数字数组时，所有元素都初始化为0。boolean数组的元素初始化为 false。 对象数组的元素则初始化为一个特殊值 null。可以使用循环为数组赋值：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+  <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><h3 id="for-each循环">for each循环</h3>
+<p><code>for(variable : collection) statement;</code></p>
+<p>定义一个变量用于暂存集合中的每一个元素， 并执行相应的语句/语句块。collection这一集合表达式必须是一个数组或者是一个实现了 Iterable 接口的类对象（例如ArrayList)。 如：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">element</span><span class="o">:</span> <span class="n">a</span><span class="o">){</span>
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">element</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div><p>打印数组元素的简便方法是利用<code>Arrays.toString(a)</code>, 返回一个包含数组元素的字符串。</p>
+<h3 id="数组初始化以及匿名数组">数组初始化以及匿名数组</h3>
+<p>除了<code>int[] a = new int[n]</code>这种形式外，还可以创建数组对象并同时赋予初始值的简化形式，不需要new：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kt">int</span><span class="o">[]</span> <span class="n">b</span> <span class="o">=</span> <span class="o">{</span><span class="n">1</span><span class="o">,</span> <span class="n">2</span><span class="o">,</span> <span class="n">3</span><span class="o">,</span> <span class="n">4</span><span class="o">};</span>
+<span class="c1">//以及：  
+</span><span class="c1"></span><span class="kt">int</span><span class="o">[]</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">17</span><span class="o">,</span> <span class="n">19</span><span class="o">,</span> <span class="n">23</span><span class="o">,</span> <span class="n">29</span><span class="o">,</span> <span class="n">31</span><span class="o">,</span> <span class="n">37</span><span class="o">};</span>
+<span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[]</span> <span class="o">{</span><span class="n">17</span><span class="o">,</span> <span class="n">19</span><span class="o">,</span> <span class="n">23</span><span class="o">,</span> <span class="n">29</span><span class="o">,</span> <span class="n">31</span><span class="o">,</span> <span class="n">37</span><span class="o">};</span>
+</code></pre></div><h3 id="数组拷贝">数组拷贝</h3>
+<p>在 Java 中，允许将一个数组变量拷贝（直接赋值）给另一个数组变量，两个变量将引用同一个数组对象。如果要复制为一个新数组，利用<code>Arrays.copyOf()</code>方法：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span> <span class="c1">// 赋值引用同一个数组对象
+</span><span class="c1"></span><span class="kt">int</span><span class="o">[]</span> <span class="n">copieda</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">a</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+<span class="c1">// 第 2 个参数是新数组的长度,可用于扩充或缩小
+</span></code></pre></div><h3 id="命令行参数">命令行参数</h3>
+<p><code>main()</code>方法中的<code>String[] args</code>表明其接受一个字符串数组，即命令行参数。例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Message</span><span class="o">{</span>
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+    <span class="k">if</span><span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">=</span> <span class="n">0</span> <span class="n">11</span> <span class="n">args</span><span class="o">[</span><span class="n">0</span><span class="o">].</span><span class="na">equals</span><span class="o">(</span><span class="s">&#34;_h&#34;</span><span class="o">))</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&#34;Hello,&#34;</span><span class="o">);</span>
+    <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="n">0</span><span class="o">].</span><span class="na">equa1s</span><span class="o">(</span><span class="s">&#34;-gM&#34;</span><span class="o">))</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&#34;Goodbye ,&#34;</span><span class="o">);</span>
+      <span class="c1">// print the other command-line arguments
+</span><span class="c1"></span>    <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">args</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span> <span class="o">++)</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&#34; &#34;</span> <span class="o">+</span> <span class="n">args</span><span class="o">[</span><span class="n">i</span><span class="o">]);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;!&#34;</span><span class="o">);</span>
+  <span class="o">}</span> 
+<span class="o">}</span>
+</code></pre></div><p>运行程序：<code>java Message -g cruel world</code>。输出：<code>Goodbye, cruel world!</code>。</p>
+<h3 id="javautilarrays-api">java,util.Arrays API</h3>
+<ul>
+<li><code>static String toString(type[] a)</code>，返回包含 a 中数据元素的字符串，数据元素被放在括号内，并用逗号分隔。</li>
+<li><code>static type copyOf(type[] a, int length)</code>，<code>static type copyOfRange(type[] a, int start, int end)</code>，返回与 a 类型相同的一个数组， 其长度为 length 或者 end-start， 数组元素为 a 的值。</li>
+<li><code>static void sort(type[] a)</code>，采用优化的快速排序算法对数组进行排序。</li>
+<li><code>static int binarySearch(type[] a, type v)</code>，<code>static int binarySearch(type[] a, int start, int end, type v)</code>，采用二分搜索算法查找值 v。如果查找成功， 则返回相应的下标值； 否则， 返回一个负数值。</li>
+<li><code>static void fill(type[] a , type v)</code>，将数组的所有数据元素值设置为v。</li>
+<li><code>static boolean equals(type[] a, type[] b)</code>，如果两个数组大小相同， 并且下标相同的元素都对应相等， 返回 true。</li>
+</ul>
+<h3 id="多维数组">多维数组</h3>
+<p>可以声明多维数组，格式与一维数组类似：</p>
+<ul>
+<li><code>int[][] x = new int[3][4];</code></li>
+<li><code>int[][] x = {{1, 2}, {3, 4}, {5, 6}};</code></li>
+<li><code>int[][] x = new int[][] {{1, 2}, {3, 4}, {5, 6}};</code></li>
+</ul>
+<p>也可以先分配高维，再分配低维：</p>
+<ul>
+<li><code>int[][] x = new int[2][];</code></li>
+<li><code>x[0] = new int[3];</code></li>
+<li><code>x[1] = new int [4];</code></li>
+</ul>
+<p>Java中没有多维数组，多维数组实际上就是数组的数组，即数组的每个元素也是一个数组。确切的说，就是，n维数组的每个元素，是n-1维数组。Java中的数组不要求是矩阵数组。低维数组的长度可以是不相等的。</p>
+</article><section class="article labels"><a class="category" href=/categories/java/>Java</a></section></div><section class="article navigation"><p><a class="link" href="/post/java%E7%B1%BB%E4%B8%8E%E5%AF%B9%E8%B1%A1/"><span class="li">&larr;</span>Java类与对象</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>
