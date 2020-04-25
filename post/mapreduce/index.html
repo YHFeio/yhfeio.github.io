@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>分布式并行编程框架MapReduce&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="分布式并行编程框架MapReduce" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">分布式并行编程框架MapReduce</h1><p class="article date">2020-04-25</p></section><article class="article markdown-body"><h1 id="分布式并行编程框架mapreduce">分布式并行编程框架MapReduce</h1>
+<h2 id="概述">概述</h2>
+<p><strong>分布式并行编程</strong></p>
+<p>CPU的摩尔定律失效，CPU性能提升不大，而数据量在快速增长，出现数据处理计算方面的矛盾。</p>
+<p>处理能力提升的两个途径：</p>
+<ul>
+<li>单核CPU到双核、四核、八核等</li>
+<li>分布式并行编程，借助集群通过多台机器并行处理大规模数据集</li>
+</ul>
+<p>Hadoop MapReduce是对谷歌的MapReduce的开源实现，并进行相关优化。在此之前也有并行编程框架如MPI、OpenCL、CUDA。</p>
+<p>MapReduce与传统并行编程框架的区别：</p>
+<ul>
+<li>集群的架构和容错性，传统：性能计算模型HPC，采用共享式架构，扩展性较差，一个硬件发生故障整个集群不可用；MapReduce：非共享式框架，每个节点都有自己的内存和存储。设计了冗余和容错机制。</li>
+<li>硬件价格和扩展性，传统：刀片服务器、存储区域网络SAN，扩展性差；MapReduce：随意增加计算节点，可用廉价的PC机。</li>
+<li>编程和学习难度，传统：编程难度高；MapReduce：自动实现分布式部署，可将大部分工作集中在业务逻辑的开发上，分布式计算中的复杂性交由框架来处理。</li>
+<li>适用场景，传统：用于实时的细粒度计算，适用<code>计算密集型</code>应用；MapReduce：非实时批处理，<code>数据密集型</code>应用。</li>
+</ul>
+<p><strong>MapReduce</strong><br>
+Mapreduce 是一个分布式并行编程框架，核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个hadoop 集群上。</p>
+<p>MapReduce屏蔽了整个分布式程序运行的底层细节，将复杂的计算过程高度的抽象成<code>Map</code>和<code>Reduce</code>函数。</p>
+<h2 id="maprduce程序">MapRduce程序</h2>
+<p><strong>示例程序运行</strong></p>
+<p>官方提供了一些样例程序，如 wordcount、pi 程序，代码都在 /share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.4.jar 包里。</p>
+<p>使用 hadoop 命令来试跑例子程序：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> /usr/local/hadoop/share/hadoop/mapreduce
+hadoop jar hadoop-mapreduce-examples-2.6.4.jar pi <span class="m">5</span> 5
+</code></pre></div><p>准备数据上传到HDFS(wordcount_test.txt中最好用英文，因为根据空格分词的)，然后运行wordcount程序：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">vim wordcount_test.txt
+hadoop fs -put wordcount_test.txt /
+<span class="nb">cd</span> /usr/local/hadoop/share/hadoop/mapreduce
+hadoop jar hadoop-mapreduce-examples-2.6.4.jar wordcount /wordcount_test.txt /wordcount
+
+hadoop fs -cat /wordcount/part-r-00000
+</code></pre></div><p><strong>MapReduce 示例程序及编码规范</strong></p>
+<p>wordcount程序（下载hadoop src包，解压后在hadoop-mapreduce-project目录往下找）：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">org.apache.hadoop.examples</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.StringTokenizer</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.conf.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.Path</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.IntWritable</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.Text</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Job</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Mapper</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.Reducer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.lib.input.FileInputFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.mapreduce.lib.output.FileOutputFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.util.GenericOptionsParser</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordCount</span> <span class="o">{</span>
+
+  <span class="c1">// map部分
+</span><span class="c1"></span>  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TokenizerMapper</span> 
+       <span class="kd">extends</span> <span class="n">Mapper</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;{</span> 
+    
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">IntWritable</span> <span class="n">one</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">(</span><span class="n">1</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="n">Text</span> <span class="n">word</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Text</span><span class="o">();</span>
+      
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">map</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">,</span> <span class="n">Text</span> <span class="n">value</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span>
+                    <span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+      <span class="n">StringTokenizer</span> <span class="n">itr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringTokenizer</span><span class="o">(</span><span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+      <span class="k">while</span> <span class="o">(</span><span class="n">itr</span><span class="o">.</span><span class="na">hasMoreTokens</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">word</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">itr</span><span class="o">.</span><span class="na">nextToken</span><span class="o">());</span>
+        <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">word</span><span class="o">,</span> <span class="n">one</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+  <span class="c1">// reduce部分
+</span><span class="c1"></span>  <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">IntSumReducer</span> 
+       <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span><span class="n">IntWritable</span><span class="o">,</span><span class="n">Text</span><span class="o">,</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">IntWritable</span> <span class="n">result</span> <span class="o">=</span> <span class="k">new</span> <span class="n">IntWritable</span><span class="o">();</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">,</span> 
+                       <span class="n">Context</span> <span class="n">context</span>
+                       <span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+      <span class="k">for</span> <span class="o">(</span><span class="n">IntWritable</span> <span class="n">val</span> <span class="o">:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">val</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+      <span class="o">}</span>
+      <span class="n">result</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">sum</span><span class="o">);</span>
+      <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 配置环境信息和提交
+</span><span class="c1"></span>  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+    <span class="n">String</span><span class="o">[]</span> <span class="n">otherArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericOptionsParser</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="n">args</span><span class="o">).</span><span class="na">getRemainingArgs</span><span class="o">();</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">otherArgs</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;</span> <span class="n">2</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Usage: wordcount &lt;in&gt; [&lt;in&gt;...] &lt;out&gt;&#34;</span><span class="o">);</span>
+      <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">2</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">Job</span> <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="s">&#34;word count&#34;</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setJarByClass</span><span class="o">(</span><span class="n">WordCount</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setMapperClass</span><span class="o">(</span><span class="n">TokenizerMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setCombinerClass</span><span class="o">(</span><span class="n">IntSumReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setReducerClass</span><span class="o">(</span><span class="n">IntSumReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setOutputKeyClass</span><span class="o">(</span><span class="n">Text</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="n">job</span><span class="o">.</span><span class="na">setOutputValueClass</span><span class="o">(</span><span class="n">IntWritable</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">otherArgs</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="n">1</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">FileInputFormat</span><span class="o">.</span><span class="na">addInputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">otherArgs</span><span class="o">[</span><span class="n">i</span><span class="o">]));</span>
+    <span class="o">}</span>
+    <span class="n">FileOutputFormat</span><span class="o">.</span><span class="na">setOutputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span>
+      <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">otherArgs</span><span class="o">[</span><span class="n">otherArgs</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="n">1</span><span class="o">]));</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">job</span><span class="o">.</span><span class="na">waitForCompletion</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">?</span> <span class="n">0</span> <span class="o">:</span> <span class="n">1</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>MapReduce 程序包含三大部分，第一部分为map逻辑代码，定义类继承Mapper 类，业务逻辑写在map()函数中；第二部分为reduce逻辑代码，定义类继承Reducer类，业务逻辑写在reduce()函数中；第三部分配置程序的运行信息。</p>
+<ul>
+<li>map阶段的输入/输出数据是键值对的形式（KV 的类型可自定义），<code>业务逻辑写在 map()方法中</code>，map()方法（maptask 进程）对<code>每一个&lt;K,V&gt;调用一次</code>。</li>
+<li>map()方法的输出经过MapReduce框架处理，处理过程基于键来排序分组，形成&lt;key,[value1,value2,&hellip;]&gt;的形式发送给reduce阶段去汇总。</li>
+<li>reduce阶段的输入数据类型对应 map阶段的输出数据类型，也是键值对形式，<code>业务逻辑写在 reduce()方法中</code>，Reducetask 进程对<code>每一个&lt;key,[value1,value2,...]&gt;调用一次 reduce()方法</code>。</li>
+<li>整个程序需要一个 Drvier 来进行提交，提交的是一个描述了各种必要信息的 job 对象。</li>
+</ul>
+<p>wordcount程序逻辑：数据按行以键值对的方式输入map()函数，键为行起始位置的偏移量，值为该行文本；map阶段忽略传入的K，对V即行文本做单词统计，每遇到一个单词则把其转换成一个&lt;word,1&gt;，reduce()函数接收到&lt;word,[1,1,1,&hellip;]&gt;形式的数据，对值进行求和输出即可。</p>
+<p>整个数据流中，数据传输需要进行序列化，JDK自带的数据类型如Int、String，在序列化时效率较低，Hadoop自定义了一套序列化框架，如果数据需要序列化（写磁盘或网络传输），需要使用下列数据类型：<br>
+<code>Long-&gt;LongWritable; String-&gt;Text; Int-&gt;IntWritable; Null-&gt;NullWritable</code>，转换可用序列化对象的set()和get()方法。</p>
+<p><strong>源码详解</strong><br>
+首先看<strong>Map部分</strong>，<code>Mapper&lt;KeyIn, ValueIn, KeyOut, ValueOut&gt;</code>（Mapper/Reducer是泛型类）中：</p>
+<ul>
+<li><code>KeyIn</code>、<code>ValueIn</code>，表示程序所读取数据的Key和Value的数据类型。</li>
+<li><code>KeyOut</code>、<code>ValueOut</code>，表示用户自定义逻辑方法返回数据中Key和Value的数据类型。</li>
+</ul>
+<p>wordcount例子程序中为<code>Mapper&lt;Object, Text, Text, IntWritable&gt;</code>。输入的键为偏移量，大部分程序中可直接使用Long类型，源码此处使用Object做了泛化；值为文本String类型。输出的键为一个单词也是String类型；值是1为Int类型。</p>
+<p>接着定义了一个IntWritable类型的静态常量one恒为1，和Text类型的变量word用于构造输出键值对。</p>
+<p>map()函数为map阶段的核心，参数为(Object key, Text value, Context context)，其中key和value即输入KV，<code>context</code>用于暂时存储 map() 处理后的结果。业务逻辑部分首先把输入值转化为字符串类型，利用Hadoop自带的分词器 StringTokenizer 进行切分，最后<code>context.write()</code>将结果写入context。</p>
+<p><strong>Reduce部分</strong>，同样地<code>Reducer&lt;Text,IntWritable,Text,IntWritable&gt;</code>中是输入输出KV的数据类型。然后定义了一个result变量用于存放求和结果。</p>
+<p>reduce()输入的键是单词，值为一个迭代器，循环迭代器将values中的值相加，最后返回key 和 sum组成的键值对。</p>
+<p><strong>main函数部分</strong>，作为MapReduce程序的运行入口，利用Job类对象管理运行环境和参数。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+  <span class="c1">// 指定 hdfs 相关的参数
+</span><span class="c1"></span>  <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+  <span class="c1">// 获取命令行传入参数
+</span><span class="c1"></span>  <span class="n">String</span><span class="o">[]</span> <span class="n">otherArgs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">GenericOptionsParser</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="n">args</span><span class="o">).</span><span class="na">getRemainingArgs</span><span class="o">();</span>
+  <span class="c1">// 小于两个则报错，至少输出输出两个路径
+</span><span class="c1"></span>  <span class="k">if</span> <span class="o">(</span><span class="n">otherArgs</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;</span> <span class="n">2</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Usage: wordcount &lt;in&gt; [&lt;in&gt;...] &lt;out&gt;&#34;</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">2</span><span class="o">);</span>
+  <span class="o">}</span>
+  <span class="n">Job</span> <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">conf</span><span class="o">,</span> <span class="s">&#34;word count&#34;</span><span class="o">);</span>  <span class="c1">// 实例化job，来控制整个作业
+</span><span class="c1"></span>  <span class="n">job</span><span class="o">.</span><span class="na">setJarByClass</span><span class="o">(</span><span class="n">WordCount</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>  <span class="c1">//使用反射机制，加载程序
+</span><span class="c1"></span>  <span class="c1">// 设置job的map/combiner/reduce阶段的执行类
+</span><span class="c1"></span>  <span class="n">job</span><span class="o">.</span><span class="na">setMapperClass</span><span class="o">(</span><span class="n">TokenizerMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>  
+  <span class="n">job</span><span class="o">.</span><span class="na">setCombinerClass</span><span class="o">(</span><span class="n">IntSumReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">job</span><span class="o">.</span><span class="na">setReducerClass</span><span class="o">(</span><span class="n">IntSumReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="c1">// 设置程序输出的key/value的类型
+</span><span class="c1"></span>  <span class="c1">//如果map阶段的输出类型跟最终输出不一致需要进行配置，job.setMapOutputKey/ValueClass();
+</span><span class="c1"></span>  <span class="n">job</span><span class="o">.</span><span class="na">setOutputKeyClass</span><span class="o">(</span><span class="n">Text</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+  <span class="n">job</span><span class="o">.</span><span class="na">setOutputValueClass</span><span class="o">(</span><span class="n">IntWritable</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">otherArgs</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="n">1</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 命令行参数中输入文件所在路径
+</span><span class="c1"></span>    <span class="n">FileInputFormat</span><span class="o">.</span><span class="na">addInputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">otherArgs</span><span class="o">[</span><span class="n">i</span><span class="o">]));</span>
+  <span class="o">}</span>
+  <span class="n">FileOutputFormat</span><span class="o">.</span><span class="na">setOutputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span>
+    <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="n">otherArgs</span><span class="o">[</span><span class="n">otherArgs</span><span class="o">.</span><span class="na">length</span> <span class="o">-</span> <span class="n">1</span><span class="o">]));</span><span class="c1">// 输出路径
+</span><span class="c1"></span>  <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">job</span><span class="o">.</span><span class="na">waitForCompletion</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">?</span> <span class="n">0</span> <span class="o">:</span> <span class="n">1</span><span class="o">);</span> <span class="c1">//等待任务完成之后退出程序
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></div><h2 id="数据流">数据流</h2>
+<p>Hadoop将作业分成若干任务（task）来执行，包括map task 和 reduce task。这些任务运行在集群的节点上，并通过YARN进行调度。如果一个任务失败则会在不同的节点上调度运行。</p>
+<p><strong>split</strong><br>
+Hadoop将MarReduce的输入数据划分成等长的小块，称为分片(input split)，并为每个分片构建一个map task对分片中的记录应用map函数。<br>
+每个分片的数据越少，负载均衡的质量越高（因为一台较快的计算机能够处理的数据分片比一台慢的更多，且成一定比例。即使使用相同的机器，失败的进程或其他并发运行的作业能够实现满意的负载均衡。？？？）。但分片数据越小，那么管理分片的总时间和构建map task的总时间变大。大多数作业合理的分块是HDFS块大小（默认128MB）。</p>
+<p>Hadoop集群中的数据块分布在各个节点上，对某个数据块的处理会寻找距离该数据块最近的map机器，以减少带宽资源消耗。理想状态数据块和map任务在同一个节点上，如果数据块的所有副本所在的节点正在运行其他map task，作业调度会寻找同一机架上的空闲map 槽（slot）来运行该map task。这也说明了为什么最佳切片大小与块大小相同（大于块大小则一个map task需要两个块数据，而HDFS节点上同时存储在两个块的可能性很小，肯定需要数据传输）。</p>
+<p>map task 会将其输出写入本地磁盘，而非HDFS。因为map task输出只是中间结果，由reduce task处理后才是最终结果，且作业完成后可以删除，如果在传送给reduce task之前任务失败，可在其他节点上再次构建该中间结果。</p>
+<p>参考：<br>
+[1] <a href="https://www.icourse163.org/course/XMU-1002335004"target="_blank">大数据技术原理与应用Mooc</a>.<br>
+[2] 光环国际课件.<br>
+[3] <a href="https://blog.csdn.net/khxu666/article/details/80764994">https://blog.csdn.net/khxu666/article/details/80764994</a>.</p>
+</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hadoop/>Hadoop</a><a class="tag" href=/tags/mapreduce/>MapReduce</a></section></div><section class="article navigation"><p><a class="link" href="/post/hdfs/"><span class="li">&rarr;</span>分布式文件系统HDFS</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>
