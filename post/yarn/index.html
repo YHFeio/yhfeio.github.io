@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>Hdoop资源管理系统YARN&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Hdoop资源管理系统YARN" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">Hdoop资源管理系统YARN</h1><p class="article date">2020-04-26</p></section><article class="article markdown-body"><h1 id="hdoop资源管理系统yarn">Hdoop资源管理系统YARN</h1>
+<p>Apache YARN（Yet Another Resource Negotiator）是Hadoop集群资源管理系统。为了改善MapReduce的实现，Hadoop2中引入了YARN，它同样支持分布式计算框架。YARN提供了请求使用资源的API，用户代码中很少用到这些API，更多的是分布式计算框架提供的更高层API。</p>
+<p>YARN应用：</p>
+<div align=center><img src="/bdimg/yarn应用.png" width = "60%" /></div>
+<p>还有一层应用在图中所示框架之上，入pig、hive等是运行在MapReduce、Spark之上的应用，它们不与YARN打交道。</p>
+<h2 id="yarn重要概念">YARN重要概念</h2>
+<p>YARN通过两类长期运行的守护进程提供核心服务：Resource Manager和Node Manager</p>
+<p><strong>ResourceManager</strong><br>
+ResourceManager 是基于应用程序对集群资源的需求进行调度的 YARN集群主控节点，负责协调和管理整个集群（所有 NodeManager）的资源，响应用户提交的不同类型应用程序的解析，调度，监控等工作。ResourceManager会为每一个Application启动一个ApplicationMaster，并且 ApplicationMaster 分散在各个 NodeManager 节点。ResourceManager主要由两个组件构成：调度器（Scheduler）和应用程序管理器（ApplicationsManager，ASM）。</p>
+<p><strong>NodeManager</strong>
+NodeManager运行在集群的所有节点上，启动和监控执行应用程序的容器，（容器中的CPU，内存，硬盘，网络等），并通过心跳向集群资源调度器ResourceManager 进行汇报。</p>
+<p><strong>ApplicationMaster</strong><br>
+ApplicationMaster 对应一个应用程序，职责是：向资源调度器申请执行任务的资源容器，运行任务，监控整个任务的执行，跟踪整个任务的状态，处理任务失败以异常情况。</p>
+<p><strong>Container</strong>
+Container 是一个抽象出来的逻辑资源单位。它封装了一个节点上的 CPU，内存，磁盘，网络等信息，MapReduce 程序的所有 task 都是在一个容器里执行完成的，容器的大小可以动态调整。</p>
+<p><strong>ASM</strong><br>
+应用程序管理器 ASM 负责管理整个系统中所有应用程序，包括应用程序提交、与调度器协商资源以启动 ApplicationMaster、监控 ApplicationMaster 运行状态并在失败时重新启动它等。</p>
+<p><strong>Scheduler</strong><br>
+调度器根据应用程序的资源需求进行资源分配，不参与应用程序具体的执行和监控等工作资源分配的单位就是 Container，调度器是一个可插拔的组件，用户可以根据自己的需求实现自己的调度器。YARN 本身为我们提供了多种直接可用的调度器，比如 FIFO，Fair Scheduler和 Capacity Scheduler 等。</p>
+<h2 id="yarn-工作机制">YARN 工作机制</h2>
+<div align=center><img src="/bdimg/yarn流程.png" width = "60%" /></div>
+<ol>
+<li>用户向 YARN 中提交应用程序，其中包括 ApplicationMaster 程序，启动 ApplicationMaster的命令，用户程序等。</li>
+<li>ResourceManager 为该程序分配第一个 Container，并与对应的 NodeManager 通讯，要求它在这个 Container 中启动应用程序 ApplicationMaster。</li>
+<li>ApplicationMaster 首先向 ResourceManager 注册，这样用户可以直接通过 ResourceManager查看应用程序的运行状态，然后将为各个任务申请资源，并监控它的运行状态，直到运行结束，重复 4 到 7 的步骤。</li>
+<li>ApplicationMaster 采用轮询的方式通过 RPC 协议向 ResourceManager 申请和领取资源。</li>
+<li>一旦 ApplicationMaster 申请到资源后，便与对应的 NodeManager 通讯，要求它启动任务。</li>
+<li>NodeManager 为任务设置好运行环境（包括环境变量、JAR 包、二进制程序等）后，将任务启动命令写到一个脚本中，并通过运行该脚本启动任务。</li>
+<li>各个任务通过某个 RPC 协议向 ApplicationMaster 汇报自己的状态和进度，以让ApplicationMaster 随时掌握各个任务的运行状态，从而可以在任务败的时候重新启动任务。</li>
+<li>应用程序运行完成后，AM 向 RM 注销并关闭自己。</li>
+</ol>
+<p>yarn 并不清楚用户提交的程序的运行机制，只提供运算资源的调度（用户程序向 yarn 申请资源，yarn 就负责分配资源），这样一来，yarn 其实就与运行的用户程序完全解耦，就意味着 yarn 上可以运行各种类型的分布式运算程序（mapreduce 只是其中的一种），比如 mapreduce、storm 程序，spark
+程序，tez ……。所以，spark、storm 等运算框架都可以整合在 yarn 上运行，只要他们各自的框架中有符合 yarn 规范的资源请求机制即可。成为一个通用的资源调度平台，从此，企业中以前存在的各种运算集群都可以整合在一个物理集群上，提高资源利用率，方便数据共享。</p>
+</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hadoop/>Hadoop</a><a class="tag" href=/tags/yarn/>YARN</a></section></div><section class="article navigation"><p><a class="link" href="/post/mapreduce/"><span class="li">&larr;</span>分布式并行编程框架MapReduce</a></p><p><a class="link" href="/post/hdfs/"><span class="li">&rarr;</span>分布式文件系统HDFS</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>

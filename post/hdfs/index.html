@@ -7,9 +7,8 @@
     <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
         <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
     <h1 class="article title">分布式文件系统HDFS</h1><p class="article date">2020-04-22</p></section><article class="article markdown-body"><h1 id="分布式文件系统hdfs">分布式文件系统HDFS</h1>
-<p><code>HDFS（Hadoop Distributed File System）</code>将大文件切割为小数据块，分别存储在不同的机器上联合管理，每个数据块做冗余备份分散到不同服务器，做到高可靠性。<br>
-HDFS是一个分布式文件系统，用于存储文件，通过统一的命名空间——目录树来定位文件。HDFS 文件系统会给客户端提供一个统一的抽象目录树，客户端通过路径来访问文件，形如：hdfs://namenode:port/dir-a/dir-b/dir-c/file.data；hdfs://hadoop02:9000/soft/hadoop-2.6.5-centos-6.7.tar.gz<br>
-为各类分布式运算框架（MapReduce，Spark，Tez，Flink，…）提供数据存储服务。</p>
+<p><code>HDFS（Hadoop Distributed File System）</code>是一个分布式文件系统，用于存储文件。为各类分布式运算框架（MapReduce，Spark，Tez，Flink，…）提供数据存储服务。HDFS通过统一的命名空间——目录树来定位文件，文件系统会给客户端提供一个统一的抽象目录树，客户端通过路径来访问文件，形如：hdfs://hadoop02:9000/soft/hadoop-2.6.5-centos-6.7.tar.gz</p>
+<p>HDFS将大文件切割为小数据块，分别存储在不同的机器上联合管理，每个数据块做冗余备份分散到不同服务器，做到高可靠性。</p>
 <h2 id="hdfs相关概念和特性">HDFS相关概念和特性</h2>
 <p><strong>块</strong>：HDFS 中的文件在物理上是分块存储（block），块的大小可以通过配置参数(dfs.blocksize)来规定，HDFS的一个块要比普通文件系统的块大得多，默认大小在 hadoop2.x 版本中是 128M，老版本中是 64M。较小的块会增加寻址开销；MapReduce以块为单位处理数据，块较大时无法发挥分布式并行处理的效果。</p>
 <p><strong>NameNode名称节点</strong>：整个HDFS集群的管家，名称节点负责存储管理元数据。<br>
@@ -42,6 +41,24 @@ hdfs-site.xml 配置文件中的 heartbeat.recheck.interval 的单位为毫秒�
 尤其是在 DataNode 节点出现故障，或在现有的集群上增添新的 DataNode 时。<br>
 命令：<code>sbin/start-balancer.sh</code><br>
 自动进行均衡非常慢，一天能移动的数据量在 10G-10T 的级别，很难满足超大集群的需求</p>
+<h2 id="高可用ha">高可用HA</h2>
+<p>在 Hadoop 2.0 之前，存在单点故障 (SPOF：A single point of failure)。对于只有一个 NameNode 的集群，如果 NameNode 机器出现故障(比如宕机或是软件、硬件升级)，那么整个集群将无法使用，直到 NameNode 重新启动。</p>
+<p>HDFS 的 HA 功能通过配置 Active/Standby 两个 NameNodes 实现在集群中对 NameNode 的热备来解决上述问题。出现故障时可通过此种方式将 NameNode 很快的切换到另外一台机器。一个典型的 HDFS(HA) 集群中，使用两台单独的机器配置为 NameNodes 。在任何时间点，确保 NameNodes 中只有一个处于 Active 状态，其他的处在 Standby 状态。其中ActiveNameNode 负责集群中的所有客户端操作，StandbyNameNode 仅仅充当备机，保证一旦 ActiveNameNode 出现问题能够快速切换。</p>
+<p>为了能够实时同步 Active 和 Standby 两个 NameNode 的元数据信息（实际上 editlog），需提供一个共享存储系统，可以是 NFS、QJM（Quorum Journal Manager）或者 Zookeeper，ActiveNamenode 将数据写入共享存储系统，而 Standby 监听该系统，一旦发现有新数据写入，则读取这些数据，并加载到自己内存中，以保证自己内存状态与 Active NameNode 保持基本一致。</p>
+<h2 id="hadoop-fedaration联邦">Hadoop Fedaration联邦</h2>
+<p>HDFS Federation 是指 HDFS 集群可同时存在多个 NameNode。这些 NameNode 分别管理一部分数据，且共享所有 DataNode 的存储资源。优点：</p>
+<ul>
+<li>
+<p>HDFS 集群扩展性。多个 NameNode 分管一部分目录，使得一个集群可以扩展到更多节点，不再像 1.0 中那样由于内存的限制制约文件存储数目。</p>
+</li>
+<li>
+<p>性能更高效。多个 NameNode 管理不同的数据，且同时对外提供服务，将为用户提供更高的读写吞吐率。</p>
+</li>
+<li>
+<p>良好的隔离性。用户可根据需要将不同业务数据交由不同 NameNode 管理，这样不同业务之间影响很小。</p>
+</li>
+</ul>
+<p>HDFS Federation 并不能解决单点故障问题，也就是说，每个 NameNode 都存在在单点故障问题。</p>
 <h2 id="元数据管理">元数据管理</h2>
 <p>NameNode负责元数据的管理，元数据全部加载在内存中，断电时会造成数据丢失，如果只存储在磁盘中则无法快速响应，因此采用内存+磁盘的存储方式。按存储形式可分为内存元数据和元数据文件两种，分别存在内存和磁盘上。<br>
 内存元数据包含所有的元数据信息，向客户端提供读服务。磁盘元数据可分为两个：</p>
@@ -92,58 +109,17 @@ Active NameNode 首先把 EditLog 提交到 JournalNode 集群，SNN会定期将
 <li><code>-count</code>，统计一个指定目录下的文件节点数量</li>
 </ul>
 <h2 id="hdfs-的-java-api-操作">HDFS 的 Java API 操作</h2>
-<p><strong>配置IDEA</strong><br>
-新建Maven项目，配置pom.xml文件添加Hadoop依赖。</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">    <span class="nt">&lt;properties&gt;</span>
-        <span class="nt">&lt;hadoopVersion&gt;</span>3.1.3<span class="nt">&lt;/hadoopVersion&gt;</span>
-    <span class="nt">&lt;/properties&gt;</span>
-
-    <span class="nt">&lt;dependencies&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>junit<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>junit<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>4.12<span class="nt">&lt;/version&gt;</span>
-            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>hadoop-common<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${hadoopVersion}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>hadoop-hdfs<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${hadoopVersion}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>hadoop-client<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${hadoopVersion}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>hadoop-mapreduce-client-core<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${hadoopVersion}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-        <span class="nt">&lt;dependency&gt;</span>
-            <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
-            <span class="nt">&lt;artifactId&gt;</span>hadoop-mapreduce-client-jobclient<span class="nt">&lt;/artifactId&gt;</span>
-            <span class="nt">&lt;version&gt;</span>${hadoopVersion}<span class="nt">&lt;/version&gt;</span>
-        <span class="nt">&lt;/dependency&gt;</span>
-    <span class="nt">&lt;/dependencies&gt;</span>
-</code></pre></div><p>注意在java程序中手动配置<code>conf.set(&quot;fs.defaultFS&quot;,&quot;hdfs://{服务器IP}:9000&quot;);</code>。系统环境变量中配置<code>HADOOP_USER_NAME</code>为服务器Hadoop用户名称避免权限问题，<a href="https://blog.csdn.net/kkdelta/article/details/50393413"target="_blank">参考</a>。</p>
-<p>存在问题，client无法连接DataNode，导致无法上传文件，<a href="https://my.oschina.net/gordonnemo/blog/3017724"target="_blank">参考</a>但还没有解决。</p>
-<p><strong>FileSystem实例</strong><br>
-在 java 中操作 hdfs，首先要获得一个客户端实例：</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">()</span>
-<span class="n">FileSystem</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">FileSystem</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">conf</span><span class="o">)</span>
-</code></pre></div><p>conf会根据Hadoop配置文件获取fs.defaultFS参数，即HDFS地址，也可以通过<code>conf.set(&quot;fs.defaultFS, &quot;地址&quot;)</code>来设定。我们的操作目标是 HDFS，所以获取到的 fs 对象是 DistributedFileSystem 的实例。<br>
-常用API：</p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.hadoop.conf.Configuration</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.FileSystem</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.Path</span><span class="o">;</span>
-</code></pre></div><ul>
+</code></pre></div><p><strong>FileSystem实例</strong><br>
+在 java 中操作 hdfs，首先要获得一个客户端实例。Hadoop文件系统通过Hadoop Path对象代表文件，可以将路径视为一个Hadoop文件系统URI。获取FileSystem实例有以下几个静态工厂方法：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">FileSystem</span> <span class="nf">get</span> <span class="o">(</span><span class="n">Configuration</span> <span class="n">conf</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">FileSystem</span> <span class="nf">get</span> <span class="o">(</span><span class="n">URI</span> <span class="n">uri</span><span class="o">,</span> <span class="n">Configuration</span> <span class="n">conf</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="n">FileSystem</span> <span class="nf">get</span> <span class="o">(</span><span class="n">URI</span> <span class="n">uri</span><span class="o">,</span> <span class="n">Configuration</span> <span class="n">conf</span><span class="o">,</span> <span class="n">String</span> <span class="n">user</span><span class="o">)</span> <span class="k">throw</span> <span class="n">IOException</span>
+</code></pre></div><p>Configuration对象封装了客户端或服务器的配置，通过设置配置文件读取路径实现。第一个方法返回默认的文件系统（core-site.xml中指定，没有则使用本地文件系统）。第二个通过给定的URI方案和权限来确定要使用的文件系统，RUI每个给定则返回默认。第三个作为给定用户来访问文件按系统。我们的操作目标是 HDFS，所以获取到的 fs 对象是 DistributedFileSystem 的实例。
+常用API：</p>
+<ul>
 <li><code>fs.makdirs(Path)</code>，建立文件夹</li>
 <li><code>fs.copyFromLocalFile(src, dst)</code>，上传文件，src和dst都是Path对象。</li>
 <li><code>fs.copyToLocalFile()</code>，下载文件</li>
@@ -153,40 +129,7 @@ Active NameNode 首先把 EditLog 提交到 JournalNode 集群，SNN会定期将
 </ul>
 <h2 id="hdfs-流式数据读写和流程">HDFS 流式数据读写和流程</h2>
 <p>相对那些封装好的方法而言的更底层一些的操作方式 上层那些 mapreduce spark 等运算框架，去 hdfs 中获取数据的时候，就是调的这种底层的 API。</p>
-<p><strong>写数据过程</strong></p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.hadoop.conf.Configuration</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.FileSystem</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.Path</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.FSDataInputStream</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WriteDataTest</span><span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
-        <span class="k">try</span><span class="o">{</span>
-            <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
-            <span class="n">FileSystem</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">FileSystem</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">conf</span><span class="o">);</span>
-            <span class="n">Path</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="s">&#34;hdfs://localhost:9000/user/hadoop/test.txt&#34;</span><span class="o">);</span>
-            <span class="n">FSDataOutputStream</span> <span class="n">outStream</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>
-            <span class="n">outStream</span><span class="o">.</span><span class="na">writeUTF</span><span class="o">(</span><span class="s">&#34;Welcome to HDFS Java API!!!&#34;</span><span class="o">);</span>
-            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Created!&#34;</span><span class="o">);</span>
-            <span class="n">outStream</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-            <span class="n">fs</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre></div><div align=center><img src="/bdimg/HDFS写数据.png" width = "80%" /></div>
-<ol>
-<li>使用 HDFS 提供的客户端 Client，向远程的 Namenode 发起 RPC 请求。</li>
-<li>Namenode检查文件是否已经存在，是否有权限进行操作，成功则会为文件创建一个记录，否则会让客户端抛出异常。</li>
-<li>客户端开始写入文件时，会将文件切分成多个 packets，并在内部以数据队列“data queue”的形式管理这些 packets，向 Namenode 申请 blocks，获取用来存储replicas 的合适的 datanode 列表，列表的大小根据 Namenode 中 replication的设定而定。</li>
-<li>开始以 pipeline（管道）的形式将 packet 写入所有的 replicas 中。客户端把 packet 以流的方式写入第一个 datanode，该 datanode 把该 packet 存储之后，再将其传递给在此 pipeline中的下一个 datanode，直到最后一个 datanode，这种写数据的方式呈流水线的形式。</li>
-<li>最后一个 datanode 成功存储之后会返回一个 ack packet（确认队列），在 pipeline 里传递至客户端，在客户端的开发库内部维护着&quot;ack queue&rdquo;，成功收到 datanode 返回的 ack packet 后会从&quot;ack queue&quot;移除相应的 packet。</li>
-<li>如果传输过程中某个 datanode 出现故障，那么当前的 pipeline 会被关闭，出现故障的 datanode 会从当前的 pipeline 中移除，剩余的 block 会继续剩下的 datanode 中继续以 pipeline 的形式传输，同时 Namenode 会分配一个新的 datanode，保持 replicas 设定的数量。</li>
-<li>客户端完成数据的写入后，会对数据流调用 close()方法，关闭数据流。</li>
-<li>只要写入了 dfs.replication.min(最小)的复本数（默认为 1），写操作就会成功，并且这个块可以在集群中异步复制，直到达到其目标复本数（dfs．replication 的默认值为 3），因为 namenode 已经知道文件由哪些块组成，所以它在返回成功前只需要等待数据块进行最小量的复制。</li>
-</ol>
-<h2 id="hdfs读数据过程">HDFS读数据过程</h2>
+<p><strong>HDFS读数据</strong></p>
 <div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.io.BufferedReader</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">java.io.InputStreamReader</span><span class="o">;</span>
 <span class="kn">import</span> <span class="nn">org.apache.hadoop.conf.Configuration</span><span class="o">;</span>
@@ -211,7 +154,14 @@ Active NameNode 首先把 EditLog 提交到 JournalNode 集群，SNN会定期将
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">}</span>
-</code></pre></div><div align=center><img src="/bdimg/hdfs读数据.png" width = "80%" /></div> 
+</code></pre></div><p><code>FSDataInputStream对象</code>，FileSystem的open()方法返回的是FSDataInputStream对象，是继承了java.io.DataInputStream的特殊类，支持随机访问可从流的任意位置读取数据。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FSDataInputStream</span> <span class="kd">extends</span> <span class="n">DataInputStream</span> <span class="kd">implements</span> <span class="n">Seekable</span><span class="o">,</span> <span class="n">PositionedReadable</span><span class="o">{}</span>
+</code></pre></div><ul>
+<li>seek()可以移动到文件的任意一个绝对位置；</li>
+<li>getPos()查询当前位置相对于文件起始位置的偏移量。</li>
+<li>read(long position, byte[] buffer, int offset, int length),从指定position位置处读取至多为length字节的数据存入缓冲区buffer的指定偏移量offset处。</li>
+</ul>
+<div align=center><img src="/bdimg/hdfs读数据.png" width = "80%" /></div> 
 <ol>
 <li>使用 HDFS 提供的客户端 Client，向远程的 Namenode 发起 RPC 请求。</li>
 <li>Namenode 会视情况返回文件的全部 block 列表，对于每个 block，Namenode 都会返回有该 block 拷贝的 DataNode 地址。</li>
@@ -220,6 +170,40 @@ Active NameNode 首先把 EditLog 提交到 JournalNode 集群，SNN会定期将
 <li>当读完列表 block 后，且文件读取还没有结束，客户端会继续向 Namenode 获取下一批的 block 列表。</li>
 <li>读取完一个 block 都会进行 checksum 验证，如果读取 datanode 时出现错误，客户端会通知 Namenode，然后再从下一个拥有该 block 拷贝的 datanode 继续读。</li>
 </ol>
+<p><strong>写数据</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">org.apache.hadoop.conf.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.FileSystem</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.Path</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.fs.FSDataOutputStream</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WriteDataTest</span><span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
+        <span class="k">try</span><span class="o">{</span>
+            <span class="n">Configuration</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Configuration</span><span class="o">();</span>
+            <span class="n">FileSystem</span> <span class="n">fs</span> <span class="o">=</span> <span class="n">FileSystem</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">conf</span><span class="o">);</span>
+            <span class="n">Path</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Path</span><span class="o">(</span><span class="s">&#34;hdfs://localhost:9000/user/hadoop/test.txt&#34;</span><span class="o">);</span>
+            <span class="n">FSDataOutputStream</span> <span class="n">outStream</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>
+            <span class="n">outStream</span><span class="o">.</span><span class="na">writeUTF</span><span class="o">(</span><span class="s">&#34;Welcome to HDFS Java API!!!&#34;</span><span class="o">);</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Created!&#34;</span><span class="o">);</span>
+            <span class="n">outStream</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+            <span class="n">fs</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p><code>FSDataOutputStream对象</code>，FileSystem的create()和append()（追加）方法返回FSDataOutputStream对象。FSDataOutputStream类不允许在文件中定位，因为HDFS只允许在一个已打开的文件中顺序写入。</p>
+<div align=center><img src="/bdimg/HDFS写数据.png" width = "80%" /></div>
+<ol>
+<li>使用 HDFS 提供的客户端 Client，向远程的 Namenode 发起 RPC 请求。</li>
+<li>Namenode检查文件是否已经存在，是否有权限进行操作，成功则会为文件创建一个记录，否则会让客户端抛出异常。</li>
+<li>客户端开始写入文件时，会将文件切分成多个 packets，并在内部以数据队列“data queue”的形式管理这些 packets，向 Namenode 申请 blocks，获取用来存储replicas 的合适的 datanode 列表，列表的大小根据 Namenode 中 replication的设定而定。</li>
+<li>开始以 pipeline（管道）的形式将 packet 写入所有的 replicas 中。客户端把 packet 以流的方式写入第一个 datanode，该 datanode 把该 packet 存储之后，再将其传递给在此 pipeline中的下一个 datanode，直到最后一个 datanode，这种写数据的方式呈流水线的形式。</li>
+<li>最后一个 datanode 成功存储之后会返回一个 ack packet（确认队列），在 pipeline 里传递至客户端，在客户端的开发库内部维护着&quot;ack queue&rdquo;，成功收到 datanode 返回的 ack packet 后会从&quot;ack queue&quot;移除相应的 packet。</li>
+<li>如果传输过程中某个 datanode 出现故障，那么当前的 pipeline 会被关闭，出现故障的 datanode 会从当前的 pipeline 中移除，剩余的 block 会继续剩下的 datanode 中继续以 pipeline 的形式传输，同时 Namenode 会分配一个新的 datanode，保持 replicas 设定的数量。</li>
+<li>客户端完成数据的写入后，会对数据流调用 close()方法，关闭数据流。</li>
+<li>只要写入了 dfs.replication.min(最小)的复本数（默认为 1），写操作就会成功，并且这个块可以在集群中异步复制，直到达到其目标复本数（dfs．replication 的默认值为 3），因为 namenode 已经知道文件由哪些块组成，所以它在返回成功前只需要等待数据块进行最小量的复制。</li>
+</ol>
 <p>参考：<br>
 [1] <a href="https://www.icourse163.org/course/XMU-1002335004"target="_blank">大数据技术原理与应用Mooc</a>.<br>
 [2] 光环国际课件.<br>
@@ -227,7 +211,7 @@ Active NameNode 首先把 EditLog 提交到 JournalNode 集群，SNN会定期将
 [4] <a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-hadoop-name-node/index.html">https://www.ibm.com/developerworks/cn/opensource/os-cn-hadoop-name-node/index.html</a><br>
 [5] <a href="https://blog.csdn.net/kkdelta/article/details/50393413">https://blog.csdn.net/kkdelta/article/details/50393413</a><br>
 [6] <a href="https://my.oschina.net/gordonnemo/blog/3017724">https://my.oschina.net/gordonnemo/blog/3017724</a></p>
-</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hadoop/>Hadoop</a><a class="tag" href=/tags/hdfs/>HDFS</a></section></div><section class="article navigation"><p><a class="link" href="/post/mapreduce/"><span class="li">&larr;</span>分布式并行编程框架MapReduce</a></p><p><a class="link" href="/post/%E5%A4%A7%E6%95%B0%E6%8D%AEhadoop/"><span class="li">&rarr;</span>大数据和Hadoop</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hadoop/>Hadoop</a><a class="tag" href=/tags/hdfs/>HDFS</a></section></div><section class="article navigation"><p><a class="link" href="/post/yarn/"><span class="li">&larr;</span>Hdoop资源管理系统YARN</a></p><p><a class="link" href="/post/%E5%A4%A7%E6%95%B0%E6%8D%AEhadoop/"><span class="li">&rarr;</span>大数据和Hadoop</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
     <p class="copyright">©2020 Notepadium.</p>
     <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
         target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 

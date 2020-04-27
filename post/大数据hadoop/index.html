@@ -65,7 +65,20 @@
 <p>数据中心，包含大量的刀片服务器，云计算的各种数据和应用都位于数据中心</p>
 <h1 id="大数据处理架构hadoop">大数据处理架构Hadoop</h1>
 <h2 id="概述">概述</h2>
-<p>Hadoop是Apache软件基金会旗下开源软件，顶级项目。降低了使用复杂度，对普通用户屏蔽底层实现细节，可根据提供的高层接口实现操作由Java语言开发，有很好的跨平台性。Hadoop支持多种语言编写应用。广义上来说，Hadoop通常是指一个更广泛的概念——Hadoop 生态圈。</p>
+<p>数据量的提升的同时我们遇到的问题：磁盘存储不断提升但磁盘访问速度却没有提升，而且CPU性能也不再遵循摩尔定律。试想用100个磁盘，每个磁盘存储数据的1%，读取时并行读取，这样就能用很少的时间读取完数据。每个磁盘可以存储多个文件的一部分数据避免浪费存储空间（多个文件同时读取的可能性不大，彼此之间干扰不大）。但会存在一些问题：</p>
+<ul>
+<li>硬件故障问题，当硬件出现故障时，数据就会丢失，常见的解决方法是复制，即保存数据的副本，当某个硬件故障后可使用其他硬件上的副本。</li>
+<li>多个磁盘数据的结合分析， 各种分布式系统允许结合不同来源的数据进行分析，但保证其正确性是一个挑战。MapReduce提出一个编程模型，该模型抽象出这些磁盘读写问题将其转化为对一个数据集的计算。</li>
+</ul>
+<p>Hadoop是Apache软件基金会旗下开源软件，顶级项目，提供了一个可靠且可扩展的存储和分析平台。降低了使用复杂度，对普通用户屏蔽底层实现细节，可根据提供的高层接口实现操作由Java语言开发，有很好的跨平台性。Hadoop支持多种语言编写应用。广义上来说，Hadoop通常是指一个更广泛的概念——Hadoop 生态圈。</p>
+<p><strong>MapReduce与关系型数据库管理系统的区别</strong>，计算机硬盘寻址时间的提升远不如传输速率的提升，寻址是将磁头移动到特定磁盘位置进行读写操作。</p>
+<ul>
+<li>如果数据库只更新一小部分记录，传统的B树（关系型数据库使用的一种数据结构，受限于寻址速率）更具有优势，但大量数据更新时B树效率明显落后于MapReduce。</li>
+<li>应用场景。MapReduce适合批处理方式分析数据集的问题，一次写入多次读取；RDBMS适用于索引后数据集的点查询和更新，持续更新的数据集。</li>
+<li>数据结构不同。所操作数据集的结构化程度，hadoop对非结构化和半结构化数据非常有效，因为它在处理数据时才对数据进行解释。关系型数据往往是规范的。</li>
+<li>可扩展性。MapReduce和Hadoop中其他的处理模型可以随着数据规模线性伸缩，对数据分区后，函数能够在各个分区上并行工作，但SQL查询一般不具备这种特性。</li>
+<li>数据量。GB/PB</li>
+</ul>
 <p>Hadoop核心组件：</p>
 <ul>
 <li>Common（基础组件）（工具包，RPC 框架）JNDI 和 RPC</li>
@@ -99,7 +112,11 @@
 <p>Apache开源版本易用性和性能最差。</p>
 <p><strong>Hadoop项目结构</strong></p>
 <div align=center><img src="/bdimg/hadoop结构.png" width = "60%" /></div> 
+<h2 id="机架感知">机架感知</h2>
+<p>在默认情况下，HDFS 集群是没有机架感知的，也就是说所有服务器节点在同一个默认机架中。配置机架感知通过修改 core-site.xml文件，设置<code>topology.script.file.name</code>，值为一个可执行文件（脚本），该脚本接收datanode 节点的 IP 地址，输出datanode 节点所在的机架配置信息，需要一个数据文件存放实际的机架信息。<br>
+<code>hdfs dfsadmin -printTopology </code>可用来查看集群拓扑。</p>
 <h2 id="hadoop安装单机和伪分布式">Hadoop安装（单机和伪分布式）</h2>
+<p>本文使用的是阿里云的ECS实例。搭建大数据环境可参照：http://dblab.xmu.edu.cn/blog/1952-2/</p>
 <p><strong>Linux的选择</strong>：当前使用比例较高的发行版是<code>CentOS</code>和<code>Ubuntu</code>，Hadoop学习上，建议使用Ubuntu，相对来讲是一个轻量级的。电脑大于4G建议使用64位系统。配置较高建议安装虚拟机。</p>
 <p><strong>Hadoop安装方式</strong></p>
 <ul>
@@ -225,30 +242,35 @@ cat ./output/*
 export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
 </code></pre><p>阿里云机器可设置web端远程查看hdfs，内网ip通过hosts文件查看，配置core-site.xml：fs.defaultFS为hdfs://内网ip:9000；hdfs-site.xml：dfs.namenode.http-address为内网ip:50070。开放防火墙和安全组，浏览器输入http:阿里云ip:50070访问。</p>
 <h2 id="hadoop集群的部署和使用">Hadoop集群的部署和使用</h2>
-<h2 id="机架感知">机架感知</h2>
-<p>在默认情况下，HDFS 集群是没有机架感知的，也就是说所有服务器节点在同一个默认机架中。配置机架感知通过修改 core-site.xml文件，设置<code>topology.script.file.name</code>，值为一个可执行文件（脚本），该脚本接收datanode 节点的 IP 地址，输出datanode 节点所在的机架配置信息，需要一个数据文件存放实际的机架信息。<br>
-<code>hdfs dfsadmin -printTopology </code>可用来查看集群拓扑。</p>
-<h2 id="高可用ha">高可用HA</h2>
-<p>在 Hadoop 2.0 之前，存在单点故障 (SPOF：A single point of failure)。对于只有一个 NameNode 的集群，如果 NameNode 机器出现故障(比如宕机或是软件、硬件升级)，那么整个集群将无法使用，直到 NameNode 重新启动。</p>
-<p>HDFS 的 HA 功能通过配置 Active/Standby 两个 NameNodes 实现在集群中对 NameNode 的热备来解决上述问题。出现故障时可通过此种方式将 NameNode 很快的切换到另外一台机器。一个典型的 HDFS(HA) 集群中，使用两台单独的机器配置为 NameNodes 。在任何时间点，确保 NameNodes 中只有一个处于 Active 状态，其他的处在 Standby 状态。其中ActiveNameNode 负责集群中的所有客户端操作，StandbyNameNode 仅仅充当备机，保证一旦 ActiveNameNode 出现问题能够快速切换。</p>
-<p>为了能够实时同步 Active 和 Standby 两个 NameNode 的元数据信息（实际上 editlog），需提供一个共享存储系统，可以是 NFS、QJM（Quorum Journal Manager）或者 Zookeeper，ActiveNamenode 将数据写入共享存储系统，而 Standby 监听该系统，一旦发现有新数据写入，则读取这些数据，并加载到自己内存中，以保证自己内存状态与 Active NameNode 保持基本一致。</p>
-<h2 id="hadoop-fedaration联邦">Hadoop Fedaration联邦</h2>
-<p>HDFS Federation 是指 HDFS 集群可同时存在多个 NameNode。这些 NameNode 分别管理一部分数据，且共享所有 DataNode 的存储资源。优点：</p>
-<ul>
-<li>
-<p>HDFS 集群扩展性。多个 NameNode 分管一部分目录，使得一个集群可以扩展到更多节点，不再像 1.0 中那样由于内存的限制制约文件存储数目。</p>
-</li>
-<li>
-<p>性能更高效。多个 NameNode 管理不同的数据，且同时对外提供服务，将为用户提供更高的读写吞吐率。</p>
-</li>
-<li>
-<p>良好的隔离性。用户可根据需要将不同业务数据交由不同 NameNode 管理，这样不同业务之间影响很小。</p>
-</li>
-</ul>
-<p>HDFS Federation 并不能解决单点故障问题，也就是说，每个 NameNode 都存在在单点故障问题。</p>
-<p>参考：<br>
-[1] <a href="https://www.icourse163.org/course/XMU-1002335004"target="_blank">大数据技术原理与应用Mooc</a>.<br>
-[2] 光环国际课件.</p>
+<p>==</p>
+<h2 id="配置idea">配置IDEA</h2>
+<p>新建Maven项目，配置pom.xml文件添加Hadoop依赖。</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml">    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;hadoopVersion&gt;</span>3.1.3<span class="nt">&lt;/hadoopVersion&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>junit<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>junit<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>4.12<span class="nt">&lt;/version&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>hadoop-client<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>${hadoopVersion}<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+</code></pre></div><p>注意在java程序中手动配置<code>conf.set(&quot;fs.defaultFS&quot;,&quot;hdfs://{服务器IP}:9000&quot;);</code>。系统环境变量中配置<code>HADOOP_USER_NAME</code>为服务器Hadoop用户名称避免权限问题，<a href="https://blog.csdn.net/kkdelta/article/details/50393413"target="_blank">参考</a>。</p>
+<p>存在问题，client无法连接DataNode，导致无法上传文件，<a href="https://my.oschina.net/gordonnemo/blog/3017724"target="_blank">参考</a>但还没有解决。</p>
+<p>参考： 
+[1] Hadoop权威指南 第四版.<br>
+[2] <a href="https://www.icourse163.org/course/XMU-1002335004"target="_blank">大数据技术原理与应用Mooc</a>.<br>
+[3] 光环国际课件.<br>
+[4] <a href="https://blog.csdn.net/kkdelta/article/details/50393413">https://blog.csdn.net/kkdelta/article/details/50393413</a><br>
+[5] <a href="https://my.oschina.net/gordonnemo/blog/3017724">https://my.oschina.net/gordonnemo/blog/3017724</a></p>
 </article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hadoop/>Hadoop</a></section></div><section class="article navigation"><p><a class="link" href="/post/hdfs/"><span class="li">&larr;</span>分布式文件系统HDFS</a></p><p><a class="link" href="/post/java%E7%B1%BB%E4%B8%8E%E5%AF%B9%E8%B1%A1/"><span class="li">&rarr;</span>Java类与对象</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
     <p class="copyright">©2020 Notepadium.</p>
     <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 

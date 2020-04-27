@@ -6,7 +6,7 @@
     <div class="base-body"><section id="header" class="site header">
     <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
         <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
-    <h1 class="article title">分布式并行编程框架MapReduce</h1><p class="article date">2020-04-25</p></section><article class="article markdown-body"><h1 id="分布式并行编程框架mapreduce">分布式并行编程框架MapReduce</h1>
+    <h1 class="article title">分布式并行编程框架MapReduce</h1><p class="article date">2020-04-27</p></section><article class="article markdown-body"><h1 id="分布式并行编程框架mapreduce">分布式并行编程框架MapReduce</h1>
 <h2 id="概述">概述</h2>
 <p><strong>分布式并行编程</strong></p>
 <p>CPU的摩尔定律失效，CPU性能提升不大，而数据量在快速增长，出现数据处理计算方面的矛盾。</p>
@@ -25,7 +25,7 @@
 </ul>
 <p><strong>MapReduce</strong><br>
 Mapreduce 是一个分布式并行编程框架，核心功能是将用户编写的业务逻辑代码和自带默认组件整合成一个完整的分布式运算程序，并发运行在一个hadoop 集群上。</p>
-<p>MapReduce屏蔽了整个分布式程序运行的底层细节，将复杂的计算过程高度的抽象成<code>Map</code>和<code>Reduce</code>函数。</p>
+<p>MapReduce屏蔽了整个分布式程序运行的底层细节，将复杂的计算过程高度的抽象成<code>map</code>和<code>reduce</code>函数。</p>
 <h2 id="maprduce程序">MapRduce程序</h2>
 <p><strong>示例程序运行</strong></p>
 <p>官方提供了一些样例程序，如 wordcount、pi 程序，代码都在 /share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.4.jar 包里。</p>
@@ -124,10 +124,10 @@ hadoop fs -cat /wordcount/part-r-00000
 <li>整个程序需要一个 Drvier 来进行提交，提交的是一个描述了各种必要信息的 job 对象。</li>
 </ul>
 <p>wordcount程序逻辑：数据按行以键值对的方式输入map()函数，键为行起始位置的偏移量，值为该行文本；map阶段忽略传入的K，对V即行文本做单词统计，每遇到一个单词则把其转换成一个&lt;word,1&gt;，reduce()函数接收到&lt;word,[1,1,1,&hellip;]&gt;形式的数据，对值进行求和输出即可。</p>
-<p>整个数据流中，数据传输需要进行序列化，JDK自带的数据类型如Int、String，在序列化时效率较低，Hadoop自定义了一套序列化框架，如果数据需要序列化（写磁盘或网络传输），需要使用下列数据类型：<br>
+<p>整个数据流中，数据传输需要进行序列化（下文说明），JDK自带的数据类型如Int、String，在序列化时效率较低，Hadoop自定义了一套序列化框架，如果数据需要序列化（写磁盘或网络传输），需要使用下列数据类型：<br>
 <code>Long-&gt;LongWritable; String-&gt;Text; Int-&gt;IntWritable; Null-&gt;NullWritable</code>，转换可用序列化对象的set()和get()方法。</p>
-<p><strong>源码详解</strong><br>
-首先看<strong>Map部分</strong>，<code>Mapper&lt;KeyIn, ValueIn, KeyOut, ValueOut&gt;</code>（Mapper/Reducer是泛型类）中：</p>
+<h2 id="源码详解">源码详解</h2>
+<p>首先看<strong>Map部分</strong>，<code>Mapper&lt;KeyIn, ValueIn, KeyOut, ValueOut&gt;</code>（Mapper/Reducer是泛型类）中：</p>
 <ul>
 <li><code>KeyIn</code>、<code>ValueIn</code>，表示程序所读取数据的Key和Value的数据类型。</li>
 <li><code>KeyOut</code>、<code>ValueOut</code>，表示用户自定义逻辑方法返回数据中Key和Value的数据类型。</li>
@@ -169,16 +169,159 @@ hadoop fs -cat /wordcount/part-r-00000
 </span><span class="c1"></span><span class="o">}</span>
 </code></pre></div><h2 id="数据流">数据流</h2>
 <p>Hadoop将作业分成若干任务（task）来执行，包括map task 和 reduce task。这些任务运行在集群的节点上，并通过YARN进行调度。如果一个任务失败则会在不同的节点上调度运行。</p>
-<p><strong>split</strong><br>
-Hadoop将MarReduce的输入数据划分成等长的小块，称为分片(input split)，并为每个分片构建一个map task对分片中的记录应用map函数。<br>
+<p>Hadoop将MarReduce的输入数据划分成等长的小块，称为分片(input split)，并为每个分片构建一个map task对分片中的记录应用map函数。<br>
 每个分片的数据越少，负载均衡的质量越高（因为一台较快的计算机能够处理的数据分片比一台慢的更多，且成一定比例。即使使用相同的机器，失败的进程或其他并发运行的作业能够实现满意的负载均衡。？？？）。但分片数据越小，那么管理分片的总时间和构建map task的总时间变大。大多数作业合理的分块是HDFS块大小（默认128MB）。</p>
 <p>Hadoop集群中的数据块分布在各个节点上，对某个数据块的处理会寻找距离该数据块最近的map机器，以减少带宽资源消耗。理想状态数据块和map任务在同一个节点上，如果数据块的所有副本所在的节点正在运行其他map task，作业调度会寻找同一机架上的空闲map 槽（slot）来运行该map task。这也说明了为什么最佳切片大小与块大小相同（大于块大小则一个map task需要两个块数据，而HDFS节点上同时存储在两个块的可能性很小，肯定需要数据传输）。</p>
 <p>map task 会将其输出写入本地磁盘，而非HDFS。因为map task输出只是中间结果，由reduce task处理后才是最终结果，且作业完成后可以删除，如果在传送给reduce task之前任务失败，可在其他节点上再次构建该中间结果。</p>
+<p>reduce task不具备数据本地化的优势，单个reduce task的输入数据通常来自所有的mapper输出，排过序的map输出通过网络发送到reduce task所在节点，然后在reduce端进行合并，由reduce函数进行处理。reduce 输出存储在HDFS中。只有一个reduce task 的数据流：</p>
+<div align=center><img src="/bdimg/one数据流.png" width = "60%" /></div>  
+<p>reduce task数量是独立指定的，<code>job.setNumReduceTasks(4);</code>。如果有多个reduce task，map task 会为每个reduce task对输出进行分区（partition）。每个分区内的键所对应的键值对记录都在同一分区，默认的partition通过哈希函数来分区，效率较高，用户可以自定义。多个reduce task的数据流：</p>
+<div align=center><img src="/bdimg/more数据流.png" width = "60%" /></div>  
+<p>map task和reduce task 之间的数据流称为<code>shuffle</code>。</p>
+<h2 id="combiner">combiner</h2>
+<p>reduce task接收所有的map task输入，可用带宽会限制MapReduce作业，因此要尽量减少map task 和 reduce task之间的数据传输。</p>
+<p>Combiner 是 Mapper 和 Reducer 之外的一种组件，在每一个 map task 所在的节点运行，它的作用是对 map task 的输出结果进行局部汇总，以减轻 reducetask 的计算负载，减少网络传输。</p>
+<p>Combiner的使用：和 Reducer 一样，编写一个类，然后继承 Reducer，reduce 方法中写具体的 Combiner逻辑，然后在 job 中设置 Combiner 组件：<code>job.setCombinerClass(FlowSumCombine.class)</code>。</p>
+<p>Combiner 的使用要非常谨慎，因为 Combiner 在 MapReduce 过程中可能调用也可能不调用，可能调一次也可能调多次，所以Combiner 使用的原则是：有或没有都不能影响业务逻辑，都不能影响最终结果。Combiner的规则制约了可用的函数类型，如求最大值可用而求平均值不可用，因为在map task的输出求最大值，再在reduce task中求全局最大值是可行的，但在map task 中求平均值再在reduce task 中求全局平均结果会不正确。</p>
+<h2 id="序列化">序列化</h2>
+<p>序列化是指将结构化对象转化为字节流以便在网络上传输或写到磁盘，还有反序列化。用于分布式数据处理的两方面：进程间通信和永久存储。Hadoop中多个节点间上进程间的通信是通过“远程过程调用”（RPC, remote procedure call）实现的。RPC协议将消息序列化为二进制流，远程节点接收后反序列化为原始消息。 RPC序列化格式：</p>
+<ul>
+<li>紧凑、快速、可扩展、支持互操作</li>
+</ul>
+<p>Hadoop使用自己的序列化格式Writable，紧凑快速但不容易用Java以外的语言扩展使用。Writable接口定义了两个方法，一是将其状态写入DataOutPut二进制流，另一个从DataInPut二进制流读取状态。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Writable</span><span class="o">{</span>
+  <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="n">DataOutPut</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">;</span>
+  <span class="kt">void</span> <span class="nf">readFields</span><span class="o">(</span><span class="n">DataInPut</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div><p>IntWritable封装了Java int类型，实现原始的WritableComparablel接口，该接口继承自Writable和java.lang.Comparable。对于MapReduce来说类比较很重要，因为中间有基于键的排序。</p>
+<p>Writable类对Java基本数据类型进行了封装（首字母大写加Writable），所有的封装包含get()和set()两个方法用于读取/存储封装的值。整数的编码有定长（IntWritable、LongWritable）和变长（VIntWritable、VLongWritable）两种格式。定长适合值在值域中均匀分布，通常不均匀则变长更节省空间。<br>
+Text是针对UTF8序列的Wriatble类，一般认为是String的Writable等价。Text.set();Text.toString()。</p>
+<p>自定义的 Writable实现，例如：FlowBean类：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.io.DataInput</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.DataOutput</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.io.WritableComparable</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FlowBean</span> <span class="kd">implements</span> <span class="n">WritableComparable</span><span class="o">&lt;</span><span class="n">FlowBean</span><span class="o">&gt;{</span>
+  <span class="kd">private</span> <span class="n">String</span> <span class="n">phone</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="kt">long</span> <span class="n">sumFlow</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="nf">FlowBean</span><span class="o">()</span> <span class="o">{</span>
+  <span class="o">}</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="n">String</span> <span class="n">phone</span><span class="o">,</span> <span class="kt">long</span> <span class="n">sumFlow</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">phone</span> <span class="o">=</span> <span class="n">phone</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">sumFlow</span> <span class="o">=</span> <span class="n">sumFlow</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="c1">// getter()
+</span><span class="c1"></span>  <span class="c1">// setter()
+</span><span class="c1"></span>
+  <span class="c1">// 序列化方法
+</span><span class="c1"></span>  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="n">DataOutput</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="n">out</span><span class="o">.</span><span class="na">writeUTF</span><span class="o">(</span><span class="n">phone</span><span class="o">);</span>
+    <span class="n">out</span><span class="o">.</span><span class="na">writeLong</span><span class="o">(</span><span class="n">sumFlow</span><span class="o">);</span>
+  <span class="o">}</span>
+
+  <span class="c1">// 反序列化方法 注意： 字段的反序列化顺序与序列化时的顺序保持一致,並且类型也一致
+</span><span class="c1"></span>  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">readFields</span><span class="o">(</span><span class="n">DataInput</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">phone</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">readUTF</span><span class="o">();</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">sumFlow</span> <span class="o">=</span> <span class="n">in</span><span class="o">.</span><span class="na">readLong</span><span class="o">();</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">phone</span> <span class="o">+</span><span class="s">&#34;\t&#34;</span> <span class="o">+</span> <span class="n">upfFlow</span> <span class="o">+</span> <span class="s">&#34;\t&#34;</span> <span class="o">+</span> <span class="n">downFlow</span> <span class="o">+</span> <span class="s">&#34;\t&#34;</span> <span class="o">+</span> <span class="n">sumFlow</span><span class="o">;</span>
+  <span class="o">}</span>
+  
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">compareTo</span><span class="o">(</span><span class="n">FlowBean</span> <span class="n">fb</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)(</span><span class="n">fb</span><span class="o">.</span><span class="na">getSumFlow</span><span class="o">()</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="na">sumFlow</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="sort">sort</h2>
+<p>需求：对总流量从大到小倒序排。</p>
+<p>在遇到排序问题时，实现自定义的类来封装信息，并将该类作为 map 输出的 key 来传输，MR 程序在处理数据的过程中会对数据排序(map 输出的 kv 对传输到 reduce 之前，会排序)，排序的依据是 map 输出的 key，所以，我们如果要实现自己需要的排序规则，则可以考虑将排序因素放到 key 中，让 key 实现接口：WritableComparable，然后重写 key 的 compareTo方法。上面定义了FlowBean并从写了compareTo方法，MapReduce 中map和reduce程序如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">FlowSumSortMapper</span> <span class="kd">extends</span> <span class="n">Mapper</span><span class="o">&lt;</span><span class="n">LongWritable</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">FlowBean</span><span class="o">,</span><span class="n">Text</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="n">FlowBean</span> <span class="n">k</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FlowBean</span><span class="o">();</span>
+  <span class="n">Text</span> <span class="n">v</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Text</span><span class="o">();</span>
+  
+  <span class="nd">@Override</span>
+  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">map</span><span class="o">(</span><span class="n">LongWritable</span> <span class="n">key</span><span class="o">,</span> <span class="n">Text</span> <span class="n">value</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+    <span class="n">String</span> <span class="n">line</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+    <span class="n">String</span><span class="o">[]</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&#34;\t&#34;</span><span class="o">);</span>
+    <span class="n">String</span> <span class="n">phone</span> <span class="o">=</span> <span class="n">fields</span><span class="o">[</span><span class="n">0</span><span class="o">];</span>
+    <span class="kt">long</span> <span class="n">FlowSum</span> <span class="o">=</span> <span class="n">Long</span><span class="o">.</span><span class="na">parseLong</span><span class="o">(</span><span class="n">fields</span><span class="o">[</span><span class="n">1</span><span class="o">]);</span>
+    <span class="n">k</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">phone</span><span class="o">,</span> <span class="n">FlowSum</span><span class="o">);</span>
+    <span class="n">v</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">phone</span><span class="o">);</span>
+    <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">k</span><span class="o">,</span> <span class="n">v</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+<span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">FlowSumSortReducer</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">FlowBean</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">FlowBean</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">FlowBean</span> <span class="n">bean</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">&gt;</span> <span class="n">phones</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+    <span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">phones</span><span class="o">.</span><span class="na">iterator</span><span class="o">().</span><span class="na">next</span><span class="o">(),</span> <span class="n">bean</span><span class="o">);</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="partitioner">Partitioner</h2>
+<p>需求：根据归属地输出流量统计数据结果到不同文件，以便于在查询统计结果时可以定位到省级范围进行
+MapReduce 中会将 map 输出的 kv 对，按照相同 key 分组，然后分发给不同的 reduce task，默认的分发规则为：根据 key 的 hashcode%reduce task 数来分发，所以：如果要按照我们自己的需求进行分组，则需要改写数据分发（分组）组件 Partitioner。自定义一个 CustomPartitioner 继承抽象类：Partitioner，然后在 job 对象中设置 <code>job.setPartitionerClass(ProvincePartitioner.class)</code>。<br>
+例：根据手机号前三位分区。</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProvincePartitioner</span> <span class="kd">extends</span> <span class="n">Partitioner</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span> <span class="n">FlowBean</span><span class="o">&gt;</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="kd">static</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">provincMap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;();</span>
+  <span class="kd">static</span> <span class="o">{</span>
+    <span class="n">provincMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;138&#34;</span><span class="o">,</span> <span class="n">0</span><span class="o">);</span>
+    <span class="n">provincMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;139&#34;</span><span class="o">,</span> <span class="n">1</span><span class="o">);</span>
+    <span class="n">provincMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;136&#34;</span><span class="o">,</span> <span class="n">2</span><span class="o">);</span>
+    <span class="n">provincMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;137&#34;</span><span class="o">,</span> <span class="n">3</span><span class="o">);</span>
+    <span class="n">provincMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;135&#34;</span><span class="o">,</span> <span class="n">4</span><span class="o">);</span>
+  <span class="o">}</span>
+  
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getPartition</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">FlowBean</span> <span class="n">value</span><span class="o">,</span> <span class="kt">int</span> <span class="n">numPartitions</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">Integer</span> <span class="n">code</span> <span class="o">=</span> <span class="n">provincMap</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">.</span><span class="na">toString</span><span class="o">().</span><span class="na">substring</span><span class="o">(</span><span class="n">0</span><span class="o">,</span> <span class="n">3</span><span class="o">));</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">code</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">code</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">5</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span> 
+</code></pre></div><h2 id="shuffle">shuffle</h2>
+<p>MapReduce中系统执行排序、将map输出作为输入传给reducer的过程称为<code>shuffle</code>。具体来说就是将 map task 输出的数据，分发给 reducetask，并在分发的过程中，对数据按 key 进行了分区和排序。shuffle过程图：</p>
+<div align=center><img src="/bdimg/shuffle.png" width = "60%" /></div>  
+<p>整体来看，分为 3 个操作：分区 partition，Sort 根据 key 排序，Combiner 进行局部 value 的合并。</p>
+<ul>
+<li>map task 收集我们的 map()方法输出的 kv 对，放到内存缓冲区中。</li>
+<li>当缓冲区内容达到阈值，则从内存缓冲区不断溢出本地磁盘文件，可能会溢出多个文件。</li>
+<li>多个溢出文件会被合并成大的溢出文件。</li>
+<li>在溢出过程中，及合并的过程中，都要调用 partitoner 进行分组和针对 key 进行排序，如果定义了combiner则在溢出过程中在排序后的输出上运行，如果合并成大文件时文件至少存在3个则在合并过程中也会调用combiner函数。</li>
+<li>reduce task 根据自己的分区号，去各个 map task 机器上取相应的结果分区数据。</li>
+<li>reduce task 会取到同一个分区的来自不同 map task 的结果文件，reduce task 会将这些文件再进行合并（归并排序）。</li>
+<li>合并成大文件后，shuffle 的过程也就结束了，后面进入 reduce task 的逻辑运算过程（从文件中取出一个一个的键值对 group，调用用户自定义的 reduce()方法）。</li>
+</ul>
+<p>Shuffle 中的缓冲区大小会影响到 mapreduce 程序的执行效率，原则上说，缓冲区越大，磁盘 io 的次数越少，执行速度就越快缓冲区的大小可以通过参数调整, 参数：io.sort.mb 默认 100M。</p>
+<h2 id="mapreduce工作机制">MapReduce工作机制</h2>
+<div align=center><img src="/bdimg/mr机制.png" width = "60%" /></div>  
+<ol>
+<li>一个 mr 程序启动的时候，最先启动的是 MRAppMaster，MRAppMaster 启动后根据本次job 的描述信息，计算出需要的 map task 实例数量，然后向集群申请机器启动相应数量的map task 进程。</li>
+<li>maptask 进程启动之后，根据给定的数据切片(哪个文件的哪个偏移量范围)范围进行数据处理，主体流程为：</li>
+</ol>
+<ul>
+<li>利用客户指定的 inputformat 来获取 RecordReader 读取数据，形成输入 KV 对</li>
+<li>将输入 KV 对传递给客户定义的 map()方法，做逻辑运算，并将 map()方法输出的 KV 对收集到缓存</li>
+<li>将缓存中的 KV 对按照 K 分区排序后不断溢写到磁盘文件</li>
+</ul>
+<ol start="3">
+<li>MRAppMaster 监控到所有 map task 进程任务完成之后（真实情况是，某些 maptask 进程处理完成后，就会开始启动 reducetask 去已完成的 map task 处 fetch 数据），会根据客户指定的参数启动相应数量的 reducetask 进程，并告知 reducetask 进程要处理的数据范围（数据分区）。</li>
+<li>Reducetask 进程启动之后，根据 MRAppMaster 告知的待处理数据所在位置，从若干台map task 运行所在机器上获取到若干个 map task 输出结果文件，并在本地进行重新归并排序，然后按照相同 key 的 KV 为一个组，调用客户定义的 reduce()方法进行逻辑运算，并收集运算输出的结果 KV，然后调用客户指定的 outputformat 将结果数据输出到外部存储。</li>
+</ol>
 <p>参考：<br>
-[1] <a href="https://www.icourse163.org/course/XMU-1002335004"target="_blank">大数据技术原理与应用Mooc</a>.<br>
-[2] 光环国际课件.<br>
-[3] <a href="https://blog.csdn.net/khxu666/article/details/80764994">https://blog.csdn.net/khxu666/article/details/80764994</a>.</p>
-</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hadoop/>Hadoop</a><a class="tag" href=/tags/mapreduce/>MapReduce</a></section></div><section class="article navigation"><p><a class="link" href="/post/hdfs/"><span class="li">&rarr;</span>分布式文件系统HDFS</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+[1] Hadoop权威指南 第四版.<br>
+[2] <a href="https://www.icourse163.org/course/XMU-1002335004"target="_blank">大数据技术原理与应用Mooc</a>.<br>
+[3] 光环国际课件.<br>
+[4] <a href="https://blog.csdn.net/khxu666/article/details/80764994">https://blog.csdn.net/khxu666/article/details/80764994</a>.</p>
+</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hadoop/>Hadoop</a><a class="tag" href=/tags/mapreduce/>MapReduce</a></section></div><section class="article navigation"><p><a class="link" href="/post/yarn/"><span class="li">&rarr;</span>Hdoop资源管理系统YARN</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
     <p class="copyright">©2020 Notepadium.</p>
     <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
         target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 

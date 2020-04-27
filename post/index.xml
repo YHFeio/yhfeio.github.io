@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 Notepadium.</copyright>
-    <lastBuildDate>Sat, 25 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 27 Apr 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,10 +15,20 @@
     <item>
       <title>分布式并行编程框架MapReduce</title>
       <link>/post/mapreduce/</link>
-      <pubDate>Sat, 25 Apr 2020 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/mapreduce/</guid>
       <description>分布式并行编程框架MapReduce 概述 分布式并行编程 CPU的摩尔定律失效，CPU性能提升不大，而数据量在快速增长，出现数据处理计算方面的矛</description>
+      
+    </item>
+    
+    <item>
+      <title>Hdoop资源管理系统YARN</title>
+      <link>/post/yarn/</link>
+      <pubDate>Sun, 26 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/yarn/</guid>
+      <description>Hdoop资源管理系统YARN Apache YARN（Yet Another Resource Negotiator）是Hadoop集群资源管理系统。为了改善MapReduce的实现，</description>
       
     </item>
     
@@ -28,7 +38,7 @@
       <pubDate>Wed, 22 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/hdfs/</guid>
-      <description>分布式文件系统HDFS HDFS（Hadoop Distributed File System）将大文件切割为小数据块，分别存储在不同的机器上联合管理，每个数据块做冗余备份分</description>
+      <description>分布式文件系统HDFS HDFS（Hadoop Distributed File System）是一个分布式文件系统，用于存储文件。为各类分布式运算框架（MapReduce，</description>
       
     </item>
     
