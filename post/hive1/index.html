@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>数据仓库Hive_简介_安装_数据类型&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="数据仓库Hive_简介_安装_数据类型" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">数据仓库Hive_简介_安装_数据类型</h1><p class="article date">2020-04-29</p></section><article class="article markdown-body"><h1 id="数据仓库hive1">数据仓库Hive（1）</h1>
+<h2 id="hive简介">Hive简介</h2>
+<p>Hive 是构建在 Hadoop上 的数据仓库框架，由Facebook实现并开源。Hive提供 HQL(Hive SQL)查询功能，其设计目的是使不熟悉 MapReduce 的用户很方便地利用 HQL 进行数据 ETL（Extraction-Transformation-Loading）操作。Hive 的本 质是将 SQL 语句转换为 MapReduce 任务运行，底层数据是存储在 HDFS 上，实质就是一款基于 HDFS 的 MapReduce 计算框架 。</p>
+<p>Hive的操作接口采用类 SQL 的语法，提供快速开发的能力；避免了写 MapReduce从而减少开发人员的学习成本；并且可自由扩展集群规模而无需重启服务，还支持用户自定义函数。具有良好的容错性，可以保障即使有节点出现问题，SQL 语句仍可完成执行。
+缺点：</p>
+<ul>
+<li>Hive 的查询延时很严重，因为 MapReduce Job 的启动过程消耗很长时间，所以不能 用在交互查询系统中。</li>
+<li>不支持事务（因为不没有增删改，所以主要用来做 OLAP（联机分析处理），而 不是 OLTP（联机事务处理），这就是数据处理的两大级别）。</li>
+</ul>
+<h2 id="hive架构">Hive架构</h2>
+<div align=center><img src="/bdimg/hive架构.png" width = "60%" /></div>
+图片来源于网络https://blog.csdn.net/oTengYue/article/details/91129850 
+<p><strong>用户接口：</strong></p>
+<ul>
+<li>CLI，Shell 终端命令行</li>
+<li>JDBC/ODBC，基于 JDBC 操作Hive的客户端，开发人员可通过JDBC连接Hive server</li>
+<li>Web UI，通过浏览器访问 Hive</li>
+</ul>
+<p><strong>元数据存储</strong>：元数据，即存储在 Hive 中的数据的描述信息。通常包括表的名字、表的列和分区及其属性、表的属性（内部表和 外部表），表的数据所在目录。</p>
+<p>Metastore 是元数据的集中存放地，包括服务和后台数据存储，默认情况下Metastore服务和Hive服务运行在一个JVM，包含一个内嵌的以本地磁盘为存储的 Derby 数据库实例。Derby数据库不允许用户打开多个客户端对其进行共享操作，这就意味着只能为每个metastore打开一个Hive会话，不适合多用户操作。通常配置 MySQL 库（本地 或 远程）。</p>
+<p><strong>解释器，编译器，优化器，执行器</strong>  这四大组件完成 HQL 查询语句从词法分析，语法分析，编译，优化，以及生成查询计 划的生成。生成的查询计划存储在 HDFS 中，并随后由 MapReduce 调用执行。</p>
+<p><strong>执行流程：</strong>  HiveQL 通过命令行或者客户端提交，经过 Compiler 编译器，运用 Metastore 中的元数据 进行类型检测和语法分析，生成一个逻辑方案(logical plan)，然后通过的优化处理，产生一 个 MapReduce 任务。</p>
+<h2 id="hive-和-rdbms-的对比">Hive 和 RDBMS 的对比</h2>
+<table>
+<thead>
+<tr>
+<th align="left">对比项</th>
+<th align="left">Hive</th>
+<th align="left">RDBMS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">数据存储</td>
+<td align="left">HDFS</td>
+<td align="left">Raw Driver or Local FS</td>
+</tr>
+<tr>
+<td align="left">执行器</td>
+<td align="left">MapReduce</td>
+<td align="left">Executor</td>
+</tr>
+<tr>
+<td align="left">数据操作</td>
+<td align="left">覆盖追加</td>
+<td align="left">行级更新删除</td>
+</tr>
+<tr>
+<td align="left">处理数据规模</td>
+<td align="left">大</td>
+<td align="left">小</td>
+</tr>
+<tr>
+<td align="left">执行延迟</td>
+<td align="left">高</td>
+<td align="left">低</td>
+</tr>
+<tr>
+<td align="left">索引</td>
+<td align="left">0.8版本后增加简单索引</td>
+<td align="left">支持复杂索引</td>
+</tr>
+<tr>
+<td align="left">扩展性</td>
+<td align="left">好</td>
+<td align="left">有限</td>
+</tr>
+<tr>
+<td align="left">数据加载模式</td>
+<td align="left">读时模式</td>
+<td align="left">写时模式</td>
+</tr>
+<tr>
+<td align="left">应用场景</td>
+<td align="left">海量数据查询</td>
+<td align="left">实时查询</td>
+</tr>
+</tbody>
+</table>
+<p>传统数据库表的模式是在加载数据时强制确定的，加载时数据不符合模式则拒绝加载，因为数据是在写入数据库时对照模式进行检查，被称为“写时模式”（schema on write）。Hive对数据的验证并不在加载数据时进行，而在查询时，称为“读时模式”（schema on read）。</p>
+<p>Hive 只适合用来做海量离线数 据统计分析。</p>
+<h2 id="hive-的数据存储">Hive 的数据存储</h2>
+<p>Hive 的存储结构包括数据库、表、视图和文件，表又分为内部表、外部表、分区表和 Bucket 表。所有的数据都存储在 HDFS 中，没有专门的数据存储格式（可支持 TextFile， SequenceFile，RCFILE 或者自定义格式等）。只需要在创建表的时候告诉 Hive 数据中的列分隔符和行分隔符，Hive 就可以解析数据。</p>
+<p>Hive 中包含以下数据模型：</p>
+<ul>
+<li>database：在 hdfs 中表现为${hive.metastore.warehouse.dir}目录下一个文件夹</li>
+<li>table：在 hdfs 中表现所属 database 目录下一个文件夹</li>
+<li>external table：与 table 类似，不过其数据存放位置可以指定任意 HDFS 目录路径</li>
+<li>partition：在 hdfs 中表现为 table 目录下的子目录</li>
+<li>bucket：在 hdfs 中表现为同一个表目录或者分区目录下根据 hash 散列之后的多个文件</li>
+<li>view：与传统数据库类似，只读，基于基本表创建</li>
+</ul>
+<h2 id="hive-环境搭建">Hive 环境搭建</h2>
+<p>来源厦门大学数据库实验室：http://dblab.xmu.edu.cn/blog/2440-2/</p>
+<p><strong>下载并解压hive源程序</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo wget https://mirrors.tuna.tsinghua.edu.cn/apache/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz <span class="c1"># 或直接下载再上传</span>
+
+sudo tar -zxvf ./apache-hive-3.1.2-bin.tar.gz -C /usr/local   <span class="c1"># 解压到/usr/local中</span>
+<span class="nb">cd</span> /usr/local/
+sudo mv apache-hive-3.1.2-bin hive       <span class="c1"># 将文件夹名改为hive</span>
+sudo chown -R 用户名:用户名 hive            <span class="c1"># 修改文件权限</span>
+</code></pre></div><p><strong>配置环境变量</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">vim ~/.bashrc
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">HIVE_HOME</span><span class="o">=</span>/usr/local/hive
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$HIVE_HOME</span>/bin
+<span class="nb">export</span> <span class="nv">HADOOP_HOME</span><span class="o">=</span>/usr/local/hadoop
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> ~/.bashrc
+</code></pre></div><p><strong>修改/usr/local/hive/conf下的hive-site.xml</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> /usr/local/hive/conf
+mv hive-default.xml.template hive-default.xml
+vim hive-site.xml
+</code></pre></div><p>写入</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; standalone=&#34;no&#34;?&gt;</span>
+<span class="cp">&lt;?xml-stylesheet type=&#34;text/xsl&#34; href=&#34;configuration.xsl&#34;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionURL<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>jdbc:mysql://localhost:3306/hive?createDatabaseIfNotExist=true<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>JDBC connect string for a JDBC metastore<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionDriverName<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>com.mysql.jdbc.Driver<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Driver class name for a JDBC metastore<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionUserName<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>hive<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>username to use against metastore database<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionPassword<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>hive<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>password to use against metastore database<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div><p><a href="">安装MySQL</a></p>
+<p><strong>配置MySQL</strong><br>
+下载mysql jdbc 包  <a href="https://dev.mysql.com/downloads/connector/j/"target="_blank">下载地址</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">tar -zxvf mysql-connector-java-5.1.40.tar.gz   <span class="c1">#解压</span>
+cp mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar  /usr/local/hive/lib #
+</code></pre></div><p>启动并登录Mysql</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">service mysql start <span class="c1">#启动mysql服务</span>
+mysql -u root -p  <span class="c1">#登陆shell界面</span>
+</code></pre></div><p>新建hive数据库，配置允许hive接入</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysql&gt; create database hive<span class="p">;</span>    <span class="c1">#这个hive数据库与hive-site.xml中localhost:3306/hive的hive对应，用来保存hive元数据</span>
+mysql&gt; grant all on *.* to hive@localhost identified by <span class="s1">&#39;hive&#39;</span><span class="p">;</span>   <span class="c1">#将所有数据库的所有表的所有权限赋给hive用户，后面的hive是配置hive-site.xml中配置的连接密码</span>
+mysql&gt; flush privileges<span class="p">;</span>  <span class="c1">#刷新mysql系统权限关系表</span>
+</code></pre></div><p>报错：java.lang.NoSuchMethodError: com.google.common.base.Preconditions.checkArgument<br>
+原因：com.google.common.base.Preconditions.checkArgument 这是因为hive内依赖的guava.jar和hadoop内的版本不一致造成的。
+解决方法：<br>
+1.查看hadoop安装目录下share/hadoop/common/lib内guava.jar版本<br>
+2.查看hive安装目录下lib内guava.jar的版本 如果两者不一致，删除版本低的，并拷贝高版本的 问题解决！</p>
+<p>警告：Establishing SSL connection without server&rsquo;s identity verification is not recommended. 参考https://blog.csdn.net/u012922838/article/details/73291524</p>
+<h2 id="hive-数据类型">Hive 数据类型</h2>
+<p>Hive支持原子数据类型和复杂数据类型。</p>
+<p><strong>原子数据类型</strong>包括字符型、布尔型和字符串型，基本对应于Java数据类型，具体如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">BOOLEAN</td>
+<td align="left">true/false</td>
+<td align="left">TRUE</td>
+</tr>
+<tr>
+<td align="left">TINYINT</td>
+<td align="left">2字节（8位）有符号整数，-128~127</td>
+<td align="left">1Y</td>
+</tr>
+<tr>
+<td align="left">SMALLINT</td>
+<td align="left">2字节（16位）有符号整数，-32768~32767</td>
+<td align="left">1S</td>
+</tr>
+<tr>
+<td align="left">INT</td>
+<td align="left">4字节（32位）有符号整数，$$-2^{31}~2^{31}-1$$</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">BIGINT</td>
+<td align="left">8字节（64位）有符号整数，$$-2^{63}~2^{63}-1$$</td>
+<td align="left">1L</td>
+</tr>
+<tr>
+<td align="left">FLOAT</td>
+<td align="left">4字节单精度有符号小数</td>
+<td align="left">1.0</td>
+</tr>
+<tr>
+<td align="left">DOUBLE</td>
+<td align="left">8字节双精度浮点数</td>
+<td align="left">1.0</td>
+</tr>
+<tr>
+<td align="left">DECEMAL</td>
+<td align="left">任意精度有符号小数</td>
+<td align="left">1.0</td>
+</tr>
+<tr>
+<td align="left">STRING</td>
+<td align="left">无上限可变长度字符串</td>
+<td align="left">&lsquo;a&rsquo;,&ldquo;a&rdquo;</td>
+</tr>
+<tr>
+<td align="left">VARCHAR</td>
+<td align="left">可变长度字符串</td>
+<td align="left">&lsquo;a&rsquo;,&ldquo;a&rdquo;</td>
+</tr>
+<tr>
+<td align="left">CHAR</td>
+<td align="left">固定长度字符串</td>
+<td align="left">&lsquo;a&rsquo;,&ldquo;a&rdquo;</td>
+</tr>
+<tr>
+<td align="left">VARCHAR</td>
+<td align="left">可变长度字符串</td>
+<td align="left">&lsquo;a&rsquo;,&ldquo;a&rdquo;</td>
+</tr>
+<tr>
+<td align="left">TIMESTAMP</td>
+<td align="left">精确到纳秒的时间戳</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">DATE</td>
+<td align="left">日期</td>
+<td align="left">&lsquo;2020-04-29&rsquo;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>复杂数据类型</strong></p>
+<p>复杂数据类型包括数组（ARRAY）、映射（MAP）和结构体（STRUCT），具体如下所示：</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">ARRAY</td>
+<td align="left">同种类型的数据集合，索引从0开始</td>
+<td align="left">array(1,2)</td>
+</tr>
+<tr>
+<td align="left">MAP</td>
+<td align="left">一组无序的键值对。键的类型必须是原子型；值可以是任何类型。同一个映射的键类型必须相同，值的类型也必须相同。</td>
+<td align="left">map(&lsquo;a&rsquo;,1,&lsquo;b&rsquo;,2)</td>
+</tr>
+<tr>
+<td align="left">STRUCT</td>
+<td align="left">一组命名的字段，字段类型可以不同</td>
+<td align="left">struct(&lsquo;a&rsquo;,1,1.0)</td>
+</tr>
+<tr>
+<td align="left">UNION</td>
+<td align="left">值的数据类型可以是多个被定义的数据类型中的任意一个，通过一个整数（零索引）来标记其为联合类型中的那个数据类型</td>
+<td align="left">creat_union(1,&lsquo;a&rsquo;,3)</td>
+</tr>
+</tbody>
+</table>
+<p>各类型数据访问，ARRAY可用索引访问，MAP通过map[&lsquo;key&rsquo;]访问，STRUCT通过struct.name访问。</p>
+<p>创建表中的示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">student</span><span class="p">(</span> 
+  <span class="n">name</span> <span class="n">STRING</span><span class="p">,</span>  
+  <span class="n">favors</span> <span class="nb">ARRAY</span><span class="o">&lt;</span><span class="n">STRING</span><span class="o">&gt;</span><span class="p">,</span>  <span class="n">scores</span> <span class="k">MAP</span><span class="o">&lt;</span><span class="n">STRING</span><span class="p">,</span> <span class="nb">FLOAT</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="n">address</span> <span class="n">STRUCT</span><span class="o">&lt;</span><span class="n">province</span><span class="p">:</span><span class="n">STRING</span><span class="p">,</span> <span class="n">city</span><span class="p">:</span><span class="n">STRING</span><span class="p">,</span> <span class="n">detail</span><span class="p">:</span><span class="n">STRING</span><span class="p">,</span> <span class="n">zip</span><span class="p">:</span><span class="nb">INT</span><span class="o">&gt;</span> <span class="p">)</span> 
+  <span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span>
+  <span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">&#39;\t&#39;</span>
+  <span class="n">COLLECTION</span> <span class="n">ITEMS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">&#39;;&#39;</span>
+  <span class="k">MAP</span> <span class="n">KEYS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">&#39;:&#39;</span> <span class="p">;</span> 
+</code></pre></div><ul>
+<li>ROW FORMAT DELIMITED 是指明后面的关键词是列和元素分隔符的。</li>
+<li>FIELDS TERMINATED BY 是字段分隔符，</li>
+<li>COLLECTION ITEMS TERMINATED BY 是元素分隔符（Array 中的各元素、Struct 中的各元素、 Map 中的 key、value 对之间）</li>
+<li>MAP KEYS TERMINATED BY 是 Map 中 key 与 value 的分隔符。</li>
+</ul>
+</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hive/>Hive</a></section></div><section class="article navigation"><p><a class="link" href="/post/%E5%AE%89%E8%A3%85mysql/"><span class="li">&larr;</span>安装MySQL</a></p><p><a class="link" href="/post/nosql%E5%92%8Chbase/"><span class="li">&rarr;</span>NoSQL数据库</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>

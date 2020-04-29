@@ -7,10 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 Notepadium.</copyright>
-    <lastBuildDate>Mon, 27 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 29 Apr 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>数据仓库Hive_简介_安装_数据类型</title>
+      <link>/post/hive1/</link>
+      <pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/hive1/</guid>
+      <description>数据仓库Hive（1） Hive简介 Hive 是构建在 Hadoop上 的数据仓库框架，由Facebook实现并开源。Hive提供 HQL(Hive SQL)查询功能，其设</description>
+      
+    </item>
+    
+    <item>
+      <title>NoSQL数据库</title>
+      <link>/post/nosql%E5%92%8Chbase/</link>
+      <pubDate>Tue, 28 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/nosql%E5%92%8Chbase/</guid>
+      <description>NoSQL数据库 NoSQL概述 NoSql（Not Only SQL），NoSQL数据库特点： 灵活的可扩展性 灵活的数据模型 和云计算紧密结合 传统的关系型数</description>
+      
+    </item>
     
     <item>
       <title>分布式并行编程框架MapReduce</title>

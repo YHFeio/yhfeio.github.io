@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>安装MySQL&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="安装MySQL" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">安装MySQL</h1><p class="article date">2020-04-29</p></section><article class="article markdown-body"><h2 id="window安装mysql8015zip安装">window安装MySQL8.0.15（zip安装）</h2>
+<p><strong>1、下载，解压到安装目录</strong><br>
+<a href="https://dev.mysql.com/downloads/mysql/"target="_blank">下载地址</a></p>
+<p><strong>2、配置初始化的my.ini文件</strong><br>
+在解压的目录中新建my.txt，输入下面配置，然后将my.txt文件更改后缀-&gt;my.ini。</p>
+<pre><code>[mysqld]
+# 设置3306端口
+port=3306
+# 设置mysql的安装目录
+basedir=D:\mysql-8.0.15-winx64
+# 设置mysql数据库的数据的存放目录
+datadir=D:\mysql-8.0.15-winx64\Data
+# 允许最大连接数
+max_connections=200
+# 允许连接失败的次数。
+max_connect_errors=10
+# 服务端使用的字符集默认为UTF8
+character-set-server=utf8
+# 创建新表时将使用的默认存储引擎
+default-storage-engine=INNODB
+# 默认使用“mysql_native_password”插件认证
+#mysql_native_password
+default_authentication_plugin=mysql_native_password
+[mysql]
+# 设置mysql客户端默认字符集
+default-character-set=utf8
+[client]
+# 设置mysql客户端连接服务端时默认使用的端口
+port=3306
+default-character-set=utf8
+</code></pre><p><strong>3、安装MySQL</strong><br>
+管理员运行CMD，进入解压的目录，运行</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysqld --initialize --console
+</code></pre></div><p>初始化过程会生成的默认root密码，找到复制下来，不小心关闭了需要重新初始化。然后执行</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysqld --install <span class="o">[</span>服务名<span class="o">]</span> <span class="c1">#（服务名可以不加默认为mysql）</span>
+</code></pre></div><p><strong>4、启动服务</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">net start mysql
+</code></pre></div><p><strong>5、配置环境变量</strong><br>
+将MySQL安装目录下的bin添加到环境变量。<br>
+<strong>进入mysql修改默认密码</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysql -u root -p
+
+mysql&gt; alter user <span class="s1">&#39;root&#39;</span>@<span class="s1">&#39;localhost&#39;</span> identified by <span class="s1">&#39;password&#39;</span><span class="p">;</span>
+</code></pre></div><h2 id="ubuntu安装mysql">Ubuntu安装MySQL</h2>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo apt-get install mysql-server
+</code></pre></div><p>安装后默认启动服务，查看：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo netstat -tap <span class="p">|</span> grep mysql
+</code></pre></div><p>开启/停止mysql服务命令：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">service mysql start
+service mysql stop
+</code></pre></div><p>Ubuntu安装Mysql时没有提示设置密码：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo vim /etc/mysql/debian.cnf
+</code></pre></div><p>使用给出的账户密码登录：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysql -u debian-sys-maint -p
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysql&gt; update mysql.user <span class="nb">set</span> <span class="nv">authentication_string</span><span class="o">=</span>password<span class="o">(</span><span class="s1">&#39;new password&#39;</span><span class="o">)</span> where <span class="nv">user</span><span class="o">=</span><span class="s1">&#39;root&#39;</span> and <span class="nv">Host</span> <span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span>
+mysql&gt; update mysql.user <span class="nb">set</span> <span class="nv">plugin</span><span class="o">=</span><span class="s2">&#34;mysql_native_password&#34;</span><span class="p">;</span> 
+mysql&gt; flush privileges<span class="p">;</span>
+mysql&gt; quit<span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo service mysql restart
+</code></pre></div><h2 id="远程连接阿里云">远程连接（阿里云）</h2>
+<p>进入MySQL，设置root可以远程访问</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysql -u root -p
+mysql&gt; use mysql<span class="p">;</span>
+mysql&gt; <span class="k">select</span> host,user,authentication_string,plugin from user<span class="p">;</span> <span class="c1"># 会看到root的host为localhost；</span>
+mysql&gt; update user <span class="nb">set</span> <span class="nv">host</span><span class="o">=</span><span class="s1">&#39;%&#39;</span> where <span class="nv">user</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">;</span>
+mysql&gt; flush privileges<span class="p">;</span>
+</code></pre></div><p>阿里云增加安全策略开放3306端口；<br>
+如果连接报错10061：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo vim /etc/mysql/mysql.conf.d/mysql.cnf
+</code></pre></div><p>在<code>bind-address=127.0.0.1</code>前添加#，注释掉。然后重启服务：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo service mysql restart
+</code></pre></div></article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/>数据库</a><a class="tag" href=/tags/mysql/>MySQL</a></section></div><section class="article navigation"><p><a class="link" href="/post/hive1/"><span class="li">&rarr;</span>数据仓库Hive_简介_安装_数据类型</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>

@@ -7,10 +7,40 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 Notepadium.</copyright>
-    <lastBuildDate>Mon, 27 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 29 Apr 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hive</title>
+      <link>/tags/hive/</link>
+      <pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/hive/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>MySQL</title>
+      <link>/tags/mysql/</link>
+      <pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/mysql/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>NoSQL</title>
+      <link>/tags/nosql/</link>
+      <pubDate>Tue, 28 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/nosql/</guid>
+      <description></description>
+      
+    </item>
     
     <item>
       <title>Hadoop</title>

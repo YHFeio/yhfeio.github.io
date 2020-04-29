@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>NoSQL数据库&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="NoSQL数据库" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">NoSQL数据库</h1><p class="article date">2020-04-28</p></section><article class="article markdown-body"><h1 id="nosql数据库">NoSQL数据库</h1>
+<h2 id="nosql概述">NoSQL概述</h2>
+<p>NoSql（Not Only SQL），NoSQL数据库特点：</p>
+<ul>
+<li>灵活的可扩展性</li>
+<li>灵活的数据模型</li>
+<li>和云计算紧密结合</li>
+</ul>
+<p>传统的关系型数据库，具有非常完备的关系理论基础，具有事务性机制的支持，高效的查询优化机制。随着web2.0的到来，出现性能上的缺陷：无法满足海量数据的管理需求；无法满足高并发的需求；无法满足高可扩展性和高可用性的需求。</p>
+<h2 id="nosql数据库四大类型">NoSQL数据库四大类型</h2>
+<p><strong>键值数据库</strong><br>
+键值数据库常见的有Redis、Memcached、simpleDB等，其中键是一个字符串对象，值可以是任意类型的数据。典型应用场景：涉及频繁读写操作，拥有简单数据模型的应用。扩展性、灵活性好，大量写操作性能高。但无法存储结构化数据，条件查询效率低。不适用：没有通过值查找的途径，不能通过两个或两个以上的键关联数据，一些键值数据库产生故障时不能回滚。  键值数据库也是理想的缓冲层解决方案，构建在底层数据库之上，加快web应用访问速度。</p>
+<p><strong>列族数据库</strong><br>
+BigTable、HBase、Cassandra，优点查询速度快可扩展性强复杂性低，缺点是功能较少，大都不支持强事务一致性。</p>
+<p><strong>文档数据库</strong><br>
+MongoDB、CouchDB，本质上也是一个键值数据库，但value的值是文档，一般使用JSON数据格式。</p>
+<p><strong>图形数据库</strong><br>
+Neo4j，数据模型为图结构，专门用于处理具有高度相互关联的数据，比较适合社交网络、模式识别、依赖分析、推荐系统及路径寻找等。</p>
+<h2 id="三大基石">三大基石</h2>
+<p>CAP理论：</p>
+<ul>
+<li>Consistency一致性，任何一个读操作总能读到之前完成的写操作结果。</li>
+<li>Availability可用性，指快速读取数据，可在确定的时间内返回操作结果，保证成功与否都有响应。</li>
+<li>Partition tolerance分区容忍性，当出现网络分区的情况（一部分节点无法和其他节点通信），分离的系统也能够正确运行。</li>
+</ul>
+<p>一个分布式系统不可能同时满足一致性、可用性和分区容忍性，最多只能满足其中两个。</p>
+<p>MySQL、SQL Server、PostgresSQL选择CA放弃P；Neo4j、HBase、BigTable、MongoDB、Redis选择CP放弃A；Dynamo、Cassandra、Voldemort、CouchDB选择AP，放弃C。不同的业务场景选择不同的产品。</p>
+<p>BASE（Basically Avaible Soft state和Eventual consistency），ACID是关系型数据库中事物的四个性质，BASE是和ACID对应的。</p>
+<ul>
+<li>Basically Avaible，分布式系统一部分发生问题其他部分仍可正常使用</li>
+<li>Soft state软状态，硬状态：一直保持数据库一致性，软状态：状态可有一段时间不同步。</li>
+<li>Eventual consistency最终一致性，一致性包括强一致性和弱一致性，主要区别是高并发的数据访问，后续操作能否获取最新数据。</li>
+</ul>
+<p>最终一致性==</p>
+<h2 id="mongodb">MongoDB</h2>
+<p>MongoDB由C++语言编写，是一个基于分布式文件系统的开源数据库系统。高负载情况下可增加更多的节点保证服务器性能。旨在为web应用提供可扩展的高性能数据存储解决方案。</p>
+<p>MongoDB将数据存储为一个文档，数据结构由键值对组成，MongoDB文档类似于JSON对象字段值可以包含其他文档、数组及文档数组。</p>
+<p>特点：</p>
+<ul>
+<li>提供面向文档存储，操作起来比较简单</li>
+<li>可以设置任何属性的索引，实现更快的排序</li>
+<li>具有较好的可扩展性</li>
+<li>支持丰富的查询表达式，可查询文档中内嵌的对象及数组</li>
+<li>可替换已完成文档中某个指定数据字段</li>
+<li>MongoDB中的MapReduce主要是用来对数据进行批量处理和聚合操作</li>
+</ul>
+<h1 id="hbase">HBase</h1>
+<h2 id="简介">简介</h2>
+<p>Big Table基于谷歌分布式文件系统GFS，协同管理服务通过Chubby实现。具有非常好的性能和可扩展性。主要满足谷歌公司的网页搜索引擎，也用于其他项目。</p>
+<p>HBase是谷歌Big Table开源实现，具有高可靠性、高性能、面向列、可伸缩特性的分布式数据库，可用于存储非结构化和半结构化的松散数据。</p>
+<p>和关系型数据库的连系和区别：</p>
+<ul>
+<li>数据类型：关系数据模型/未解释的字符串（Bytes）</li>
+<li>数据操作：定义很多数据操作/</li>
+<li>存储模式：行模式存储/基于列</li>
+<li>数据索引：可针直接针对不同的列/（最初）对行键的简单索引</li>
+<li>数据维护：更新操作直接覆盖原值/保留一段时间</li>
+<li>可伸缩性：很难实现水平扩展</li>
+</ul>
+<p>HBase访问接口：Java API（Shell等），SQL类型接口（Pig，Hive）</p>
+<h2 id="hbase数据模型">HBase数据模型</h2>
+<p>HBase是一个稀疏的多维度的排序的映射表，通过行键、列族、列限定符、时间戳定位数据。列族支持动态扩展，保留数据旧版本，因为底层是HDFS不允许修改数据。</p>
+<p>HBase以表的形式组织数据，相对于关系型数据库避免多表的连接操作，因为数据都存储在一张表上。一个表由行和很多列族构成，行用行键RowKey标识。列族是HBase的存储基本单元。</p>
+<p>列族中包含列限定符（列），列可以动态变化。</p>
+<p><strong>概念视图</strong><br>
+|行键|时间戳|列族content|列族anchor|
+|:&mdash;|:&mdash;|:&mdash;|:&mdash;|
+|com|t3| |anchor:cnnsi.com=&quot;CNN&quot;|
+| |t2|content:html=&quot;<code>&lt;html&gt;...</code>&quot;||
+| |t1|content:html=&quot;<code>&lt;html&gt;...</code>&quot;|anchor:cnnsi.com=&quot;CNNS&quot;|</p>
+<p>从概念视图可以看出很多单元格没有值，这也是为什么HBase是一个稀疏表。但实际上底层的物理存储是按照列族为单位进行存储：<br>
+|行键|时间戳|列族content|
+|:&mdash;|:&mdash;|:&mdash;|
+|com|t2|content:html=&quot;<code>&lt;html&gt;...</code>&quot;|
+| |t1|content:html=&quot;<code>&lt;html&gt;...</code>&quot;|</p>
+<table>
+<thead>
+<tr>
+<th align="left">行键</th>
+<th align="left">时间戳</th>
+<th align="left">列族anchor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">com</td>
+<td align="left">t3</td>
+<td align="left">anchor:cnnsi.com=&quot;CNN&rdquo;</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">t1</td>
+<td align="left">anchor:cnnsi.com=&quot;CNNS&rdquo;</td>
+</tr>
+</tbody>
+</table>
+<p>HBase是面向列存储，即将列单独存储，不同于关系型数据库面向行进行存储。行式存储适用于事务性操作较多的应用；列式存储适合分析型应用。</p>
+<h2 id="hbase实现原理">HBase实现原理</h2>
+<p>HBase功能组件</p>
+<ul>
+<li>库函数，用于连接每个客户端</li>
+<li>Master服务器，充当管家的作用，1.分区信息的维护和管理，2.维护一个Region服务器列表，3.集群中有那些Region服务器在工作，4.负责对Region进行分配，5.负载均衡。</li>
+<li>Region服务器，负责存储每一个Region</li>
+</ul>
+<p>HBase表会被分为很多Region存储在不同的Region服务器上，Region增大后会拆分为小的Region。Region的位置信息存放在元数据.MATE.表中（放在内存中），随着.MATE.表的增大也会分裂为多个Region，这些Region信息存放在-ROOT-表中，-ROOT-表只有一个Region不会分裂。HBase的三层结构：
+|层次|名称|作用|
+|:&mdash;|:&mdash;|:&mdash;|
+|第一层|Zookeeper文件|记录-ROOT-表位置信息|
+|第二层|-ROOT-表|记录了.MATE.表的Region位置信息|
+|第三层|.MATE.表|记录了用户数据表的Region位置信息|</p>
+<p>为了加速寻址，客户端会缓存位置信息，同时需要解决缓存失效问题（即Region已经更新了）。采用惰性解决，只有当按照缓存无法找到时，再次利用三层寻址来寻找文件。</p>
+</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/nosql/>NoSQL</a></section></div><section class="article navigation"><p><a class="link" href="/post/hive1/"><span class="li">&larr;</span>数据仓库Hive_简介_安装_数据类型</a></p><p><a class="link" href="/post/mapreduce/"><span class="li">&rarr;</span>分布式并行编程框架MapReduce</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>

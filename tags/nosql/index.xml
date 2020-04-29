@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>NoSQL on YHFeio</title>
+    <link>/tags/nosql/</link>
+    <description>Recent content in NoSQL on YHFeio</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>©2020 Notepadium.</copyright>
+    <lastBuildDate>Tue, 28 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+        <atom:link href="/tags/nosql/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>NoSQL数据库</title>
+      <link>/post/nosql%E5%92%8Chbase/</link>
+      <pubDate>Tue, 28 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/nosql%E5%92%8Chbase/</guid>
+      <description>NoSQL数据库 NoSQL概述 NoSql（Not Only SQL），NoSQL数据库特点： 灵活的可扩展性 灵活的数据模型 和云计算紧密结合 传统的关系型数</description>
+      
+    </item>
+    
+  </channel>
+</rss>
