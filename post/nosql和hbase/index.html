@@ -70,17 +70,59 @@ Neo4j，数据模型为图结构，专门用于处理具有高度相互关联的
 <p>HBase是一个稀疏的多维度的排序的映射表，通过行键、列族、列限定符、时间戳定位数据。列族支持动态扩展，保留数据旧版本，因为底层是HDFS不允许修改数据。</p>
 <p>HBase以表的形式组织数据，相对于关系型数据库避免多表的连接操作，因为数据都存储在一张表上。一个表由行和很多列族构成，行用行键RowKey标识。列族是HBase的存储基本单元。</p>
 <p>列族中包含列限定符（列），列可以动态变化。</p>
-<p><strong>概念视图</strong><br>
-|行键|时间戳|列族content|列族anchor|
-|:&mdash;|:&mdash;|:&mdash;|:&mdash;|
-|com|t3| |anchor:cnnsi.com=&quot;CNN&quot;|
-| |t2|content:html=&quot;<code>&lt;html&gt;...</code>&quot;||
-| |t1|content:html=&quot;<code>&lt;html&gt;...</code>&quot;|anchor:cnnsi.com=&quot;CNNS&quot;|</p>
-<p>从概念视图可以看出很多单元格没有值，这也是为什么HBase是一个稀疏表。但实际上底层的物理存储是按照列族为单位进行存储：<br>
-|行键|时间戳|列族content|
-|:&mdash;|:&mdash;|:&mdash;|
-|com|t2|content:html=&quot;<code>&lt;html&gt;...</code>&quot;|
-| |t1|content:html=&quot;<code>&lt;html&gt;...</code>&quot;|</p>
+<p><strong>概念视图</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">行键</th>
+<th align="left">时间戳</th>
+<th align="left">列族content</th>
+<th align="left">列族anchor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">com</td>
+<td align="left">t3</td>
+<td align="left"></td>
+<td align="left">anchor:cnnsi.com=&quot;CNN&rdquo;</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">t2</td>
+<td align="left">content:html=&quot;<code>&lt;html&gt;...</code>&rdquo;</td>
+<td></td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">t1</td>
+<td align="left">content:html=&quot;<code>&lt;html&gt;...</code>&rdquo;</td>
+<td align="left">anchor:cnnsi.com=&quot;CNNS&rdquo;</td>
+</tr>
+</tbody>
+</table>
+<p>从概念视图可以看出很多单元格没有值，这也是为什么HBase是一个稀疏表。但实际上底层的物理存储是按照列族为单位进行存储：</p>
+<table>
+<thead>
+<tr>
+<th align="left">行键</th>
+<th align="left">时间戳</th>
+<th align="left">列族content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">com</td>
+<td align="left">t2</td>
+<td align="left">content:html=&quot;<code>&lt;html&gt;...</code>&rdquo;</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left">t1</td>
+<td align="left">content:html=&quot;<code>&lt;html&gt;...</code>&rdquo;</td>
+</tr>
+</tbody>
+</table>
 <table>
 <thead>
 <tr>
