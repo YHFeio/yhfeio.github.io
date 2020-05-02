@@ -7,18 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 Notepadium.</copyright>
-    <lastBuildDate>Wed, 29 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 02 May 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/tags/hive/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>数据仓库Hive_简介_安装_数据类型</title>
+      <title>数据仓库Hive_基本操作</title>
+      <link>/post/hive2/</link>
+      <pubDate>Sat, 02 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/hive2/</guid>
+      <description>数据仓库Hive（2） 官方文档中的language manual DDL（Data Definition Language，数据定义语言） 用来创建或者删除存储数据用的数据库以及</description>
+      
+    </item>
+    
+    <item>
+      <title>数据仓库Hive_基础和安装</title>
       <link>/post/hive1/</link>
       <pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/hive1/</guid>
-      <description>数据仓库Hive（1） Hive简介 Hive 是构建在 Hadoop上 的数据仓库框架，由Facebook实现并开源。Hive提供 HQL(Hive SQL)查询功能，其设</description>
+      <description>数据仓库Hive（1） Hive官方文档 Hive简介 Hive 是构建在 Hadoop上 的数据仓库框架，由Facebook实现并开源。Hive提供 HQL(Hive SQL</description>
       
     </item>
     

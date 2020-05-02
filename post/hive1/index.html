@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="supported-color-schemes" content="light dark"><title>数据仓库Hive_简介_安装_数据类型&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="数据仓库Hive_简介_安装_数据类型" /><body>
+<meta name="supported-color-schemes" content="light dark"><title>数据仓库Hive_基础和安装&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="数据仓库Hive_基础和安装" /><body>
     <div class="base-body"><section id="header" class="site header">
     <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
         <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
-    <h1 class="article title">数据仓库Hive_简介_安装_数据类型</h1><p class="article date">2020-04-29</p></section><article class="article markdown-body"><h1 id="数据仓库hive1">数据仓库Hive（1）</h1>
+    <h1 class="article title">数据仓库Hive_基础和安装</h1><p class="article date">2020-04-29</p></section><article class="article markdown-body"><h1 id="数据仓库hive1">数据仓库Hive（1）</h1>
+<p><a href="https://cwiki.apache.org/confluence/display/Hive/Home#Home-HiveDocumentation"target="_blank">Hive官方文档</a></p>
 <h2 id="hive简介">Hive简介</h2>
 <p>Hive 是构建在 Hadoop上 的数据仓库框架，由Facebook实现并开源。Hive提供 HQL(Hive SQL)查询功能，其设计目的是使不熟悉 MapReduce 的用户很方便地利用 HQL 进行数据 ETL（Extraction-Transformation-Loading）操作。Hive 的本 质是将 SQL 语句转换为 MapReduce 任务运行，底层数据是存储在 HDFS 上，实质就是一款基于 HDFS 的 MapReduce 计算框架 。</p>
 <p>Hive的操作接口采用类 SQL 的语法，提供快速开发的能力；避免了写 MapReduce从而减少开发人员的学习成本；并且可自由扩展集群规模而无需重启服务，还支持用户自定义函数。具有良好的容错性，可以保障即使有节点出现问题，SQL 语句仍可完成执行。
@@ -87,79 +88,6 @@
 </table>
 <p>传统数据库表的模式是在加载数据时强制确定的，加载时数据不符合模式则拒绝加载，因为数据是在写入数据库时对照模式进行检查，被称为“写时模式”（schema on write）。Hive对数据的验证并不在加载数据时进行，而在查询时，称为“读时模式”（schema on read）。</p>
 <p>Hive 只适合用来做海量离线数 据统计分析。</p>
-<h2 id="hive-的数据存储">Hive 的数据存储</h2>
-<p>Hive 的存储结构包括数据库、表、视图和文件，表又分为内部表、外部表、分区表和 Bucket 表。所有的数据都存储在 HDFS 中，没有专门的数据存储格式（可支持 TextFile， SequenceFile，RCFILE 或者自定义格式等）。只需要在创建表的时候告诉 Hive 数据中的列分隔符和行分隔符，Hive 就可以解析数据。</p>
-<p>Hive 中包含以下数据模型：</p>
-<ul>
-<li>database：在 hdfs 中表现为${hive.metastore.warehouse.dir}目录下一个文件夹</li>
-<li>table：在 hdfs 中表现所属 database 目录下一个文件夹</li>
-<li>external table：与 table 类似，不过其数据存放位置可以指定任意 HDFS 目录路径</li>
-<li>partition：在 hdfs 中表现为 table 目录下的子目录</li>
-<li>bucket：在 hdfs 中表现为同一个表目录或者分区目录下根据 hash 散列之后的多个文件</li>
-<li>view：与传统数据库类似，只读，基于基本表创建</li>
-</ul>
-<h2 id="hive-环境搭建">Hive 环境搭建</h2>
-<p>来源厦门大学数据库实验室：http://dblab.xmu.edu.cn/blog/2440-2/</p>
-<p><strong>下载并解压hive源程序</strong></p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo wget https://mirrors.tuna.tsinghua.edu.cn/apache/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz <span class="c1"># 或直接下载再上传</span>
-
-sudo tar -zxvf ./apache-hive-3.1.2-bin.tar.gz -C /usr/local   <span class="c1"># 解压到/usr/local中</span>
-<span class="nb">cd</span> /usr/local/
-sudo mv apache-hive-3.1.2-bin hive       <span class="c1"># 将文件夹名改为hive</span>
-sudo chown -R 用户名:用户名 hive            <span class="c1"># 修改文件权限</span>
-</code></pre></div><p><strong>配置环境变量</strong></p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">vim ~/.bashrc
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">HIVE_HOME</span><span class="o">=</span>/usr/local/hive
-<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$HIVE_HOME</span>/bin
-<span class="nb">export</span> <span class="nv">HADOOP_HOME</span><span class="o">=</span>/usr/local/hadoop
-</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> ~/.bashrc
-</code></pre></div><p><strong>修改/usr/local/hive/conf下的hive-site.xml</strong></p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> /usr/local/hive/conf
-mv hive-default.xml.template hive-default.xml
-vim hive-site.xml
-</code></pre></div><p>写入</p>
-<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; standalone=&#34;no&#34;?&gt;</span>
-<span class="cp">&lt;?xml-stylesheet type=&#34;text/xsl&#34; href=&#34;configuration.xsl&#34;?&gt;</span>
-<span class="nt">&lt;configuration&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionURL<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>jdbc:mysql://localhost:3306/hive?createDatabaseIfNotExist=true<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;description&gt;</span>JDBC connect string for a JDBC metastore<span class="nt">&lt;/description&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionDriverName<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>com.mysql.jdbc.Driver<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;description&gt;</span>Driver class name for a JDBC metastore<span class="nt">&lt;/description&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionUserName<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>hive<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;description&gt;</span>username to use against metastore database<span class="nt">&lt;/description&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-  <span class="nt">&lt;property&gt;</span>
-    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionPassword<span class="nt">&lt;/name&gt;</span>
-    <span class="nt">&lt;value&gt;</span>hive<span class="nt">&lt;/value&gt;</span>
-    <span class="nt">&lt;description&gt;</span>password to use against metastore database<span class="nt">&lt;/description&gt;</span>
-  <span class="nt">&lt;/property&gt;</span>
-<span class="nt">&lt;/configuration&gt;</span>
-</code></pre></div><p><a href="https://yhfeio.github.io/post/%E5%AE%89%E8%A3%85mysql/"target="_blank">安装MySQL</a></p>
-<p><strong>配置MySQL</strong><br>
-下载mysql jdbc 包  <a href="https://dev.mysql.com/downloads/connector/j/"target="_blank">下载地址</a></p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">tar -zxvf mysql-connector-java-5.1.40.tar.gz   <span class="c1">#解压</span>
-cp mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar  /usr/local/hive/lib #
-</code></pre></div><p>启动并登录Mysql</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">service mysql start <span class="c1">#启动mysql服务</span>
-mysql -u root -p  <span class="c1">#登陆shell界面</span>
-</code></pre></div><p>新建hive数据库，配置允许hive接入</p>
-<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysql&gt; create database hive<span class="p">;</span>    <span class="c1">#这个hive数据库与hive-site.xml中localhost:3306/hive的hive对应，用来保存hive元数据</span>
-mysql&gt; grant all on *.* to hive@localhost identified by <span class="s1">&#39;hive&#39;</span><span class="p">;</span>   <span class="c1">#将所有数据库的所有表的所有权限赋给hive用户，后面的hive是配置hive-site.xml中配置的连接密码</span>
-mysql&gt; flush privileges<span class="p">;</span>  <span class="c1">#刷新mysql系统权限关系表</span>
-</code></pre></div><p>报错：java.lang.NoSuchMethodError: com.google.common.base.Preconditions.checkArgument<br>
-原因：com.google.common.base.Preconditions.checkArgument 这是因为hive内依赖的guava.jar和hadoop内的版本不一致造成的。
-解决方法：<br>
-1.查看hadoop安装目录下share/hadoop/common/lib内guava.jar版本<br>
-2.查看hive安装目录下lib内guava.jar的版本 如果两者不一致，删除版本低的，并拷贝高版本的 问题解决！</p>
-<p>警告：Establishing SSL connection without server&rsquo;s identity verification is not recommended. 参考https://blog.csdn.net/u012922838/article/details/73291524</p>
 <h2 id="hive-数据类型">Hive 数据类型</h2>
 <p>Hive支持原子数据类型和复杂数据类型。</p>
 <p><strong>原子数据类型</strong>包括字符型、布尔型和字符串型，基本对应于Java数据类型，具体如下：</p>
@@ -293,6 +221,99 @@ mysql&gt; flush privileges<span class="p">;</span>  <span class="c1">#刷新mysq
 <li>COLLECTION ITEMS TERMINATED BY 是元素分隔符（Array 中的各元素、Struct 中的各元素、 Map 中的 key、value 对之间）</li>
 <li>MAP KEYS TERMINATED BY 是 Map 中 key 与 value 的分隔符。</li>
 </ul>
+<p>HQL基础操作见<a href="https://yhfeio.github.io/post/hive2/"target="_blank">Hive基础操作</a></p>
+<h2 id="hive-的数据模型">Hive 的数据模型</h2>
+<p>Hive 的存储结构包括数据库、表、视图和文件，表又分为内部表、外部表、分区表和 Bucket 表。所有的数据都存储在 HDFS 中，没有专门的数据存储格式（可支持 TextFile， SequenceFile，RCFILE 或者自定义格式等）。只需要在创建表的时候告诉 Hive 数据中的列分隔符和行分隔符，Hive 就可以解析数据。</p>
+<p>Hive 中包含以下数据模型：</p>
+<ul>
+<li>database：在 hdfs 中表现为${hive.metastore.warehouse.dir}目录下一个文件夹</li>
+<li>table：在 hdfs 中表现所属 database 目录下一个文件夹</li>
+<li>external table：与 table 类似，不过其数据存放位置可以指定任意 HDFS 目录路径</li>
+<li>partition：在 hdfs 中表现为 table 目录下的子目录</li>
+<li>bucket：在 hdfs 中表现为同一个表目录或者分区目录下根据 hash 散列之后的多个文件</li>
+<li>view：与传统数据库类似，只读，基于基本表创建</li>
+</ul>
+<h2 id="托管表内部表和外部表">托管表（内部表）和外部表</h2>
+<p>Hive在创建表时，默认由Hive管理数据，会把数据移入它的“仓库目录”（warehouse directory），还可以创建一个外部表，让Hive到仓库目录外访问数据。Hive将内部表看作是“属于自己”的，而外部表“不属于自己”，两种表的区别表现在加载（LOAD）和删除（DROP）表上（加载表文件系统中的文件移动或重命名，速度很快）。</p>
+<p>加载表时，对于内部表，Hive会把数据移动到仓库目录。对于外部表，创建表时需要指明外部数据的位置，不会将数据移动到仓库目录，并且不会检查这一位置是否存在。</p>
+<p>删除表时，内部表的数据和元数据会被一起删除，数据会彻底消失。而删除外部表时只会删除元数据。</p>
+<p>如果所有数据处理都由Hive完成，应该使用内部表；如果要使用Hive和其他工具处理同一数据集，应该使用外部表。</p>
+<h2 id="分区和桶">分区和桶</h2>
+<p><code>分区</code>，在 Hive Select 查询中一般会扫描整个表内容，效率较低。有时候只需要扫描表中关心的一部分数据，因此建表时引入了 partition 概念。根据<code>分区列</code>的值对表进行粗略划分。一个表可以从多维度进行分区（即每个分区可以进行子分区，如按天分区，再按地区分区），每个分区以文件夹的形式单独存储在表文件夹（或子分区的父分区文件夹）的目录下。分区是以字段的形式在表结构中存在，通过 desc table 命令可以查看到该字段，但是该字段不存放实际的数据内容，仅仅是分区的表示。</p>
+<p><code>桶</code>，对于每一个表（table）或者分区， Hive 可以进一步组织成桶，即桶是更细粒度的数据范围划分。Hive 也是 针对某一列进行桶的组织，对列值哈希， 然后除以桶的个数求余来决定该条记录存放在哪个桶当中。把表（或者分区）组织成桶（Bucket）有两个理由：</p>
+<ul>
+<li>获得更高的查询处理效率。桶为表加上了额外的结构，Hive 在处理某些查询 时能利用这个结构。具体而言，连接两个在（包含连接列的）相同列上划分了桶的表， 可以使用 Map 端连接 （Map-side join）高效的实现。比如 JOIN 操作，两个表有一个相同的列，如果对这两个表都进行了桶操作，那么将保存相同列值的桶进 行 JOIN 操作就可以，可以大大较少 JOIN 的数据量。</li>
+<li>使取样（sampling）更高效。在处理大规模数据集时，在开发和修改查询的阶 段，如果能在数据集的一小部分数据上试运行查询，会带来很多方便。</li>
+</ul>
+<h2 id="存储格式">存储格式</h2>
+<p>Hive从<code>行格式（row format）</code>和<code>文件格式（file format）</code>两个维度对表的存储进行管理。行格式指定行以及行中字段如何存储。行格式由SerDe（Serializer-Deserializer）序列化和反序列化工具定义。序列化即执行INSERT或CTAS时，表的SerDe会把Hive的数据行内部表现形式序列化为字节形式输出到文件。反序列化即查询表（SELECT）时，SerDe将文件中字节形式的数据反序列化为Hive内部操作数据行。文件格式指一行中字段容器的格式，最简单的是纯文本。</p>
+<p>默认存储格式：分隔的文本，创建表是没有指定ROW FORMAT 或 STORED AS子句，默认文本每行存储一个数据行，分隔符为Control-A（ASCII码为1），集合类元素的默认分隔符为Control-B，映射键（map key）分隔符为Control-C。</p>
+<p>二进制存储格式：顺序文件、Avro数据文件、Parquet文件、RCFile和ORCFile。</p>
+<h2 id="hive-环境搭建">Hive 环境搭建</h2>
+<p>来源厦门大学数据库实验室：http://dblab.xmu.edu.cn/blog/2440-2/</p>
+<p><strong>下载并解压hive源程序</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo wget https://mirrors.tuna.tsinghua.edu.cn/apache/hive/hive-3.1.2/apache-hive-3.1.2-bin.tar.gz <span class="c1"># 或直接下载再上传</span>
+
+sudo tar -zxvf ./apache-hive-3.1.2-bin.tar.gz -C /usr/local   <span class="c1"># 解压到/usr/local中</span>
+<span class="nb">cd</span> /usr/local/
+sudo mv apache-hive-3.1.2-bin hive       <span class="c1"># 将文件夹名改为hive</span>
+sudo chown -R 用户名:用户名 hive            <span class="c1"># 修改文件权限</span>
+</code></pre></div><p><strong>配置环境变量</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">vim ~/.bashrc
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">export</span> <span class="nv">HIVE_HOME</span><span class="o">=</span>/usr/local/hive
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$HIVE_HOME</span>/bin
+<span class="nb">export</span> <span class="nv">HADOOP_HOME</span><span class="o">=</span>/usr/local/hadoop
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">source</span> ~/.bashrc
+</code></pre></div><p><strong>修改/usr/local/hive/conf下的hive-site.xml</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell"><span class="nb">cd</span> /usr/local/hive/conf
+mv hive-default.xml.template hive-default.xml
+vim hive-site.xml
+</code></pre></div><p>写入</p>
+<div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; standalone=&#34;no&#34;?&gt;</span>
+<span class="cp">&lt;?xml-stylesheet type=&#34;text/xsl&#34; href=&#34;configuration.xsl&#34;?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionURL<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>jdbc:mysql://localhost:3306/hive?createDatabaseIfNotExist=true<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>JDBC connect string for a JDBC metastore<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionDriverName<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>com.mysql.jdbc.Driver<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>Driver class name for a JDBC metastore<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionUserName<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>hive<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>username to use against metastore database<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+  <span class="nt">&lt;property&gt;</span>
+    <span class="nt">&lt;name&gt;</span>javax.jdo.option.ConnectionPassword<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;value&gt;</span>hive<span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;description&gt;</span>password to use against metastore database<span class="nt">&lt;/description&gt;</span>
+  <span class="nt">&lt;/property&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div><p><a href="https://yhfeio.github.io/post/%E5%AE%89%E8%A3%85mysql/"target="_blank">安装MySQL</a></p>
+<p><strong>配置MySQL</strong><br>
+下载mysql jdbc 包  <a href="https://dev.mysql.com/downloads/connector/j/"target="_blank">下载地址</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">tar -zxvf mysql-connector-java-5.1.40.tar.gz   <span class="c1">#解压</span>
+cp mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar  /usr/local/hive/lib #
+</code></pre></div><p>启动并登录Mysql</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">service mysql start <span class="c1">#启动mysql服务</span>
+mysql -u root -p  <span class="c1">#登陆shell界面</span>
+</code></pre></div><p>新建hive数据库，配置允许hive接入</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">mysql&gt; create database hive<span class="p">;</span>    <span class="c1">#这个hive数据库与hive-site.xml中localhost:3306/hive的hive对应，用来保存hive元数据</span>
+mysql&gt; grant all on *.* to hive@localhost identified by <span class="s1">&#39;hive&#39;</span><span class="p">;</span>   <span class="c1">#将所有数据库的所有表的所有权限赋给hive用户，后面的hive是配置hive-site.xml中配置的连接密码</span>
+mysql&gt; flush privileges<span class="p">;</span>  <span class="c1">#刷新mysql系统权限关系表</span>
+</code></pre></div><p>报错：java.lang.NoSuchMethodError: com.google.common.base.Preconditions.checkArgument<br>
+原因：com.google.common.base.Preconditions.checkArgument 这是因为hive内依赖的guava.jar和hadoop内的版本不一致造成的。
+解决方法：<br>
+1.查看hadoop安装目录下share/hadoop/common/lib内guava.jar版本<br>
+2.查看hive安装目录下lib内guava.jar的版本 如果两者不一致，删除版本低的，并拷贝高版本的 问题解决！</p>
+<p>警告：Establishing SSL connection without server&rsquo;s identity verification is not recommended.<br>
+在hive-site.xml的jdbc:mysql://localhost:3306/hive?createDatabaseIfNotExist=true后增加<code>&amp;amp;useSSL=false</code>。参考https://blog.csdn.net/u012922838/article/details/73291524</p>
+<p>进入hive后执行语句报错：Unable to instantiate org.apache.hadoop.hive.ql.metadata.SessionHiveMetaStoreClient<br>
+退出hive执行<code>schematool -dbType mysql -initSchema</code></p>
 </article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hive/>Hive</a></section></div><section class="article navigation"><p><a class="link" href="/post/%E5%AE%89%E8%A3%85mysql/"><span class="li">&larr;</span>安装MySQL</a></p><p><a class="link" href="/post/nosql%E5%92%8Chbase/"><span class="li">&rarr;</span>NoSQL数据库</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
     <p class="copyright">©2020 Notepadium.</p>
     <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
