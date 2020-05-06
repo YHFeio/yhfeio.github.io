@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>Scala语言基础&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Scala语言基础" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">Scala语言基础</h1><p class="article date">2020-05-06</p></section><article class="article markdown-body"><h1 id="scala语言概述">Scala语言概述</h1>
+<h2 id="编程范式">编程范式</h2>
+<ul>
+<li>命令式编程，Java，C等，命令式语言完全根植于冯.诺依曼体系结构，一个命令式程序就是一个冯诺依曼机器的指令序列。</li>
+<li>函数式编程，Haskell,Erlang等，源自阿隆佐.邱琦的λ演算，和命令式编程有同样久远的历史。函数式编程可以充分利用多核CPU多线程并发能力，命令式编程涉及多线程之间变量的状态共享问题，没办法充分利用多核CPU多线程并发能力。函数式编程中很多变量是不可以修改的。</li>
+</ul>
+<h2 id="scala简介">Scala简介</h2>
+<p>Scala是类似Java的多范式语言，由Martin Odersky发明，即支持面向对象编程风格，也支持函数式编程风格。Scala在Java基础上发展起来，运行在JVM之上，兼容java程序（直接import Java类 调用里面的方法）。Scala是纯粹面向对象编程语言，每一个值都是对象，对值的操作都是对值对象方法的调用，如3+5，其实就是3.+(5)，即调用+方法传入5。</p>
+<ul>
+<li>并发性好</li>
+<li>支持轻量级函数，如Lambda表达式</li>
+<li>支持高阶函数，函数的参数可以是函数。</li>
+</ul>
+<h2 id="安装scala">安装Scala</h2>
+<p>首先要安装JDK，并添加环境变量。</p>
+<p>然后<a href="https://pan.baidu.com/s/17skzk_XLo2UeKHGPjukwTw"target="_blank">下载</a> (提取码：zl7c)scala，解压后添加环境变量。<a href="https://www.scala-lang.org/download/"target="_blank">官网下载</a></p>
+<p>Linux中：</p>
+<div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">sudo tar -zxvf ./scala-2.12.11.tgz -C /usr/local
+<span class="nb">cd</span> /usr/local
+sudo mv ./scala-2.12.11 ./scala
+sudo chown -R linziyu:linziyu ./scala
+<span class="nb">cd</span>
+vim .bashrc <span class="c1"># 添加 export PATH=$PATH:/usr/local/scala/bin</span>
+<span class="nb">source</span> .bashrc
+</code></pre></div><h2 id="hello-word">Hello Word</h2>
+<p>交互式：<code>println(&quot;hello world&quot;)</code></p>
+<p>交互式环境执行Scala代码文件，如test.scala文件：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">println</span><span class="o">(</span><span class="s">&#34;hello world&#34;</span><span class="o">)</span>
+</code></pre></div><p>进入交互式环境<code>scala&gt;:load 文件路径</code> 。在REPL中键入： help可以看到一组有用的命令清单。所有的命令都以冒号打头。</p>
+<p>打包编译运行，HelloWorld.scala：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">object</span> <span class="nc">HelloWorld</span><span class="o">{</span>
+    <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span><span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">]){</span>
+        <span class="n">println</span><span class="o">(</span><span class="s">&#34;Hello World&#34;</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-shell" data-lang="shell">scalac HelloWrold.scala
+scala HelloWorld  <span class="c1">#也可以加 -classpath指定路径</span>
+</code></pre></div><h1 id="scala语言基础知识">Scala语言基础知识</h1>
+<h2 id="基本数据类型和变量">基本数据类型和变量</h2>
+<p>同Java基本数据类型类似，Byte、Short、Int、Long、Char、String、Float、Double、Boolean。这些数据类型都是类，如Int类型实际上是scala.int类，比较特殊的是Scala没有自己定义String类型，直接用的java.lang.String表示字符串。</p>
+<p><strong>字面量</strong>：如定义i为123，123就是字面量。</p>
+<p>运算符与Java类似，包括算数运算发+-*/%；关系运算符&lt;,&lt;=,&gt;,&gt;=,==,!=；逻辑运算符&amp;&amp;||！；位运算符&amp;|^~；赋值运算符=及+=等。在Scala中运算符都是定义好的方法。</p>
+<p><strong>富包装类</strong>，如整形Int基本类型中只定义了一些基本方法，而没有定义复杂的运算，但Int类型可以使如max等复杂方法，因为对每个基本类型有一个专门的富包装类， 以Rich开头，如RichInt。当我们使用复杂运算时，会自动隐式地将当前对象转换为富包装类对象。</p>
+<p><strong>变量</strong>，Scala包含可变变量和不可变变量。</p>
+<table>
+<thead>
+<tr>
+<th>val</th>
+<th>不可变</th>
+<th>声明时必须初始化</th>
+<th>不能再次赋值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>var</td>
+<td>可变</td>
+<td>声明时需要初始化</td>
+<td>可以再赋值</td>
+</tr>
+</tbody>
+</table>
+<p>变量声明：<code>val 变量名称:数据类型 = 初始值</code>;<code>var 变量名称:数据类型 = 初始值</code></p>
+<p><strong>类型自动推断机制</strong>：变量声明时没有必要给定数据类型，Scala会自动推断数据类型。在同一个环境中可以多次使用同一个变量名，即使声明为val，如下面的语句是正确的：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="s">&#34;hello world&#34;</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">123</span>
+</code></pre></div><p>在Scala中，仅当同一行代码中存在多条语句时才需要用分号隔开。</p>
+<h2 id="输入输出">输入输出</h2>
+<p>控制台读取输入使用方法：readInt()等（readLine()读取String，其他每个数据类型都有），这些方法在<code>scala.io.StdIn</code>包中，因此使用之前需要导入或使用全称。示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">scala.io.StdIn._</span>  <span class="c1">//._同Java中的.*一样，导入所有
+</span><span class="c1"></span><span class="n">scala</span><span class="o">&gt;</span> <span class="k">var</span> <span class="n">i</span> <span class="k">=</span> <span class="n">readInt</span><span class="o">()</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">var</span> <span class="n">b</span> <span class="k">=</span> <span class="n">readBoolean</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">var</span> <span class="n">s</span> <span class="k">=</span> <span class="n">readLine</span><span class="o">(</span><span class="s">&#34;pleas input name:&#34;</span><span class="o">)</span>
+</code></pre></div><p>输出使用<code>print(),println()</code>。</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">print</span><span class="o">(</span><span class="s">&#34;i=&#34;</span><span class="o">);</span><span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+</code></pre></div><p>支持格式化字符串风格<code>printf()</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">printf</span><span class="o">(</span><span class="s">&#34;%s input the Int num is %d&#34;</span><span class="o">,</span><span class="n">s</span><span class="o">,</span><span class="n">a</span><span class="o">)</span>
+</code></pre></div><p>这些输出函数定义在scala.Predef中，Scala启动时自动导入。</p>
+<p>Scala支持<code>插值字符串</code>，包括s插值字符串和f插值字符串。s插值字符串需要在字符串前加<code>小写s</code>，是在<code>$</code>符号后接变量名，则会用该变量值替换掉<code>$变量名</code>。示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">s&#34;</span><span class="si">$s</span><span class="s"> input the Int num is </span><span class="si">$a</span><span class="s">&#34;</span><span class="o">)</span>
+</code></pre></div><p>f字符串可以格式化一些字符，如浮点型的小数位数，s字符串是做不到的</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">var</span> <span class="n">d</span> <span class="k">=</span> <span class="mf">56.3221</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">println</span><span class="o">(</span><span class="s">f&#34;String s=</span><span class="si">$s</span><span class="s"> ;num d=</span><span class="si">$d</span><span class="s">%.1f&#34;</span><span class="o">)</span>
+</code></pre></div><p><strong>读写文件</strong><br>
+写入文件直接使用<code>java.io.PrintWriter</code>中的print和println</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">java.io.PrintWriter</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">outputFile</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">PrintWriter</span><span class="o">(</span><span class="s">&#34;d:/test.txt&#34;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">outputFile</span><span class="o">.</span><span class="n">println</span><span class="o">(</span><span class="s">&#34;test input.&#34;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">outputFile</span><span class="o">.</span><span class="n">print</span><span class="o">(</span><span class="s">&#34;test print.&#34;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">outputFile</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
+</code></pre></div><p>读取文件用<code>scala.io.Source</code>，示例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">scala.io.Source</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">inputFile</span> <span class="k">=</span> <span class="nc">Source</span><span class="o">.</span><span class="n">fromFile</span><span class="o">(</span><span class="s">&#34;d:/test.txt&#34;</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">lines</span> <span class="k">=</span> <span class="n">inputFile</span><span class="o">.</span><span class="n">getLines</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span> <span class="o">(</span><span class="n">line</span> <span class="k">&lt;-</span> <span class="n">lines</span><span class="o">)</span> <span class="n">println</span><span class="o">(</span><span class="n">line</span><span class="o">)</span>
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">inputFile</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
+</code></pre></div><h2 id="控制结构">控制结构</h2>
+<h3 id="if">if</h3>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">if</span><span class="o">(</span><span class="n">condition</span><span class="o">){</span>
+    <span class="n">true_statement</span>
+<span class="o">}</span><span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="n">condition</span><span class="o">){</span>
+    <span class="n">true_statement</span>
+<span class="o">}</span><span class="k">else</span><span class="o">{</span>
+    <span class="n">false_statement</span>
+<span class="o">}</span>
+</code></pre></div><p>与Java不同的是Scala中if语句可以有值，赋值给变量，如：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">6</span>
+<span class="k">var</span> <span class="n">x</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span><span class="n">a</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
+</code></pre></div><h3 id="while">while</h3>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">while</span><span class="o">(</span><span class="n">condition</span><span class="o">){</span>
+    <span class="n">loop_body</span>
+<span class="o">}</span>
+<span class="k">do</span><span class="o">{</span>
+    <span class="n">loop_body</span>
+<span class="o">}</span><span class="k">while</span><span class="o">(</span><span class="n">condition</span><span class="o">)</span>
+</code></pre></div><h3 id="for">for</h3>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">for</span><span class="o">(</span><span class="n">变量</span><span class="k">&lt;-</span><span class="n">表达式</span><span class="o">){</span>
+    <span class="n">loop_body</span>
+<span class="o">}</span>
+</code></pre></div><p><code>变量&lt;-表达式</code>称为生成器，看作是遍历，例：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">for</span><span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o">)</span> <span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+</code></pre></div><p><code>1 to 5</code>是一个Range数据结构，左闭右闭，增加步长：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">for</span><span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span> <span class="n">by</span> <span class="mi">2</span><span class="o">)</span> <span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+</code></pre></div><p><code>守卫（guard）表达式</code>，每次循环判断条件是否满足，满足再执行循环体。</p>
+<pre><code>for(变量&lt;- 表达式 if 条件表达式){
+    loop_body
+}
+
+for(i &lt;- 1 to 5 if i % 2 == 0)println(i)
+</code></pre><p><code>支持多个生成器</code>，当然也支持嵌套循环</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">for</span><span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">3</span><span class="o">;</span> <span class="n">j</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="n">i</span><span class="o">){</span>
+    <span class="n">printf</span><span class="o">(</span><span class="s">&#34;%d * %d = %d&#34;</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="n">i</span><span class="o">*</span><span class="n">j</span><span class="o">)</span>
+    <span class="n">println</span><span class="o">()</span>
+<span class="o">}</span> 
+</code></pre></div><p><code>for推导式</code></p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">for</span> <span class="o">(</span><span class="n">变量</span><span class="k">&lt;-</span><span class="n">表达式</span><span class="o">)</span> <span class="k">yield</span><span class="o">{</span><span class="n">语句块</span><span class="o">}</span>
+
+<span class="k">var</span> <span class="n">r</span> <span class="k">=</span> <span class="k">for</span><span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="nc">Array</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">yield</span> <span class="o">{</span><span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">);</span> <span class="n">i</span><span class="o">}</span>
+</code></pre></div><p>遍历数组，判断是否被2整除，整除则打印i，并将i作为语句块的值赋值给r，最终r是一个数组包含2和4。</p>
+<h3 id="循环控制">循环控制</h3>
+<p>java、C中有break和continue语句中止循环或跳出本次循环，Scala中没有break和continue。Scala提供了<code>Breaks</code>类，在<code>scala.util.control</code>中定义，提供<code>breakable</code>和<code>break</code>，用法如下：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">import</span> <span class="nn">scala.util.control.Breaks._</span>
+
+<span class="c1">//类似Java中的break语句
+</span><span class="c1"></span><span class="n">breakable</span><span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o">){</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="o">)</span> <span class="n">break</span>
+        <span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">//类似于continue
+</span><span class="c1"></span><span class="k">for</span><span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">5</span><span class="o">){</span>
+    <span class="n">breakable</span><span class="o">{</span>
+        <span class="k">if</span><span class="o">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="o">)</span><span class="n">break</span>
+        <span class="n">println</span><span class="o">(</span><span class="n">i</span><span class="o">)</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div><p>即break会跳出breakable语句块。</p>
+<h3 id="异常处理">异常处理</h3>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">try</span><span class="o">{</span>
+    <span class="n">语句</span>
+<span class="o">}</span><span class="k">catch</span><span class="o">{</span>
+    <span class="k">case</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">错误1</span><span class="o">=&gt;</span>
+        <span class="n">错误1处理方法</span>
+    <span class="k">case</span> <span class="n">ex</span><span class="k">:</span> <span class="kt">错误2</span><span class="o">=&gt;</span>
+        <span class="n">错误2处理方法</span>   
+<span class="o">}</span><span class="k">finally</span><span class="o">{</span>
+    <span class="n">最终执行语句</span>
+<span class="o">}</span>
+</code></pre></div><h2 id="数据结构">数据结构</h2>
+<p>Scala数据结构包括<code>数组、元组、容器、序列、集合、映射、迭代器</code>。</p>
+<h3 id="数组">数组</h3>
+<p>数组：<code>相同类型数据</code>的集合，声明数组：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">数组名</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">类型</span><span class="o">](</span><span class="n">长度</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">数组名</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="n">元素列表</span><span class="o">)</span>
+
+<span class="c1">//声明一个整型数组
+</span><span class="c1"></span><span class="k">val</span> <span class="n">intarr</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Array</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="mi">3</span><span class="o">)</span> <span class="c1">//元素初始化为0
+</span><span class="c1"></span>
+<span class="c1">// 引用从0开始，方式同Java不一样，使用圆括号
+</span><span class="c1"></span><span class="n">intarr</span><span class="o">(</span><span class="mi">0</span><span class="o">)</span> <span class="k">=</span> <span class="mi">1</span>
+<span class="n">intarr</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="k">=</span> <span class="mi">4</span>
+<span class="n">intarr</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="k">=</span> <span class="mi">6</span>
+
+<span class="k">val</span> <span class="n">strarr</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="s">&#34;a&#34;</span><span class="o">,</span> <span class="s">&#34;b&#34;</span><span class="o">,</span> <span class="s">&#34;c&#34;</span><span class="o">)</span>
+</code></pre></div><p>多维数组</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">arr2</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">.</span><span class="n">ofDim</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">arr3</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">.</span><span class="n">ofDim</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">)</span>
+<span class="k">val</span> <span class="n">arr</span> <span class="k">=</span> <span class="nc">Array</span><span class="o">(</span><span class="nc">Array</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">),</span><span class="nc">Array</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span><span class="mi">5</span><span class="o">,</span><span class="mi">6</span><span class="o">))</span>
+</code></pre></div><h3 id="元组">元组</h3>
+<p>对多个<code>不同类型对象</code>的简单封装，用括号括起来，元素用逗号分隔。</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">tuple1</span> <span class="k">=</span> <span class="o">(</span><span class="s">&#34;yhmf&#34;</span><span class="o">,</span><span class="mi">520</span><span class="o">)</span>
+
+<span class="c1">//用._加位置索引获取元素，从1开始
+</span><span class="c1"></span><span class="n">println</span><span class="o">(</span><span class="n">tuple1</span><span class="o">.</span><span class="n">_1</span><span class="o">)</span>
+</code></pre></div><h3 id="容器">容器</h3>
+<p>Collection，翻译成容器，set翻译为集合。Scala提供了丰富的容器库序列、集合、映射。通过三个包组织这些容器类（每个容器是一个类，需要放入包中组织），分别是scala.collection,scala.collection.mutable,scala.collection.immutable。scala.collection是封装了可变容器和不可变容器的超类（特质），定义了可变容器和不可变容器的通用操作，其中容器的宏观层次结构（继承关系）：</p>
+<div align=center><img src="/bdimg/Scalacollection.png" width = "80%" /></div>  
+<p>Scala中没有接口概念，有Trait 特质，类似于Java中的接口。seq、set、map的特质区别在于元素索引方式，seq元素按照索引0，1，2&hellip;，map通过键，set没有这种索引结构。</p>
+<h3 id="序列容器">序列容器</h3>
+<p>跟是collection.Seq，又分为IndexedSeq和LinearSeq，满足不同需求，列表和队列继承自LinearSeq，Vector、ArrayBuffer继承自IndexedSeq。</p>
+<p><strong>列表</strong><br>
+是一个具体容器类，共享<code>相同类型</code>的<code>不可变</code>的对象序列，被定义在scala.collection.immutable包中，必须在声明时初始化。</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">strList</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">&#34;a&#34;</span><span class="o">,</span><span class="s">&#34;b&#34;</span><span class="o">,</span><span class="s">&#34;c&#34;</span><span class="o">)</span>
+
+<span class="n">println</span><span class="o">(</span><span class="n">strList</span><span class="o">.</span><span class="n">head</span><span class="o">)</span> <span class="c1">//返回头部
+</span><span class="c1"></span><span class="n">println</span><span class="o">(</span><span class="n">strList</span><span class="o">.</span><span class="n">tail</span><span class="o">)</span> <span class="c1">//返回尾部(除第一外剩下的)
+</span><span class="c1"></span>
+<span class="c1">//头部增加元素构造新的列表
+</span><span class="c1"></span><span class="k">var</span> <span class="n">otherList</span> <span class="k">=</span> <span class="s">&#34;other&#34;</span><span class="k">:</span><span class="kt">:strList</span> 
+<span class="n">println</span><span class="o">(</span><span class="n">otherList</span><span class="o">)</span>
+</code></pre></div><p><code>::</code>是一个操作符，上述操作将strList挂接一个字符串生成新列表，strList没被覆盖，<code>::</code>是右结合，从右往左执行。也可以这样构造列表</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">intList</span> <span class="k">=</span> <span class="mi">1</span><span class="k">:</span><span class="kt">:</span><span class="err">2</span><span class="kt">::</span><span class="err">3</span><span class="kt">::Nil</span>
+</code></pre></div><p><strong>向量</strong><br>
+具体类Vector</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">v</span> <span class="k">=</span> <span class="nc">Vector</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">)</span>
+
+<span class="c1">//增加元素
+</span><span class="c1"></span><span class="k">var</span> <span class="n">v2</span> <span class="k">=</span> <span class="mi">3</span> <span class="o">+:</span> <span class="mi">4</span> <span class="o">+:</span> <span class="n">v</span>
+<span class="k">var</span> <span class="n">v3</span> <span class="k">=</span> <span class="n">v2</span> <span class="k">:</span><span class="kt">+</span> <span class="err">5</span>
+</code></pre></div><p><strong>Range</strong></p>
+<p>Range是一种特殊的带索引的不可变数字等差序列。<code>起点 to 终点 by 步长</code>，包含终点，不包含终点使用<code>until</code>代替to。</p>
+<h3 id="集合">集合</h3>
+<p>集合元素不重复、没有顺序、通过哈希方式组织，可以快速的找到某个值，包括可变集合和不可变集合。</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">set1</span> <span class="k">=</span> <span class="nc">Set</span><span class="o">(</span><span class="s">&#34;a&#34;</span><span class="o">,</span><span class="s">&#34;b&#34;</span><span class="o">)</span>  <span class="c1">//默认情况是创建不可变集合对象
+</span><span class="c1"></span><span class="n">set1</span> <span class="o">+=</span> <span class="s">&#34;c&#34;</span>  <span class="c1">// set1是可变变量，通过+=在原来集合基础上增加一个元素生成一个新的不可变集合赋值给set1
+</span><span class="c1"></span>
+<span class="c1">//通过显示的创建可变集合
+</span><span class="c1"></span><span class="k">import</span> <span class="nn">scala.collection.mutable.Set</span>
+
+<span class="k">val</span> <span class="n">mySet</span> <span class="k">=</span> <span class="nc">Set</span><span class="o">(</span><span class="s">&#34;scala&#34;</span><span class="o">,</span><span class="s">&#34;spark&#34;</span><span class="o">)</span>
+<span class="n">mySet</span> <span class="o">+=</span> <span class="s">&#34;hadoop&#34;</span>  <span class="c1">// mySet是不可变变量，但指向的Set是可变集合，因此+=操作的是可变集合而没有改变变量mySet
+</span></code></pre></div><h3 id="映射">映射</h3>
+<p>一系列键值对集合，键是唯一的，映射也包含可变和不可变映射，同Set一样默认不可变。</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">map1</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&#34;yhf&#34;</span><span class="o">-&gt;</span><span class="mi">26</span><span class="o">,</span><span class="s">&#34;ymf&#34;</span><span class="o">-&gt;</span><span class="mi">25</span><span class="o">)</span>
+<span class="n">println</span><span class="o">(</span><span class="n">map1</span><span class="o">(</span><span class="s">&#34;yhf&#34;</span><span class="o">))</span>
+<span class="c1">// 获取前判断
+</span><span class="c1"></span><span class="k">val</span> <span class="n">yhfnum</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span><span class="n">map1</span><span class="o">.</span><span class="n">contains</span><span class="o">(</span><span class="s">&#34;yhf&#34;</span><span class="o">))</span> <span class="n">map1</span><span class="o">(</span><span class="s">&#34;yhf&#34;</span><span class="o">)</span> <span class="k">else</span> <span class="mi">0</span>
+<span class="n">println</span><span class="o">(</span><span class="n">yhfnum</span><span class="o">)</span>
+
+<span class="c1">//可变
+</span><span class="c1"></span><span class="k">import</span> <span class="nn">scala.collection.mutable.Map</span>
+
+<span class="k">val</span> <span class="n">map2</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&#34;yhf&#34;</span><span class="o">-&gt;</span><span class="mi">26</span><span class="o">,</span><span class="s">&#34;ymf&#34;</span><span class="o">-&gt;</span><span class="mi">25</span><span class="o">)</span>
+<span class="n">map2</span><span class="o">(</span><span class="s">&#34;yhf&#34;</span><span class="o">)</span> <span class="k">=</span> <span class="mi">25</span> <span class="c1">//更新
+</span><span class="c1"></span><span class="n">map2</span><span class="o">(</span><span class="s">&#34;yhmf&#34;</span><span class="o">)</span> <span class="k">=</span> <span class="mi">1</span>  <span class="c1">//添加  也可以通过+=添加
+</span></code></pre></div></article><section class="article labels"><a class="category" href=/categories/scala/>Scala</a></section></div><section class="article navigation"><p><a class="link" href="/post/hive3/"><span class="li">&rarr;</span>数据仓库Hive_高级操作</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>

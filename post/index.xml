@@ -7,10 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 Notepadium.</copyright>
-    <lastBuildDate>Sat, 02 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 06 May 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Scala语言基础</title>
+      <link>/post/scala1/</link>
+      <pubDate>Wed, 06 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/scala1/</guid>
+      <description>Scala语言概述 编程范式 命令式编程，Java，C等，命令式语言完全根植于冯.诺依曼体系结构，一个命令式程序就是一个冯诺依曼机器的指令序列。</description>
+      
+    </item>
+    
+    <item>
+      <title>数据仓库Hive_高级操作</title>
+      <link>/post/hive3/</link>
+      <pubDate>Sun, 03 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/hive3/</guid>
+      <description>数据仓库Hive（3） 复杂数据类型示例 Array --建表语句： create table person(name string,work_locations array&amp;lt;string&amp;gt;) row format delimited fields terminated by &amp;#39;\t&amp;#39; collection items terminated by &amp;#39;,&amp;#39;; --数据： xxx beijing,shanghai,tianjin,hangzhou yyy changchu,chengdu,wuhan zzz dalian,shenyang,jilin --导入数据： load data local inpath &amp;#39;/home/hadoop/person.txt&amp;#39; into table person;</description>
+      
+    </item>
     
     <item>
       <title>数据仓库Hive_基本操作</title>

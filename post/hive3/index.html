@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>数据仓库Hive_高级操作&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="数据仓库Hive_高级操作" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">数据仓库Hive_高级操作</h1><p class="article date">2020-05-03</p></section><article class="article markdown-body"><h1 id="数据仓库hive3">数据仓库Hive（3）</h1>
+<h2 id="复杂数据类型示例">复杂数据类型示例</h2>
+<p><strong>Array</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">--建表语句： 
+</span><span class="c1"></span><span class="k">create</span> <span class="k">table</span>  <span class="n">person</span><span class="p">(</span><span class="n">name</span> <span class="n">string</span><span class="p">,</span><span class="n">work_locations</span> <span class="nb">array</span><span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="p">)</span> 
+<span class="k">row</span> <span class="n">format</span> <span class="n">delimited</span> <span class="n">fields</span> <span class="n">terminated</span> <span class="k">by</span> <span class="s1">&#39;\t&#39;</span> 
+<span class="n">collection</span> <span class="n">items</span> <span class="n">terminated</span> <span class="k">by</span> <span class="s1">&#39;,&#39;</span><span class="p">;</span> 
+ 
+<span class="c1">--数据： 
+</span><span class="c1"></span><span class="n">xxx</span> <span class="n">beijing</span><span class="p">,</span><span class="n">shanghai</span><span class="p">,</span><span class="n">tianjin</span><span class="p">,</span><span class="n">hangzhou</span>
+<span class="n">yyy</span> <span class="n">changchu</span><span class="p">,</span><span class="n">chengdu</span><span class="p">,</span><span class="n">wuhan</span>
+<span class="n">zzz</span> <span class="n">dalian</span><span class="p">,</span><span class="n">shenyang</span><span class="p">,</span><span class="n">jilin</span> 
+ 
+<span class="c1">--导入数据： 
+</span><span class="c1"></span><span class="k">load</span> <span class="k">data</span> <span class="k">local</span> <span class="n">inpath</span> <span class="s1">&#39;/home/hadoop/person.txt&#39;</span> <span class="k">into</span> <span class="k">table</span> <span class="n">person</span><span class="p">;</span> 
+ 
+<span class="c1">--查询语句： 
+</span><span class="c1"></span><span class="k">Select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">person</span><span class="p">;</span> 
+<span class="k">Select</span> <span class="n">work_locations</span> <span class="k">from</span> <span class="n">person</span><span class="p">;</span> 
+<span class="k">Select</span> <span class="n">work_locations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">from</span> <span class="n">person</span><span class="p">;</span> 
+</code></pre></div><p><strong>Map</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">--建表语句： 
+</span><span class="c1"></span><span class="k">create</span> <span class="k">table</span> <span class="n">score</span><span class="p">(</span><span class="n">name</span> <span class="n">string</span><span class="p">,</span> <span class="n">scores</span> <span class="k">map</span><span class="o">&lt;</span><span class="n">string</span><span class="p">,</span><span class="nb">int</span><span class="o">&gt;</span><span class="p">)</span> 
+<span class="k">row</span> <span class="n">format</span> <span class="n">delimited</span> <span class="n">fields</span> <span class="n">terminated</span> <span class="k">by</span> <span class="s1">&#39;\t&#39;</span> 
+<span class="n">collection</span> <span class="n">items</span> <span class="n">terminated</span> <span class="k">by</span> <span class="s1">&#39;,&#39;</span> 
+<span class="k">map</span> <span class="n">keys</span> <span class="n">terminated</span> <span class="k">by</span> <span class="s1">&#39;:&#39;</span><span class="p">;</span>
+ 
+<span class="c1">--数据： 
+</span><span class="c1"></span><span class="n">xxx</span> <span class="n">yuwen</span><span class="p">:</span><span class="mi">80</span><span class="p">,</span><span class="n">shuxue</span><span class="p">:</span><span class="mi">89</span><span class="p">,</span><span class="n">yingyu</span><span class="p">:</span><span class="mi">95</span>
+<span class="n">yyy</span> <span class="n">yuwen</span><span class="p">:</span><span class="mi">70</span><span class="p">,</span><span class="n">shuxue</span><span class="p">:</span><span class="mi">65</span><span class="p">,</span><span class="n">yingyu</span><span class="p">:</span><span class="mi">81</span>
+<span class="n">zzz</span> <span class="n">yuwen</span><span class="p">:</span><span class="mi">75</span><span class="p">,</span><span class="n">shuxue</span><span class="p">:</span><span class="mi">100</span><span class="p">,</span><span class="n">yingyu</span><span class="p">:</span><span class="mi">75</span>
+ 
+<span class="c1">--导入数据： 
+</span><span class="c1"></span><span class="k">load</span> <span class="k">data</span> <span class="k">local</span> <span class="n">inpath</span> <span class="s1">&#39;/ home/hadoop /score.txt&#39;</span> <span class="k">into</span> <span class="k">table</span> <span class="n">score</span><span class="p">;</span>
+ 
+<span class="c1">--查询语句： 
+</span><span class="c1"></span><span class="k">Select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">score</span><span class="p">;</span> 
+<span class="k">Select</span> <span class="n">s</span><span class="p">.</span><span class="n">scores</span><span class="p">[</span><span class="s1">&#39;yuwen&#39;</span><span class="p">]</span> <span class="k">from</span> <span class="n">score</span> <span class="n">s</span><span class="p">;</span>
+</code></pre></div><p><strong>Struct</strong></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">--建表语句： 
+</span><span class="c1"></span><span class="k">create</span> <span class="k">table</span> <span class="n">structtable</span><span class="p">(</span><span class="n">id</span> <span class="nb">int</span><span class="p">,</span><span class="n">course</span> <span class="n">struct</span><span class="o">&lt;</span><span class="n">name</span><span class="p">:</span><span class="n">string</span><span class="p">,</span><span class="n">score</span><span class="p">:</span><span class="nb">int</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="k">row</span> <span class="n">format</span> <span class="n">delimited</span> <span class="n">fields</span> <span class="n">terminated</span> <span class="k">by</span> <span class="s1">&#39;\t&#39;</span> 
+<span class="n">collection</span> <span class="n">items</span> <span class="n">terminated</span> <span class="k">by</span> <span class="s1">&#39;,&#39;</span><span class="p">;</span> 
+ 
+<span class="c1">--数据： 
+</span><span class="c1"></span><span class="mi">1</span> <span class="n">english</span><span class="p">,</span><span class="mi">80</span> <span class="mi">2</span> <span class="n">math</span><span class="p">,</span><span class="mi">89</span> <span class="mi">3</span> <span class="n">chinese</span><span class="p">,</span><span class="mi">95</span> 
+ 
+<span class="c1">--导入数据： 
+</span><span class="c1"></span><span class="k">load</span> <span class="k">data</span> <span class="k">local</span> <span class="n">inpath</span> <span class="s1">&#39;/ home/hadoop / structtable.txt&#39;</span> <span class="k">into</span> <span class="k">table</span> <span class="n">structtable</span><span class="p">;</span> 
+ 
+<span class="c1">--查询语句： 
+</span><span class="c1"></span><span class="k">Select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">structtable</span><span class="p">;</span>  
+<span class="k">Select</span> <span class="n">course</span> <span class="k">from</span> <span class="n">structtable</span><span class="p">;</span> 
+<span class="k">Select</span> <span class="n">t</span><span class="p">.</span><span class="n">course</span><span class="p">.</span><span class="n">name</span> <span class="k">from</span> <span class="n">structtable</span> <span class="n">t</span><span class="p">;</span> 
+<span class="k">Select</span> <span class="n">t</span><span class="p">.</span><span class="n">course</span><span class="p">.</span><span class="n">score</span> <span class="k">from</span> <span class="n">structtable</span> <span class="n">t</span><span class="p">;</span> 
+</code></pre></div><h2 id="hive函数">Hive函数</h2>
+<h3 id="内置函数">内置函数</h3>
+<p><a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual&#43;UDF"target="_blank">官方教程</a></p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">--查看内置函数： 
+</span><span class="c1"></span><span class="k">show</span> <span class="n">functions</span><span class="p">;</span>
+<span class="c1">--显示函数的详细信息： 
+</span><span class="c1"></span><span class="k">desc</span> <span class="k">function</span> <span class="k">abs</span><span class="p">;</span> 
+<span class="c1">--显示函数的扩展信息： 
+</span><span class="c1"></span><span class="k">desc</span> <span class="k">function</span> <span class="n">extended</span> <span class="n">concat</span><span class="p">;</span>
+</code></pre></div><p>内置函数列表：<br>
+1、关系运算</p>
+<ul>
+<li>相等: <code>=</code>，<code>&lt;=&gt;</code></li>
+<li>不相等: <code>&lt;&gt;</code>和<code>!=</code></li>
+<li>小于、小于等于、大于、大于等于：<code>&lt;</code>,<code>&lt;=</code>,<code>&gt;</code>,<code>&gt;=</code></li>
+<li>范围判断：<code>A [NOT] BETWEEN B AND C</code></li>
+<li>空值判断: <code>IS NULL</code></li>
+<li>非空判断: <code>IS NOT NULL</code></li>
+<li>LIKE 比较: <code>LIKE</code></li>
+<li>JAVA 的 LIKE 操作: <code>RLIKE</code></li>
+<li>REGEXP 操作: <code>REGEXP</code></li>
+</ul>
+<p>2、数学运算</p>
+<ul>
+<li>加、减、乘、除: <code>+</code>, <code>–</code>, <code>*</code>, <code>/</code></li>
+<li>取余: <code>%</code></li>
+<li>位与: <code>&amp;</code></li>
+<li>位或: <code>|</code></li>
+<li>位异或: <code>^</code></li>
+<li>位取反: <code>~</code></li>
+</ul>
+<p>3、逻辑运算</p>
+<ul>
+<li>逻辑与: <code>AND</code>,<code>&amp;&amp;</code></li>
+<li>逻辑或: <code>OR</code>, <code>||</code></li>
+<li>逻辑非: <code>NOT</code>,<code>!</code></li>
+<li>存在：<code>A [NOT] IN (val1, val2, ...)</code></li>
+</ul>
+<p>4、复杂数据类型构造与取值</p>
+<ul>
+<li><code>map(key1, value1, key2, value2, ...)</code></li>
+<li><code>struct(val1, val2, val3, ...)</code>,Struct field names will be col1, col2, &hellip;.</li>
+<li><code>named_struct(name1, val1, name2, val2, ...)</code></li>
+<li><code>array(val1, val2, ...) </code></li>
+<li><code>create_union(tag, val1, val2, ...)</code></li>
+<li>Array取值：<code>A[n]</code></li>
+<li>Map取值：<code>M[key]</code></li>
+<li>Struct取值：<code>S.x</code></li>
+</ul>
+<p>5、数值计算函数</p>
+<ul>
+<li>取整函数(可指定精度): <code>round</code></li>
+<li>向下取整函数: <code>floor</code></li>
+<li>向上取整函数: <code>ceil</code>,<code>ceiling</code></li>
+<li>取随机数函数: <code>rand</code></li>
+<li>自然指数函数: <code>exp</code></li>
+<li>以 10、2 为底对数函数: <code>log10</code>,<code>log2</code></li>
+<li>对数函数: <code>log</code></li>
+<li>幂运算函数: <code>pow</code>,<code>power</code></li>
+<li>开平方函数: <code>sqrt</code></li>
+<li>绝对值函数: <code>abs</code></li>
+<li>正取余函数: <code>pmod</code></li>
+<li><code>sin</code>,<code>asin</code>,<code>cos</code>,<code>acos</code></li>
+<li>positive 函数: <code>positive</code></li>
+<li>negative 函数: <code>negative</code></li>
+</ul>
+<p>6、类型转换</p>
+<ul>
+<li>二进制转换：<code>binary</code></li>
+<li>基础类型之间强制转换：<code>cast(expr as &lt;type&gt;)</code></li>
+</ul>
+<p>7、日期函数</p>
+<ul>
+<li>UNIX 时间戳转日期函数: <code>from_unixtime</code></li>
+<li>获取当前 UNIX 时间戳函数: <code>unix_timestamp</code></li>
+<li>日期转 UNIX 时间戳函数: <code>unix_timestamp</code></li>
+<li>日期转日期函数: <code>to_date</code></li>
+<li>日期转年/月/日/小时/分钟/秒/周数函数: <code>year</code>,<code>month</code>,<code>day</code>,<code>hour</code>,<code>minute</code>,<code>second</code>,<code>weekofyear</code></li>
+<li>日期比较函数(返会间隔天数): <code>datediff(end,star)</code></li>
+<li>日期增加/减少函数: <code>date_add</code>,<code>date_sub</code></li>
+</ul>
+<p>8、条件函数</p>
+<ul>
+<li>If 函数: <code>if(boolean testCondition, T valueTrue, T valueFalseOrNull)</code>，testCondition为真返回valueTrue，否则返回valFalseOrNull</li>
+<li>非空查找函数: COALESCE</li>
+<li>条件判断函数：CASE</li>
+</ul>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CASE</span> <span class="n">a</span> <span class="k">WHEN</span> <span class="n">b</span> <span class="k">THEN</span> <span class="k">c</span> <span class="p">[</span><span class="k">WHEN</span> <span class="n">d</span> <span class="k">THEN</span> <span class="n">e</span><span class="p">]</span><span class="o">*</span> <span class="p">[</span><span class="k">ELSE</span> <span class="n">f</span><span class="p">]</span> <span class="k">END</span>   
+<span class="c1">--When a = b, returns c; when a = d, returns e; else returns f.
+</span><span class="c1"></span><span class="k">CASE</span> <span class="k">WHEN</span> <span class="n">a</span> <span class="k">THEN</span> <span class="n">b</span> <span class="p">[</span><span class="k">WHEN</span> <span class="k">c</span> <span class="k">THEN</span> <span class="n">d</span><span class="p">]</span><span class="o">*</span> <span class="p">[</span><span class="k">ELSE</span> <span class="n">e</span><span class="p">]</span> <span class="k">END</span>
+<span class="c1">--When a = true, returns b; when c = true, returns d; else returns e.
+</span></code></pre></div><p>9、字符串函数</p>
+<ul>
+<li>字符 ascii 码函数：<code>ascii</code></li>
+<li>字符串连接函数：<code>concat</code></li>
+<li>带分隔符字符串连接函数(可将数组转换成字符串)：<code>concat_ws</code></li>
+<li>小数位格式化成字符串函数：<code>format_number</code></li>
+<li>字符串截取函数：<code>substr,substring</code></li>
+<li>字符串查找函数：<code>instr(string str, string substr)</code>,<code>locate(string substr, string str[, int pos])</code></li>
+<li>字符串长度函数：<code>length</code></li>
+<li>字符串格式化函数：<code>printf</code></li>
+<li>字符串转换成 map 函数：<code>str_to_map</code></li>
+<li>字符串转大写/小写函数：<code>upper,ucase</code>/<code>lower,lcase</code></li>
+<li>去空格函数：<code>trim</code>, <code>ltrim</code>,<code>rtrim</code></li>
+<li>正则表达式替换函数：<code>regexp_replace</code></li>
+<li>分割字符串函数: <code>split</code></li>
+<li>分词函数：<code>sentences</code></li>
+<li>分词后统计一起出现频次最高的 <code>TOP-K</code></li>
+</ul>
+<p>10、汇总统计函数（UDAF）</p>
+<ul>
+<li>计数/求和/平均/最小值/最大值/: <code>count</code>,<code>sum</code>,<code>avg</code>,<code>min</code>,<code>max</code></li>
+<li>非空集合总体变量函数: var_pop</li>
+<li>非空集合样本变量函数: var_samp</li>
+<li>总体标准偏离函数: stddev_pop</li>
+<li>样本标准偏离函数: stddev_samp</li>
+<li>中位数函数: percentile</li>
+<li>近似中位数函数: percentile_approx</li>
+<li>直方图: histogram_numeric</li>
+<li>集合去重数：collect_set</li>
+<li>集合不去重函数：collect_list</li>
+</ul>
+<h3 id="hive-自定义函数-udf">Hive 自定义函数 UDF</h3>
+<p>当 Hive 提供的内置函数无法满足业务处理需要时，此时就可以考虑使用用户自定义函数</p>
+<ul>
+<li>UDF（user-defined function）作用于单个数据行，产生一个数据行作为输出。</li>
+<li>UDAF（用户定义聚集函数 User- Defined Aggregation Funcation）：接收多个输入数据行，并产 生一个输出数据行。</li>
+<li>UDTF（User-Defined Table Functions）：接收一行输入，输出多行（explode）</li>
+</ul>
+<p>**一个简单的 UDF 示例 **</p>
+<p>1、先开发一个简单的 java 类，继承 org.apache.hadoop.hive.ql.exec.UDF，重载 evaluate 方法</p>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Package</span> <span class="n">com</span><span class="o">.</span><span class="na">ghgj</span><span class="o">.</span><span class="na">hive</span><span class="o">.</span><span class="na">udf</span> 
+ 
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span> <span class="kn">import</span> <span class="nn">org.apache.hadoop.hive.ql.exec.UDF</span><span class="o">;</span> 
+ 
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ToLowerCase</span> <span class="kd">extends</span> <span class="n">UDF</span> <span class="o">{</span>  
+    <span class="c1">// 必须是 public  
+</span><span class="c1"></span>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">evaluate</span><span class="o">(</span><span class="n">String</span> <span class="n">field</span><span class="o">)</span> <span class="o">{</span>   
+        <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="na">toLowerCase</span><span class="o">();</span>   
+        <span class="k">return</span> <span class="n">result</span><span class="o">;</span>  
+    <span class="o">}</span> 
+<span class="o">}</span> 
+</code></pre></div><p>2、打成 jar 包上传到服务器<br>
+3、将 jar 包添加到 hive 的 classpath 执行</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span><span class="k">add</span> <span class="n">JAR</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">hadoop</span><span class="o">/</span><span class="n">hivejar</span><span class="o">/</span><span class="n">udf</span><span class="p">.</span><span class="n">jar</span><span class="p">;</span>    
+<span class="c1">--查看加入的 jar 的命令： 
+</span><span class="c1"></span><span class="n">hive</span><span class="o">&gt;</span> <span class="n">list</span> <span class="n">jar</span><span class="p">;</span> 
+</code></pre></div><p>4、创建临时函数与开发好的 class 关联起来</p>
+<div class="highlight"><pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span><span class="k">create</span> <span class="k">temporary</span> <span class="k">function</span> <span class="n">tolowercase</span> <span class="k">as</span> <span class="s1">&#39;testudf&#39;</span><span class="p">;</span>
+</code></pre></div><p>至此，便可以在 hql 在使用自定义的函数 select tolowercase(name),age from student;</p>
+</article><section class="article labels"><a class="category" href=/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/>大数据</a><a class="tag" href=/tags/hive/>Hive</a></section></div><section class="article navigation"><p><a class="link" href="/post/scala1/"><span class="li">&larr;</span>Scala语言基础</a></p><p><a class="link" href="/post/hive2/"><span class="li">&rarr;</span>数据仓库Hive_基本操作</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>
