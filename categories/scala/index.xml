@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 Notepadium.</copyright>
-    <lastBuildDate>Wed, 06 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 08 May 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/categories/scala/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Scala语言基础(面向对象)</title>
+      <link>/post/scala2/</link>
+      <pubDate>Fri, 08 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/scala2/</guid>
+      <description>面向对象编程 注：如果在IDE中编写代码，可在文件中创建object单例对象（下面会介绍），其中创建main函数用于编写运行代码(类似于Jav</description>
+      
+    </item>
     
     <item>
       <title>Scala语言基础</title>

@@ -45,10 +45,9 @@ vim .bashrc <span class="c1"># 添加 export PATH=$PATH:/usr/local/scala/bin</sp
 scala HelloWorld  <span class="c1">#也可以加 -classpath指定路径</span>
 </code></pre></div><h1 id="scala语言基础知识">Scala语言基础知识</h1>
 <h2 id="基本数据类型和变量">基本数据类型和变量</h2>
-<p>同Java基本数据类型类似，Byte、Short、Int、Long、Char、String、Float、Double、Boolean。这些数据类型都是类，如Int类型实际上是scala.int类，比较特殊的是Scala没有自己定义String类型，直接用的java.lang.String表示字符串。</p>
+<p>同Java基本数据类型类似，Byte、Short、Int、Long、Char、String、Float、Double、Boolean。这些数据类型都是类，如Int类型实际上是scala.Int类，比较特殊的是Scala没有自己定义String类型，直接用的java.lang.String表示字符串。</p>
 <p><strong>字面量</strong>：如定义i为123，123就是字面量。</p>
-<p>运算符与Java类似，包括算数运算发+-*/%；关系运算符&lt;,&lt;=,&gt;,&gt;=,==,!=；逻辑运算符&amp;&amp;||！；位运算符&amp;|^~；赋值运算符=及+=等。在Scala中运算符都是定义好的方法。</p>
-<p><strong>富包装类</strong>，如整形Int基本类型中只定义了一些基本方法，而没有定义复杂的运算，但Int类型可以使如max等复杂方法，因为对每个基本类型有一个专门的富包装类， 以Rich开头，如RichInt。当我们使用复杂运算时，会自动隐式地将当前对象转换为富包装类对象。</p>
+<p><strong>富包装类</strong>，如整形Int基本类型中只定义了一些基本方法，而没有定义复杂的运算，但Int类型可以使如max等复杂方法，因为对每个基本类型有一个专门的富包装类， 以Rich开头，如RichInt，String类型富包装类是StringOps。当我们使用复杂运算时，会自动隐式地将当前对象转换为富包装类对象，然后再调用复杂方法。</p>
 <p><strong>变量</strong>，Scala包含可变变量和不可变变量。</p>
 <table>
 <thead>
@@ -72,7 +71,14 @@ scala HelloWorld  <span class="c1">#也可以加 -classpath指定路径</span>
 <p><strong>类型自动推断机制</strong>：变量声明时没有必要给定数据类型，Scala会自动推断数据类型。在同一个环境中可以多次使用同一个变量名，即使声明为val，如下面的语句是正确的：</p>
 <div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="s">&#34;hello world&#34;</span>
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">123</span>
-</code></pre></div><p>在Scala中，仅当同一行代码中存在多条语句时才需要用分号隔开。</p>
+</code></pre></div><p>在Scala中，仅当同一行代码中存在多条语句时才需要用分号隔开。你可以将多个值或变量放在一起声明</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">val</span> <span class="n">xmax</span><span class="o">,</span> <span class="n">ymax</span> <span class="k">=</span> <span class="mi">100</span> 
+<span class="k">var</span> <span class="n">greeting</span><span class="o">,</span> <span class="n">message</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kc">null</span> 
+</code></pre></div><p><strong>类型转换</strong>：在Scala中我们用方法，而不是强制类型转换，来做数值类型之间的转换。例 99.44.toInt得到 99, 99. toChar得到’c’。toString将任意的对象转换成字符串。</p>
+<h2 id="算数和操作符">算数和操作符</h2>
+<p>运算符与Java类似，包括算数运算发+-*/%；关系运算符&lt;,&lt;=,&gt;,&gt;=,==,!=；逻辑运算符&amp;&amp;||！；位运算符&amp;|^~；赋值运算符=及+=等。在Scala中这些操作符实际上是方法。</p>
+<p>通常可以用<code>a 方法 b</code>作为<code>a.方法(b)</code>的简写。 Scala并没有提供＋＋和－操作符，我们需要使用<code>+=1</code> 或者<code>-=1</code></p>
+<p>在Java中不能对操作符进行重载，Scala允许定义操作符，由你来决定是否要在必要时有分 寸地使用这个特性。</p>
 <h2 id="输入输出">输入输出</h2>
 <p>控制台读取输入使用方法：readInt()等（readLine()读取String，其他每个数据类型都有），这些方法在<code>scala.io.StdIn</code>包中，因此使用之前需要导入或使用全称。示例：</p>
 <div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="n">scala</span><span class="o">&gt;</span> <span class="k">import</span> <span class="nn">scala.io.StdIn._</span>  <span class="c1">//._同Java中的.*一样，导入所有
@@ -102,7 +108,10 @@ scala HelloWorld  <span class="c1">#也可以加 -classpath指定路径</span>
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">val</span> <span class="n">lines</span> <span class="k">=</span> <span class="n">inputFile</span><span class="o">.</span><span class="n">getLines</span>
 <span class="n">scala</span><span class="o">&gt;</span> <span class="k">for</span> <span class="o">(</span><span class="n">line</span> <span class="k">&lt;-</span> <span class="n">lines</span><span class="o">)</span> <span class="n">println</span><span class="o">(</span><span class="n">line</span><span class="o">)</span>
 <span class="n">scala</span><span class="o">&gt;</span> <span class="n">inputFile</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
-</code></pre></div><h2 id="控制结构">控制结构</h2>
+</code></pre></div><h2 id="块表达式和赋值">块表达式和赋值</h2>
+<p>Scala中<code>{}</code>块包含一系列表达式，其结果也是一个表达式。<code>块中最后一个表达式的值就是块的值</code>。</p>
+<p>Scala中赋值动作本身是没有值的，更严格地说，它们的值是Unit类型的。Unit类型等同于Java中的void，而这个类型只有一个值，写作()。 一个以赋值语句结束的块的值是Unit类型的。</p>
+<h2 id="控制结构">控制结构</h2>
 <h3 id="if">if</h3>
 <div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">if</span><span class="o">(</span><span class="n">condition</span><span class="o">){</span>
     <span class="n">true_statement</span>
@@ -114,7 +123,9 @@ scala HelloWorld  <span class="c1">#也可以加 -classpath指定路径</span>
 </code></pre></div><p>与Java不同的是Scala中if语句可以有值，赋值给变量，如：</p>
 <div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">var</span> <span class="n">a</span> <span class="k">=</span> <span class="mi">6</span>
 <span class="k">var</span> <span class="n">x</span> <span class="k">=</span> <span class="k">if</span><span class="o">(</span><span class="n">a</span><span class="o">&gt;</span><span class="mi">5</span><span class="o">)</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
-</code></pre></div><h3 id="while">while</h3>
+</code></pre></div><p>混合类型表达式<code>if (x &gt; 0 ) &quot;positive&quot; else -1</code>，该表达式的类型是两个分支类型的公共超类型。本例中是java.lang.String和Int的公共超类型Any。</p>
+<p>不带else的表达式若条件不成立不输出任何值，但每个表达式都应该有某种值。因此引入Unit类，写作(),不带else的if语句等同于<code>if(...) ... else ()</code>，</p>
+<h3 id="while">while</h3>
 <div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">while</span><span class="o">(</span><span class="n">condition</span><span class="o">){</span>
     <span class="n">loop_body</span>
 <span class="o">}</span>
@@ -140,6 +151,8 @@ for(i &lt;- 1 to 5 if i % 2 == 0)println(i)
     <span class="n">printf</span><span class="o">(</span><span class="s">&#34;%d * %d = %d&#34;</span><span class="o">,</span> <span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="n">i</span><span class="o">*</span><span class="n">j</span><span class="o">)</span>
     <span class="n">println</span><span class="o">()</span>
 <span class="o">}</span> 
+</code></pre></div><p>可以使用任意多的定义，引人可以在循环中使用的变量：</p>
+<div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">for</span> <span class="o">(</span><span class="n">i</span> <span class="k">&lt;-</span> <span class="mi">1</span> <span class="n">to</span> <span class="mi">3</span><span class="o">;</span> <span class="n">from</span> <span class="k">=</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="k">&lt;-</span> <span class="n">from</span> <span class="n">to</span> <span class="mi">3</span><span class="o">)</span> <span class="n">print</span><span class="o">(</span><span class="s">f&#34;</span><span class="si">${</span><span class="mi">10</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="err">｝</span><span class="o">%</span><span class="mi">3</span><span class="n">d</span><span class="err">&#34;</span><span class="o">)</span>
 </code></pre></div><p><code>for推导式</code></p>
 <div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">for</span> <span class="o">(</span><span class="n">变量</span><span class="k">&lt;-</span><span class="n">表达式</span><span class="o">)</span> <span class="k">yield</span><span class="o">{</span><span class="n">语句块</span><span class="o">}</span>
 
@@ -165,6 +178,8 @@ for(i &lt;- 1 to 5 if i % 2 == 0)println(i)
 <span class="o">}</span>
 </code></pre></div><p>即break会跳出breakable语句块。</p>
 <h3 id="异常处理">异常处理</h3>
+<p>和Java一样，抛出的对象必须是j ava.lang.Throwable的子类。但Scala没有“受检”异常一一你不需要声明函数或方法可能会抛出某种异常。</p>
+<p>在Java中，“受检”异常在编译期被检查。如果你的方法可能会抛出异常，则必须做出声明。</p>
 <div class="highlight"><pre class="chroma"><code class="language-scala" data-lang="scala"><span class="k">try</span><span class="o">{</span>
     <span class="n">语句</span>
 <span class="o">}</span><span class="k">catch</span><span class="o">{</span>
@@ -175,7 +190,8 @@ for(i &lt;- 1 to 5 if i % 2 == 0)println(i)
 <span class="o">}</span><span class="k">finally</span><span class="o">{</span>
     <span class="n">最终执行语句</span>
 <span class="o">}</span>
-</code></pre></div><h2 id="数据结构">数据结构</h2>
+</code></pre></div><p>更通用的异常应该排在更具体的异常之后</p>
+<h2 id="数据结构">数据结构</h2>
 <p>Scala数据结构包括<code>数组、元组、容器、序列、集合、映射、迭代器</code>。</p>
 <h3 id="数组">数组</h3>
 <p>数组：<code>相同类型数据</code>的集合，声明数组：</p>
@@ -252,7 +268,7 @@ for(i &lt;- 1 to 5 if i % 2 == 0)println(i)
 <span class="k">val</span> <span class="n">map2</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&#34;yhf&#34;</span><span class="o">-&gt;</span><span class="mi">26</span><span class="o">,</span><span class="s">&#34;ymf&#34;</span><span class="o">-&gt;</span><span class="mi">25</span><span class="o">)</span>
 <span class="n">map2</span><span class="o">(</span><span class="s">&#34;yhf&#34;</span><span class="o">)</span> <span class="k">=</span> <span class="mi">25</span> <span class="c1">//更新
 </span><span class="c1"></span><span class="n">map2</span><span class="o">(</span><span class="s">&#34;yhmf&#34;</span><span class="o">)</span> <span class="k">=</span> <span class="mi">1</span>  <span class="c1">//添加  也可以通过+=添加
-</span></code></pre></div></article><section class="article labels"><a class="category" href=/categories/scala/>Scala</a></section></div><section class="article navigation"><p><a class="link" href="/post/hive3/"><span class="li">&rarr;</span>数据仓库Hive_高级操作</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+</span></code></pre></div></article><section class="article labels"><a class="category" href=/categories/scala/>Scala</a></section></div><section class="article navigation"><p><a class="link" href="/post/scala2/"><span class="li">&larr;</span>Scala语言基础(面向对象)</a></p><p><a class="link" href="/post/hive3/"><span class="li">&rarr;</span>数据仓库Hive_高级操作</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
     <p class="copyright">©2020 Notepadium.</p>
     <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
         target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
