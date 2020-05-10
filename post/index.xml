@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 Notepadium.</copyright>
-    <lastBuildDate>Fri, 08 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 10 May 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>数据挖掘：概念、数据</title>
+      <link>/post/dm1/</link>
+      <pubDate>Sun, 10 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/dm1/</guid>
+      <description>1 绪论 大数据时代，数据的数量、多样性及数据收集、处理速率对于人类来说太大，需要自动化工具从大数据中提取有用信息。一些需要高级数据分析技术的应</description>
+      
+    </item>
     
     <item>
       <title>Scala语言基础(面向对象)</title>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>数据挖掘：概念、数据&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="数据挖掘：概念、数据" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">数据挖掘：概念、数据</h1><p class="article date">2020-05-10</p></section><article class="article markdown-body"><h1 id="1-绪论">1 绪论</h1>
+<p>大数据时代，数据的数量、多样性及数据收集、处理速率对于人类来说太大，需要自动化工具从大数据中提取有用信息。一些需要高级数据分析技术的应用：<br>
+<strong>商业和工业</strong>：依据零售商在收银台收集顾客购物最新数据，电子商务网站日志、客服中心记录等商务数据，数据挖掘技术可以支持广泛的商务智能应用，如顾客分析、定向营销、工作流管理、商店分布、欺诈检测、自动化购买和销售等。其他商业问题如：最有价值客户、产品交叉销售或提升销售、营业前景等。电子商务领域，根据用户在线浏览、购物偏好数据构建推荐系统等，互联网服务中过滤垃圾邮件、回答搜索查询等。互联网上的大量文本、图片视频推动数据挖掘技术进步。物联网（IOT）收集的数据也可用于探索有价值的信息。
+<strong>医学、科学与工程</strong></p>
+<h2 id="11-数据挖掘概念">1.1 数据挖掘概念</h2>
+<p>数据挖掘是在大型数据库中自动地发现有用信息的过程，发现未知的有用模式、预测未来的观测结果。</p>
+<p>数据挖掘是<code>数据库中知识发现（Knowledge Discovery in Database，KDD）</code>中的一部分：<br>
+输入数据-&gt;预处理（特征选择、维约归、规范化、选择数据子集）-&gt;数据挖掘-&gt;后处理（模式过滤、可视化、模式解释）-&gt;信息<br>
+<code>预处理</code>目的是将原始输入数据转换为适当的格式以便后续分析，包括数据融合、数据清洗、记录和特征选择。是最耗时、费力的过程。</p>
+<h2 id="12-要解决的问题">1.2 要解决的问题</h2>
+<p>大数据时代传统数据分析面临的问题：</p>
+<ul>
+<li><code>可伸缩</code>，处理海量数据集，数据挖掘算法必须是可伸缩的。特殊的搜索策略、新的数据结构、抽样|分布式并行算法。</li>
+<li><code>高维性</code>，当前数据集通常具有成百上千个属性，为低纬数据开发的传统分析方法不能很好的处理这些数据。</li>
+<li><code>异构数据和复杂数据</code>，不同于之前包含相同类型（连续、分类）属性的数据集，现在出现更复杂的数据对象，如包含文本、超链接、图像和视频的Web和社交媒体数据等。</li>
+<li><code>数据的所有权与分布</code>，存储在不同站点的不同所有权数据需要开发分布式数据挖掘技术，问题：减低通讯量、统一多个数据源获得的结果、数据安全和隐私</li>
+<li><code>非传统分析</code>，传统统计方法基于假设-检验模式，当前需要产生和评估数千种假设、因此需要自动地产生和评估假设。</li>
+</ul>
+<h2 id="13-数据挖掘任务">1.3 数据挖掘任务</h2>
+<p>两大类任务：</p>
+<ul>
+<li><code>预测任务</code>，根据其他属性的值预测特定属性的值。因变量（被解释变量/目标变量）、自变量（解释变量）概念。</li>
+<li><code>描述任务</code>，导出概述数据中潜在联系的模式（相关、趋势、聚类、轨迹、异常），通常是探查性的</li>
+</ul>
+<p>四种主要的数据挖掘任务：</p>
+<p>1、<code>预测建模(predictive modeling)</code>，为目标变量建立模型，将其作为解释变量的函数。两类预测建模任务：<code>分类</code>用于预测离散的目标变量；<code>回归</code>用于预测连续的目标变量。任务目标都是训练一个模型，使目标变量的预测值同实际值之间误差达到最小。<br>
+2、<code>关联分析(association analysis)</code>，发现描述数据中强关联特征的模式。模式通常用蕴含规则或特征子集的形式表示。<br>
+3、<code>聚类分析(cluster analysis)</code>，发现紧密相关的观测值群组，使得属于不同簇的观测值相比，属于统一簇的观测值之间尽可能类似。<br>
+4、<code>异常检测(anomaly detection)</code>，识别特征显著不同于其他数据的观测值。这样的观测值称为<code>异常点</code>或<code>离群点</code>。一个好的异常检测器必须具有高检测率和低误报率。应用包括欺诈检测、网络攻击、疾病不寻常模式、生态系统扰动。</p>
+<h1 id="2-数据">2 数据</h1>
+<h2 id="21-数据类型">2.1 数据类型</h2>
+<p><code>数据集</code>可以看作<code>数据对象</code>的集合，数据对象有时叫做记录、点、向量、模式、事件、案例、样本、实例、观测或实体。数据对象用一组刻画对象的特征的<code>属性</code>描述。属性有时叫字段、变量、特征、特性、维。如下面的学生信息数据集，其中数据对象（记录等）即表中的每一行，每个列都是一个属性。</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>姓名</th>
+<th>年级</th>
+<th>绩点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10002</td>
+<td>xxx</td>
+<td>1</td>
+<td>3.1</td>
+</tr>
+<tr>
+<td>10003</td>
+<td>yyy</td>
+<td>1</td>
+<td>3.3</td>
+</tr>
+<tr>
+<td>10201</td>
+<td>zzz</td>
+<td>2</td>
+<td>3.0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="211属性与度量">2.1.1属性与度量</h3>
+<p><code>属性（attribute）</code>即对象的性质或特征，因对象而异或随时间变化。如人的“身高”属性。<br>
+<code>测量标度（measurement scale）</code>将数值或符号与对象的属性相关联的规则。</p>
+<p>属性类型通常称为测量标度的类型，可以理解为属性类型是由测量标度决定的，并且用来代表属性的值可能具有不同于属性本身的性质，反之亦然。如雇员ID和年龄属性，都可以用整数表示，但平均年龄是有意义的但平均ID没有意义。</p>
+<p><strong>属性的不同类型</strong>，可通过确定对应属性基本性质的数值的性质指定属性类型。数值的性质（操作）：1.相异性；2.比较排序；3.加减；4.乘除。根据这些性质可以定义四种属性类型如表中所示，<code>每种属性类型拥有其上方属性类型的所有性质和操作</code>。</p>
+<table>
+<thead>
+<tr>
+<th>属性类型</th>
+<th>描述</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标称（nominal）</td>
+<td>值只是不同的名字，即只提供足够信息区分对象（=，!=）</td>
+<td>如邮政编码，性别，ID</td>
+</tr>
+<tr>
+<td>序数（ordinal）</td>
+<td>值提供足够信息确定对象的序（&lt;,&gt;）</td>
+<td>如矿石硬度（好、较好、最好）、成绩等</td>
+</tr>
+<tr>
+<td>区间（interval）</td>
+<td>值之间的差是有意义的，即存在测量单位（+,-）</td>
+<td>如日历日期、摄氏度</td>
+</tr>
+<tr>
+<td>比率（ratio）</td>
+<td>值之间的差和比率都是有意义的（+,-,*,/）</td>
+<td>如计数、年龄、质量、长度等</td>
+</tr>
+</tbody>
+</table>
+<p>标称和序数属性类型统称为<code>分类的（categorical）</code>或<code>定性的（qualitative）</code>属性。定性属性不具备数的大部分性质。区间和比率属性统称为<code>定量的（quantitative）</code>或<code>数值的（numeric）</code>属性。</p>
+<p>根据属性可能取值的个数可分为：</p>
+<ul>
+<li><code>离散（discrete）</code>属性，具有有限个或无限可数个值。只有两个值的称为<code>二元属性（binary attribute）</code>。</li>
+<li><code>连续（continuous）</code>属性，取实数值的属性。</li>
+</ul>
+<p><strong>非对称的属性</strong>，即出现非零属性值才是重要的，如属性表示学生是否选择的某个课程，数据集中大部分是0，关注非0值更有意义，可称为非对称的二元属性。同样有非对称的离散属性和连续属性。</p>
+<h3 id="212-数据集的类型">2.1.2 数据集的类型</h3>
+<p>记录数据、基于图形的数据和有序数据。</p>
+<p><strong>数据集的一般特性</strong></p>
+<ul>
+<li><code>维度（dimensionality）</code>，数据对象具有的属性数目。</li>
+<li><code>分布（distribution）</code>，数据对象属性各个值的出现频率，同样数据集的分布可以看作对数据空间各个区域中对下那个集中程度的描述。</li>
+<li><code>分辨率（resolution）</code>，经常可以在不同分辨率下得到数据，且不同分辨率下数据性质不同。数据模式也依赖于分辨率，分辨率太高，模式可能看不出或掩盖在噪声中，太低，模式可能不出现。</li>
+</ul>
+<p><code>数据倾斜</code>表示数据分布的<code>倾斜度（skewness）</code>较大，如将类别属性作为类变量，其中一个类在95%情况下会出现，其他的类别只在5%的情况下出现，这会使分类变的困难。数据倾斜的一个特例是<code>稀疏性（sparsity）</code>，对于稀疏的二进制、计数或连续数据，一个对象的大多数属性值为0。实际上稀疏性是一个有点，系数数据集中属性通常是非对称属性。</p>
+<p>1）<code>记录数据</code>，许多数据挖掘任务都假定数据集是记录的汇集，每个记录都包含固定的数据字段（属性）集。如关系型数据库中表的形式。其还有不同的变体：</p>
+<ul>
+<li><em>事物数据或购物篮数据</em>，事务数据（transaction data）中每个记录（事务）涉及一系列的项。如杂货店中顾客一次购物的商品集合构成一个事务，商品是项。这种类型数据称为购物篮数据（market basket data）。</li>
+<li><em>数据矩阵</em>，如果数据集中所有数据对象都具有相同的数值属性集，数据对象可以看作多维空间中的点（向量），每个维度代表一个属性，可用一个$$m \times n$$ 的矩阵表示。</li>
+<li><em>稀疏数据矩阵</em>。</li>
+</ul>
+<p>2）<code>基于图的数据</code>，图形可以方便而有效地表示数据。</p>
+<ul>
+<li><em>带有对象之间联系的数据</em>，对象之间的联系常常携带重要信息，这种情况下通常用图表示。如万维网的网页之间、社交网络。</li>
+<li><em>具有图对象的数据</em>，如果对象具有结构，即对象包含具有联系的子对象，则通常用图表示。如化合物的结构</li>
+</ul>
+<p>3）<code>有序数据</code>，属性具有涉及时间或空间序的联系。</p>
+<ul>
+<li><em>时序事务数据</em>，是事务数据的扩充，每个事务包含一个与之关联的时间。</li>
+<li><em>时间序列数据</em>（time series data），每条记录都是一个时间序列，即一段时间来的观测序列。</li>
+<li><em>序列数据</em>（sequence data），类似于时间序列，不过只是考虑项的位置，如词或字母的序列。</li>
+<li><em>空间和时空数据</em>，数据中记录空间属性，如位置。不同位置随时间收集的观测数据，称为时空数据（面板数据？）。一个重要研究方面是空间自相关性（spatial autocorrelation），即物理上靠近的对象趋于在其他方面也类似。</li>
+</ul>
+<h2 id="22-数据质量">2.2 数据质量</h2>
+<h3 id="测量和数据收集问题">测量和数据收集问题</h3>
+<p><code>测量误差（measurement error）</code>，指测量过程中产生的问题，常见问题是测量值与实际值不同。对于连续属性，测量值与实际值的差称为<code>误差（error）</code>。涉及问题：噪声、伪像、偏置、精度、准确率。<br>
+<code>数据收集错误（data collection error）</code>，指遗漏对象或属性值，或不当地包含其他数据对象等错误。涉及问题：离群点、遗漏和不一致的值、重复数据。</p>
+<p>两者可能是系统的也可能是随机的。</p>
+<p>1）<code>噪声和伪像</code>，噪声是测量误差的随机部分。完全消除噪声是困难的，因此常设计<code>鲁棒算法（robust algorithm）</code>，即在噪声干扰下也能产生可接受的结果。数据错误可能是确定性现象，这种确定性失真称为<code>伪像（artifact）</code>。<br>
+2）<code>精度（precision）</code>：重复测量值之间的接近程度，通常用值集合的标准差度量。<br>
+3）<code>偏置（bias）</code>：测量值与被测量值之间的系统的变化。用值集合的均值与测出来的已知值（实际值？）之间的差。<br>
+4）<code>准确率（accuracy）</code>：测量值与实际值之间的接近程度。<br>
+5）<code>离群点（outlier）</code>：具有不同于数据集中大部分数据对象的特征的数据对象，或对于该属性值来说不寻常的属性值。称为<code>异常（anomalous）</code>对象或异常值。与噪声不同，离群值可以是合法的数据对象或值。<br>
+6）<code>遗漏值</code>：即数据集中对象遗漏一个或多个属性值。处理遗漏值的策略：</p>
+<ul>
+<li>删除数据对象或属性，这是一种简单的策略，但不完整的数据对象也包含有用的信息。</li>
+<li>估计遗漏值，一些情况下（如平滑方式变化、少量且分散遗漏的时间序列）可用其他值估计（插值）遗漏值。连续可用邻近的均值，离散用常出现的属性值。</li>
+<li>分析时忽略遗漏值</li>
+</ul>
+<p>7）<code>不一致的值</code>，如身高、年龄为负数，即与其他值形式不一致，或不切实际。<br>
+8）<code>重复数据</code></p>
+<h2 id="23-数据预处理">2.3 数据预处理</h2>
+<p>数据预处理为了让数据更适合挖掘，包含大量以复杂的方式相关联的不同策略和技术。主要讨论：聚集、抽样、维归约、特征子集选择、特征创建、离散化和二元化、变量变换。 可分为两类：选择分析所需数据对象和属性、创建/改变属性。下面有时使用特征或变量指代属性。</p>
+<h3 id="聚集">聚集</h3>
+<p><code>聚集（aggregation）</code>将两个或多个对象合并成单个对象。通常对于定量属性使用聚合函数如求和求均值，对于定性属性可以忽略或使用高层次类别概括。聚集的目的：较小数据集减少内存、处理开销；通过高层次视图实现维度转换；群的行为通常比单个对象或属性稳定。</p>
+<h3 id="抽样">抽样</h3>
+<p>统计学抽样是因为获取这个数据集代价太高，而数据挖掘通常是因为处理所有数据所需内存或时间成本太高。有效抽样原理：样本是有代表性的（近似具有原数据集相同的（感兴趣的）性质），则使用样本与使用整个数据集的效果几乎一样。<br>
+抽样方法：简单随机抽样，变种有放回和无放回抽样；分层抽样。<br>
+自适应（adaptive）或渐进抽样（progressive sampling），从小样本开始逐渐增大样本，过程种需要评估样本的方法，来确定是否足够大。如学习一个模型，通过观察准确率随样本量的变化，某点后趋于稳定则停止抽样。</p>
+<h3 id="维归约降维">维归约（降维）</h3>
+<p>数据集可能包含大量特征，维归约关键的好处是，如果维度较低许多数据挖掘算法效果会更好，部分因为可以删除不相关属性并降低噪声，另一部分是因为维灾难。通常1、通过创建新属性用于合并旧属性；2、通过选择旧属性的子集得到新属性。这种维归约称为特征选择。</p>
+<p><code>维灾难</code>指随着数据维度增加，许多数据分析变得困难。特别是随着维度增加，数据所占空间（多维数据空间）越来越稀疏。对于分类可能意味着没有足够的数据对象创建一个模型；对于聚类，点之间的密度和距离的定义失去意义。</p>
+<p><code>维归约的线性代数技术</code>，将数据由高维空间投影到低维空间，特别是对于连续数据。<code>主成分分析（Principal Component Analysis，PCA）</code>用于连续属性，找出新的属性（主成分），这些属性是原属性的线性组合，是相互<code>正交的（orthogonal）</code>，并捕获了数据的最大变差。<code>奇异值分解（Singular Value Decomposition，SVD）</code>与PCA有关，也用于维归约。</p>
+<h3 id="特征子集选择">特征子集选择</h3>
+<p>降维的另一种方法是仅使用特征的一个子集，在存在冗余或不相关特征时适用。理想方法是将所有可能的特征子集作为数据挖掘算法的输入，选取能够产生最好结果的子集。但子集数目庞大大部分情况下行不通。三个标准的特征选择方法：</p>
+<ul>
+<li><code>嵌入方法（embedded approach）</code>即特征选择作为数据挖掘算法的一部分。算法在运行期间决定使用那些属性。如决策树。</li>
+<li><code>过滤方法（filter approach）</code>使用独立于数据挖掘算法的方法，在数据挖掘算法运行前进行特征选择。</li>
+<li><code>包装方法（wrapper approach）</code>将目标数据挖掘算法作为黑盒，使用类似于理想方法，但不枚举所有可能子集。</li>
+</ul>
+<p>1）<strong>特征子集选择体系结构</strong><br>
+把过滤和包装方法放入一个共同体系结构中，两者不同在于特征子集评估方法不同，包装方法使用目标数据挖掘算法，过滤方法使用其他评估技术。嵌入方法跟具体的挖掘算法有关。</p>
+<div align=center><img src="/dmimg/子集选择流程.jpg" width = "70%" /></div>
+<ul>
+<li>可以使用许多不同类型的搜索策略，但计算花费应较低。</li>
+<li>对于子集的评估，需要一种评估度量，过滤方法试图预测实际挖掘算法在给定子集上的执行效果，包装方法实际运行目标挖掘算法，用评估函数度量算法结果。</li>
+<li>由于子集数量较大，因此需要一种停止搜索判断，通常是设置最大迭代次数、子集评估度量优于给定阈值、达到特定大小子集。</li>
+<li>特征子集确定后，要验证目标算法在子集上的结果，最简单的是同用全部特征的结果比较，或比较不同特征选择策略结果。</li>
+</ul>
+<p>2）特征加权<br>
+特征加权是另一种保留或删除特征的方法，特征越重要赋予的权值越大。</p>
+<h3 id="特征创建">特征创建</h3>
+<p>由原来属性创建新属性，更有效捕获数据集中的重要信息。较少的新属性也可带来降维的好处。<br>
+1）特征提取<br>
+<code>特征提取（feature extraction）</code>由原始数据创建新的特征集。常用特征提取技术是高度针对具体领域的，即对特定领域开发的特征提取技术不适用其他领域。</p>
+<p>2）映射数据到新的空间<br>
+使用一种完全不同的视角挖掘数据可能揭示出重要和有趣的特征。如时间序列数据包含单周期，且噪声不多，很容易检测到该模式，但多周期且大量噪声就很难。通过对时间序列实施<code>傅里叶变换（Fourier transform）</code>，将它转换成频率信息明显的表示，就能检测出这些模式。另外<code>小波变换（wavelet transform）</code>也是非常有用的。</p>
+<h3 id="离散化和二元化">离散化和二元化</h3>
+<p>有些数据挖掘算法，特别是分类算法，要求数据是分类形式的。因此常常需要将连续属性变换为分类属性（<code>离散化（discretization）</code>），将连续和离散属性转换为一个或多个二元属性（<code>二元化（binarization）</code>）。同时对于包含大量类别的属性，合并某些出现频率低的类别是有益的。最佳离散化或二元化要与数据挖掘任务的性能好坏直接相关。</p>
+<p>1）二元化</p>
+<p>一种分类属性二元化简单技术：如果有m个类别值，则每个原始值赋予[0,m-1]之间的一个整数，如果是有序的必须保持顺序关系。将m个整数都变换为一个二进制数，需要$$n=log_2 m $$个二进制位表示这些整数，因此需要n个二元属性。例如：</p>
+<table>
+<thead>
+<tr>
+<th>分类值</th>
+<th>整数值</th>
+<th>x1</th>
+<th>x2</th>
+<th>x3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>awful</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>poor</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>ok</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>good</td>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>great</td>
+<td>4</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>上述方法可能导致复杂化，如无意中建立了变换后属性之间的联系。关联分析需要非对称的二元属性，因此一种方法是为每一个分类值引入一个二元属性，表示是否为该类别。同样有可能需要用两个非对称的二元属性替换单个二元属性，如男女性别，可创建两个二元属性，其中一个当是男性时为1，另一个是女性时为1。</p>
+<p>2）连续属性离散化</p>
+<p>涉及两个子任务：确定分类值数量n；如何将连续属性值映射到这些分类值。通常将连续属性值排序后，指定n-1个分割点分成n个区间，然后将一个区间内的所有值映射到相同的分类值。</p>
+<p><code>无监督离散化</code>，不使用类信息进行离散化，常用简单方法进行分类，如等宽、等频率或等深方法划分值域。<br>
+<code>监督离散化</code>，更具类标对数据离散化。基于熵的方法。</p>
+<h3 id="变量变换">变量变换</h3>
+<p><code>变量变换（variable transformation）</code>是指用于变量所有值的变换。</p>
+<p>1）简单函数<br>
+将一个简单的数学函数作用于每一个值。设x是变量，包括$$x^k、log x、e^x$$ 等。</p>
+<p>2）规范化或标准化
+使整个值的集合具有特定的性质。统计学中的“标准化”（减均值比标准差），如果以某种方法组合不同的变量，标准化可以避免具有较大值的变量左右分析结果。<br>
+而均值和标准差受离群值的影响较大，可用<code>中位数</code>取代均值，用<code>绝对标准差（absolute standard deviation）</code>取代标准差。绝对标准差是变量减中位数或均值的绝对值的和。</p>
+<h2 id="24-相似性和相异性的度量">2.4 相似性和相异性的度量</h2>
+<p>使用述语<code>邻近度（proximity）</code>表示相似性或相异性。</p>
+<h3 id="基础">基础</h3>
+<p><code>相似度</code>的非正式定义是两个对象相似程度的数值度量。通常在0-1之间取值。<code>相异度</code>是两个对象差异程度的数值度量，通常<code>距离（distance）</code>用作相异度的近义词。</p>
+<p><strong>变换</strong><br>
+通常使用变换将相似度和相异度互相转换，或把近邻度变换到一个特定区间。</p>
+<p>对于一个有限值域的近邻度变换到[0,1]区间可以使用01标准化方法，即减去最小值除以极差。这是一个线性变换，保留了点之间的相对距离。但如果原来的近邻度在0-无穷上取值，则需要非线性变换，且值不在具有相同的联系。</p>
+<h3 id="简单属性之间的相似度和相异度">简单属性之间的相似度和相异度</h3>
+<p>通常多个属性对象之间的近邻度用单个属性近邻度的组合定义，首先讨论具有单个属性的对象的近邻度。</p>
+<table>
+<thead>
+<tr>
+<th>属性类型</th>
+<th>相异度</th>
+<th>相似度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标称</td>
+<td>d=0,x=y;d=1,x!=y</td>
+<td>s=1,x=y;x=0,x!=y</td>
+</tr>
+<tr>
+<td>序数</td>
+<td>d=abs(x-y)/(n-1).值映射到整数0~n-1</td>
+<td>s=1-d</td>
+</tr>
+<tr>
+<td>区间或比率</td>
+<td>d=abs(x-y)</td>
+<td>s=-d,s=1/(1+d),s=exp(-d)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数据对象之间的相异度">数据对象之间的相异度</h3>
+<p>多维空间中两点的<code>欧几里得距离（Euclidean distance）</code>d：<br>
+$$d(x,y)=\sqrt {\sum_{k=1}^{n}{{(x_k - y_k)^2}}}$$<br>
+其中n是维数。点和点之间可以构成距离矩阵。<br>
+<code>闵可夫斯基距离（Minkowski distance）</code>：<br>
+$$d(x,y)=(\sum_{k=1}^{n} {|x_k - y_k|^r} )^{\frac{1}{r}}$$<br>
+其中r为参数，三个常见的例子：</p>
+<ul>
+<li>r=1，麦哈顿距离（L1范数），常见的例子是汉明距离。</li>
+<li>r=2，欧几里得距离（L2范数）</li>
+<li>r=无穷，上确界距离</li>
+</ul>
+<p>距离矩阵都是对称的。距离的性质，d(x,y)是两点x和y之间的距离：1、非负性；2、对称性，d(x,y)=d(y,x)；3、三角不等式，d(x,z)&lt;=d(x,y)+d(y,z)。满足以上三个性质的测度称为<code>度量（metric）</code>。</p>
+<h3 id="数据对象之间的相似度">数据对象之间的相似度</h3>
+<p>三角不等式对于相似度通常不成立，非负性和对称性通常成立。</p>
+<h3 id="近邻度度量的例子">近邻度度量的例子</h3>
+<p>1）二元数据的相似性度量<br>
+两个仅包含二元属性的对象之间的相似性度量也称为<code>相似系数</code>，0~1之间取值。设x，y两个对象：</p>
+<ul>
+<li>f00=x取0且y取0的属性个数</li>
+<li>f01=x取0且y取1的属性个数</li>
+<li>f10=x取1且y取0的属性个数</li>
+<li>f11=x取1且y取1的属性个数</li>
+</ul>
+<p><code>简单匹配系数（Simple Matching Coefficient，SMC）</code>是一种常用的相似系数：
+$$SMC=\frac{f11+f00}{f00+f01+f10+f11}$$
+即值匹配的属性个数/属性个数。</p>
+<p><code>Jaccard系数</code>，仅包含非对称二元属性的对象由于都包含大量的0值，SMC会判定所有对象都是类似的。因此使用Jaccard系数处理仅包含非对称二元属性的对象：<br>
+$$J=\frac {f11}{f01+f10+f11}$$</p>
+<p>2）余弦相似度<br>
+文档的向量表示法中，向量的每个属性代表一个特定的词在文档中出现的频率，每个文档的向量都是稀疏的，那么相似性就不能依赖0-0匹配。因此文档相似度的度量要像Jaccard系数度量一样忽略0-0匹配，且能够处理非二元向量。</p>
+<p><code>余弦相似度（cosine similarity）</code>是文档相似性常用度量之一。设x，y是两个文档向量：<br>
+$$cos(x,y)=\frac {x \cdot y}{||x|| ; ||y||}$$<br>
+$$\cdot$$表示两个向量的内积（对应元素相乘的和）。内积适用于非对称属性，只依赖两个向量中非零的分量。余弦相似度实际上是x和y之间的夹角的度量。相似度为1则夹角为0，除长度外都相等，相似度为0则夹角为90度。</p>
+<p>3）广义Jaccard系数（Tanimoto 系数）<br>
+可用于文档数据：<br>
+$$ EJ(x,y)=\frac {x \cdot y} {||x||^2 + ||y||^2 - x \cdot y}$$</p>
+<p>4）相关性<br>
+相关性经常用来测量两组观测值之间的线性关系。相关性可以测量类型和取值尺度差异很大的属性间的相似度。两个数据对象如向量x和y之间的<code>皮尔森相关（Pearson's correlation）</code>系数：<br>
+$$corr(x,y)=\frac {cov(x,y)}{\sigma x ; \sigma y} = 
+\frac {\sum_{i}{(x_i-\overline{x}) (y_i-\overline{y})} }
+{\sqrt{\sum_{i}{(x_i-\overline{x})^2} \sum_{i}{(y_i-\overline{y})^2} } }$$</p>
+<p>取值[-1,1]，1为完全线性相关即函数关系，0则不存在线性关系，不能判定是否有非线性关系。</p>
+<p>5）连续属性度量方法的差异<br>
+考虑两种数据变换方式：常数因子缩放（乘）和常数值平移（加）。进行数据变换后，近邻度度量方法的值不变，则认为对数据变换具有不变性。</p>
+<table>
+<thead>
+<tr>
+<th>性质</th>
+<th>余弦</th>
+<th>相关性</th>
+<th>闵可夫斯基距离</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>缩放不变性</td>
+<td>是</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>平移不变性</td>
+<td>否</td>
+<td>是</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<h3 id="互信息">互信息</h3>
+<p>类似相关性，互信息用于度量两组成对值之间的相似性，可作为相关性的替代值，特别是疑似存在非线性关系时。</p>
+</article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/>数据挖掘</a></section></div><section class="article navigation"><p><a class="link" href="/post/scala2/"><span class="li">&rarr;</span>Scala语言基础(面向对象)</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>
