@@ -8,7 +8,7 @@
         <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
     <h1 class="article title">数据挖掘：概念、数据</h1><p class="article date">2020-05-10</p></section><article class="article markdown-body"><h1 id="1-绪论">1 绪论</h1>
 <p>大数据时代，数据的数量、多样性及数据收集、处理速率对于人类来说太大，需要自动化工具从大数据中提取有用信息。一些需要高级数据分析技术的应用：<br>
-<strong>商业和工业</strong>：依据零售商在收银台收集顾客购物最新数据，电子商务网站日志、客服中心记录等商务数据，数据挖掘技术可以支持广泛的商务智能应用，如顾客分析、定向营销、工作流管理、商店分布、欺诈检测、自动化购买和销售等。其他商业问题如：最有价值客户、产品交叉销售或提升销售、营业前景等。电子商务领域，根据用户在线浏览、购物偏好数据构建推荐系统等，互联网服务中过滤垃圾邮件、回答搜索查询等。互联网上的大量文本、图片视频推动数据挖掘技术进步。物联网（IOT）收集的数据也可用于探索有价值的信息。
+<strong>商业和工业</strong>：依据零售商在收银台收集顾客购物最新数据，电子商务网站日志、客服中心记录等商务数据，数据挖掘技术可以支持广泛的商务智能应用，如顾客分析、定向营销、工作流管理、商店分布、欺诈检测、自动化购买和销售等。其他商业问题如：最有价值客户、产品交叉销售或提升销售、营业前景等。电子商务领域，根据用户在线浏览、购物偏好数据构建推荐系统等，互联网服务中过滤垃圾邮件、回答搜索查询等。互联网上的大量文本、图片视频推动数据挖掘技术进步。物联网（IOT）收集的数据也可用于探索有价值的信息。<br>
 <strong>医学、科学与工程</strong></p>
 <h2 id="11-数据挖掘概念">1.1 数据挖掘概念</h2>
 <p>数据挖掘是在大型数据库中自动地发现有用信息的过程，发现未知的有用模式、预测未来的观测结果。</p>
@@ -253,7 +253,7 @@
 <p><code>变量变换（variable transformation）</code>是指用于变量所有值的变换。</p>
 <p>1）简单函数<br>
 将一个简单的数学函数作用于每一个值。设x是变量，包括$$x^k、log x、e^x$$ 等。</p>
-<p>2）规范化或标准化
+<p>2）规范化或标准化<br>
 使整个值的集合具有特定的性质。统计学中的“标准化”（减均值比标准差），如果以某种方法组合不同的变量，标准化可以避免具有较大值的变量左右分析结果。<br>
 而均值和标准差受离群值的影响较大，可用<code>中位数</code>取代均值，用<code>绝对标准差（absolute standard deviation）</code>取代标准差。绝对标准差是变量减中位数或均值的绝对值的和。</p>
 <h2 id="24-相似性和相异性的度量">2.4 相似性和相异性的度量</h2>
@@ -323,11 +323,14 @@ $$J=\frac {f11}{f01+f10+f11}$$</p>
 <p>2）余弦相似度<br>
 文档的向量表示法中，向量的每个属性代表一个特定的词在文档中出现的频率，每个文档的向量都是稀疏的，那么相似性就不能依赖0-0匹配。因此文档相似度的度量要像Jaccard系数度量一样忽略0-0匹配，且能够处理非二元向量。</p>
 <p><code>余弦相似度（cosine similarity）</code>是文档相似性常用度量之一。设x，y是两个文档向量：<br>
-$$cos(x,y)=\frac {x \cdot y}{||x|| ; ||y||}$$<br>
-$$\cdot$$表示两个向量的内积（对应元素相乘的和）。内积适用于非对称属性，只依赖两个向量中非零的分量。余弦相似度实际上是x和y之间的夹角的度量。相似度为1则夹角为0，除长度外都相等，相似度为0则夹角为90度。</p>
+$$cos(x,y)=\frac {&lt;x, y&gt;}{||x|| ; ||y||}$$<br>
+&lt;x, y&gt;表示两个向量的内积（对应元素相乘的和）。两个向量的内积适用于非对称属性，因为只依赖两个向量中非零的分量。余弦相似度实际上是x和y之间的夹角的度量。相似度为1则夹角为0，除长度外都相等，相似度为0则夹角为90度。</p>
+<p>还可以写成：<br>
+$$cos(x,y)=&lt;\frac{x}{||x||}, \frac{y}{||y||}&gt;$$<br>
+x和y除以它们的长度，将它们规范化为1，这意味着余弦相似度不考虑两个数据对象的量值。<code>对于长度为1的向量，可以简单地取内积计算</code>。</p>
 <p>3）广义Jaccard系数（Tanimoto 系数）<br>
 可用于文档数据：<br>
-$$ EJ(x,y)=\frac {x \cdot y} {||x||^2 + ||y||^2 - x \cdot y}$$</p>
+$$ EJ(x,y)=\frac {&lt;x, y&gt;} {||x||^2 + ||y||^2 - &lt;x, y&gt;}$$</p>
 <p>4）相关性<br>
 相关性经常用来测量两组观测值之间的线性关系。相关性可以测量类型和取值尺度差异很大的属性间的相似度。两个数据对象如向量x和y之间的<code>皮尔森相关（Pearson's correlation）</code>系数：<br>
 $$corr(x,y)=\frac {cov(x,y)}{\sigma x ; \sigma y} = 
@@ -361,8 +364,31 @@ $$corr(x,y)=\frac {cov(x,y)}{\sigma x ; \sigma y} =
 </tbody>
 </table>
 <h3 id="互信息">互信息</h3>
-<p>类似相关性，互信息用于度量两组成对值之间的相似性，可作为相关性的替代值，特别是疑似存在非线性关系时。</p>
-</article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/>数据挖掘</a></section></div><section class="article navigation"><p><a class="link" href="/post/scala2/"><span class="li">&rarr;</span>Scala语言基础(面向对象)</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+<p>类似相关性，互信息用于度量两组成对值之间的相似性，可作为相关性的替代值，特别是疑似存在非线性关系时。互信息来自信息论，实际上互信息是一组值对另一组提供多少信息的度量方法。考虑两组值X，Y它们成对出现（X,Y），熵：<br>
+$$H(X)=-\sum_{j=1}^{m}{P(X=u_j)log_2 P(X=u_j)}$$<br>
+$$H(Y)=-\sum_{k=1}^{n}{P(Y=v_k)log_2 P(Y=v_k)}$$<br>
+$$H(X,Y)=-\sum_{j=1}^{m}{ 
+\sum_{k=1}^{n}{
+P(X=u_j,Y=v_k)log_2 P(X=u_j,y=v_k)}}$$</p>
+<p>X和Y的互信息直接定义如下：<br>
+$$I(X,Y)=H(X)+H(Y)-H(X,Y)$$<br>
+注意H(X,Y)=H(Y,X)，因此互信息也是对称的。<br>
+规范化互信息到01区间可用$$\frac {I(X,Y)}{log_2 (min(m,n))}$$</p>
+<h3 id="核函数">核函数</h3>
+<p>如果一个数据集有m个数据集，<code>核矩阵k</code>是一个$$m \times m$$的矩阵，如果xi和xj是第i和第j个数据对象，则$$K_ij$$是通过核函数计算的K的第ij个熵：<br>
+$$k_ij = k(x_i,x_j)$$</p>
+<p>核矩阵的使用允许<code>算法对各种数据的更广泛的适用性</code>，还能<code>扩展仅用于检测线性关系的算法到非线性关系上建模</code>。</p>
+<p>1）核使得算法数据独立<br>
+如果算法使用一个核矩阵，那么它可以与任何类型的数据一起使用，并为该数据设计核函数。</p>
+<p>基本核算法：</p>
+<pre><code>1：从数据集中读取m个数据对象
+2：通过对每个数据对象对运用和函数k，计算得到核矩阵K
+3：将K作为输入，执行数据分析算法
+4：返回分析结果
+</code></pre><p>2）将数据映射到高维数据空间可以允许非线性关系的建模<br>
+基于核的数据分析算法能够用只模拟线性关系的算法来构建非线性关系，通常首先将数据从低维空间映射到高维空间来实现。例：<br>
+x,y定义了椭圆关系：$$4x^2+9xy+7y^2=10$$，通过创建三个变量映射二维数据到三维：$$w=x^2; u=xy; v=y^2$$。此时可以将椭圆方程由w，u，v表示为线性方程。</p>
+</article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98_%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/>数据挖掘_机器学习</a></section></div><section class="article navigation"><p><a class="link" href="/post/modeleas/"><span class="li">&larr;</span>机器学习：模型评估与选择</a></p><p><a class="link" href="/post/scala2/"><span class="li">&rarr;</span>Scala语言基础(面向对象)</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
     <p class="copyright">©2020 Notepadium.</p>
     <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
         target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
