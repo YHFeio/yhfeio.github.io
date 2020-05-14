@@ -165,7 +165,7 @@ $$AUC=\frac{1}{2} \sum_{i=1}^{m-1}{(x_{i+1}-x_i) \cdot (y_i + y_{i+1})}$$</p>
 <p>$$
 E(f;D;cost)=\frac {1}{m} 
 (\sum_{x_i \in D^+} Ⅱ(f(x_i) \neq y_i) 
-\times cost_{01} + 
+\times cost_{01} + \<br>
 \sum_{x_i \in D^-} Ⅱ(f(x_i) \neq y_i) \times cost_{10})$$</p>
 <p>在非均等代价下ROC曲线不能直接反映学习器的期望总体代价，可用<code>代价曲线(cost curve)</code>，横轴是取值为 [0,1] 的正例概率代价：</p>
 <p>$$P(+)cost=\frac {p \times cost_{01}} {p \times cost_{01}+(1-p)\times cost_{10}}$$</p>
@@ -231,7 +231,7 @@ $$\tau_t=|\frac{\sqrt{k}\mu}{\sigma}|$$<br>
 $$E(f;D) = bias^2(x)+var(x) + \varepsilon^2$$<br>
 即泛化误差可分解为偏差、方差与噪声之和。偏差一方差分解说明，泛化性能是由 学习算法的能力、数据的充分性以及学习任务本身的难度所共同决定的。</p>
 <p>偏差与方差是有冲突的，这称为偏差一方差窘境(bias-variance dilemma)。给定学习任务，在训练不足时，学习器的拟合能力不够强，训练数据的扰动不足以便学习器产生显著变化，此时偏差主导了泛化错误率；随着训练程度的加深，学习器的拟合能力逐渐增强，训练数据发生的扰动渐渐能被学习器学到，方差逐渐主导了泛化错误率；在训练程度充足后，学习器的拟合能力已非常强，训练 数据发生的轻微扰动都会导致学习器发生显著变化，若训练数据自身的、非全 局的特性被学习器学到了，则将发生过拟合。</p>
-</article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98_%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/>数据挖掘_机器学习</a></section></div><section class="article navigation"><p><a class="link" href="/post/dm1/"><span class="li">&rarr;</span>数据挖掘：概念、数据</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+</article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98_%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/>数据挖掘_机器学习</a></section></div><section class="article navigation"><p><a class="link" href="/post/linearmodel/"><span class="li">&larr;</span>机器学习：线性模型</a></p><p><a class="link" href="/post/dm1/"><span class="li">&rarr;</span>数据挖掘：概念、数据</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
     <p class="copyright">©2020 Notepadium.</p>
     <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
         target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 

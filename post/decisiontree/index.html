@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>机器学习：决策树&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="机器学习：决策树" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">机器学习：决策树</h1><p class="article date">2020-05-14</p></section><article class="article markdown-body"><h1 id="决策树">决策树</h1>
+<h2 id="1-基本流程">1 基本流程</h2>
+<p>决策树(decision tree)基于树形结构进行决策。一棵决策树包含一个根结点、若干个内部结点和若干个叶结点，叶结点对应于决策结果，其他每个结点则对应于一个属性测试。从根结点到每个叶结点的路径对应了一个判定测试序列。基本流程遵循<code>分而治之(divide-and-conquer)</code>策略。</p>
+<hr>
+<p><strong>输入</strong>:训练集 D = $${(x_1,y_1),(x_2,y_2),\cdots ,(x_m,y_m)}$$; 属性集 $$A={a_1, a_2,\cdots,a_d}$$
+<strong>过程</strong>：函数TreeGenerate(D,A)</p>
+<pre><code>1:  生成结点 node; 
+2:  if D中样本全属于同一类别C then   //情形1
+3:      将node标记为C类叶结点;return
+4:  end if
+5:  if A=空集 OR D中样本在A上取值相同 then   //情形2，当前节点后验分布
+6:      将node标记为叶结点,其类别标记为D中样本数最多的类; return
+7:  end if
+8:  从A中选择最优划分属性a*;
+9:  for a* 的每一个值a*v do
+10:     为node生成一个分支;令Dv表示D中在a*上取值为a*v的样本子集;
+11:     if Dv为空 then
+12:         将分支结点标记为叶结点，其类别标记为D中样本最多的类; return    //情形3，父节点样本分布作为先验分布
+13:     else
+14:         以TreeGenerate(Dv, A\{α*})为分支结点
+15:     end if
+16: end for  
+</code></pre><p><strong>输出</strong>:以node为根结点的决策树</p>
+<hr>
+<p>决策树的生成是一个递归过程，有三种情形会导致递归返回:</p>
+<p>1）当前结点包含的样本全属于同一类别，无需划分；<br>
+2）当前属性集为空，或是所有样本在所有属性上取值相同，无法划分；<br>
+3）当前结点包 含的样本集合为空，不能划分。</p>
+<h2 id="2-划分选择">2 划分选择</h2>
+<p>关键是<code>如何选择最优划分属性</code>。希望决策树的分支结点所包含的样 本尽可能属于同一类别，即结点的<code>纯度(purity)</code>越来越高。</p>
+<h3 id="21-信息增益">2.1 信息增益</h3>
+<p><code>信息熵(information entropy)</code>：度量样本集合纯度的指标。假定D中第k类样本所占的比例为$$P_k(k=1,2,\cdots,|\gamma|)$$，则D的信息熵：<br>
+$$Ent(D)=-\sum_{k=1}^{|\gamma|}{p_k \log_2{pk}}$$<br>
+Ent(D) 的值越小，则 D 的纯度越高。</p>
+<p><code>信息增益(information gain)</code>，假定离散属性a 有V个可能的取值 $${a^1,a^2,\cdots,a^V}$$，用a对D划分会产生 V 个分支结点，第v个分支结点包含了D中所有在属性a上取值为$$a^v$$的样本，记为$$D^v$$。可计算各分支节点的信息熵，不同的分支结点所包含的样本数不同，赋予权重$$|D^v|/|D|$$。用属性a对D划分所获得的信息增益：<br>
+$$Gain(D,a)=Ent(D)-\sum_{v=1}^{V}{\frac{|D^v|}{|D|}Ent(D^v)}$$</p>
+<p>信息增益越大，使用属性a来进行划分所获得的&quot;纯度提升&quot;越大。因此可用信息增益选择划分属性，则算法第8行为：<br>
+$$a* = \underset {a \in A}{\operatorname {arg max}}\quad Gain(D,a)$$</p>
+<p><strong>ID3决策树学习算法</strong> 就是以信息增益为准则来选择划分属性。</p>
+<h3 id="22-增益率">2.2 增益率</h3>
+<p>信息增益准则对可取值数目较多的属性有所偏好，例如，要是按照编号作为属性划分，那么会产生很多分支，每个分支结点仅包含一个样本，这些分支结点的纯度己达最大。但这样的决策树显然不具有泛化能力，无法对新样本进行有效预测。</p>
+<p><strong>C4.5决策树算法</strong>使用<code>增益率(gain ratio)</code>来选择最优划分属性。<br>
+$$Gain \underline{\quad} ratio(D,a)=\frac{Gain(D,a)}{IV(a)}$$<br>
+$$IV(a)=-\sum_{v=1}^{V}{\frac{|D^v|}{|D|} \log_2{\frac{|D^v|}{|D|}}}$$</p>
+<p>IV(a)称为属性 a 的<code>固有值(intrinsic value)</code>，a的可能取值数目越多(即 V 越大)，则 IV(a) 的值通常会越大。</p>
+<p>增益率准则对可取值数目较少的属性有所偏好，因此，C4.5 算法并不是直接选择增益率最大的候选划分属性，而是使用了一个启发式：先从候选划分属性中找出信息增益高于平均水平的属性，再从 中选择增益率最高的。</p>
+<h3 id="23-基尼指数">2.3 基尼指数</h3>
+<p><strong>CART决策树</strong>使用<code>基尼指数(Gini index)</code>来选择划分属性。数据集 D 的纯度可用基尼值来度量：<br>
+$$Gini(D)=\sum_{k=1}^{|\gamma|}{\sum_{k&rsquo; \neq k}{p_kp_{k&rsquo;}}} = 1-\sum_{k=1}^{|\gamma|}{p_k^2}$$</p>
+<p>Gini(D)反映了从数据集 D 中随机抽取两个样本，其类别标记 不一致的概率。因此，Gini(D) 越小，则数据集 D 的纯度越高。</p>
+<p>属性 a 的基尼指数定义为：</p>
+<p>$$Gini \underline{\quad} index(D,a) = \sum_{v=1}^{V}{\frac{|D^v|}{|D|}Gini(D^v)}$$</p>
+<p>选择使得划分后基尼指数最小的属性作为最优划分属性。</p>
+<h2 id="3-剪枝处理">3 剪枝处理</h2>
+<p><code>剪枝(pruning)</code>是决策树学习算法对付&quot;过拟合&quot;的主要手段。通过主动去掉一些分支，防止由于分支过多，把训练样本学得&quot;太好&quot;导致过拟合。基本策略有<code>预剪枝(prepruning)</code>和<code>后剪枝(post-pruning)</code>。</p>
+<h3 id="31-预剪枝">3.1 预剪枝</h3>
+<p>在决策树生成过程中，对每个结点在划分前先进行估计，若当前结点的划分不能带来决策树泛化性能提升，则停止划分并将当前结点标记为叶结点。判断决策树泛化性能是否提升可使用性能评估方法（如留出法，根据验证集上的精度进行判断）。</p>
+<ul>
+<li>仅有一层划分的决策树，亦称<code>决策树桩(decision stump)</code>。</li>
+<li>有些分支的当前划分虽不能提升泛化性能、甚至可能导致泛化性能暂时下降，但在其基础上进行的后续划分却有可能导致性能显著提高，预剪枝基于<code>贪心</code>本质禁止这些分支展开，给预剪枝决策树带来了欠拟含的风险。</li>
+</ul>
+<h3 id="32-后剪枝">3.2 后剪枝</h3>
+<p>后剪枝先从训练集生成一棵完整决策树，然后自底向上地对非叶结点进行考察，若将该结点对应的子树替换为叶结点能带来决策树泛化性能提升，则将该子树替换为叶结点。</p>
+<ul>
+<li>后剪枝决策树通常比预剪枝决策树保留了更多的分支。</li>
+<li>后剪枝决策树的欠拟合风险很小，泛化性能往往优于预剪枝决策树。</li>
+<li>但其训练时间开销比未剪枝决策树和预剪枝决策树都要大得多。</li>
+</ul>
+<h2 id="4-连续与缺失值">4 连续与缺失值</h2>
+<h3 id="41-连续值处理">4.1 连续值处理</h3>
+<p>连续属性不能直接根据可取值对结点进行划分，可利用连续属性离散化技术。</p>
+<p>最简单的策略是<code>二分法(bi-partition)</code>（C4.5 决策树算法中 采用）。给定D和连续属性a，将a在D上出现的n个值从小到大进行排序，记为$${a^1,a^2,\cdots,a^n}$$。基于划分点t可将D分为$$D_t^+$$（大于t的值）和 $$D_t^-$$（小于t的值）。t在相邻的属性值区间$$[a^i,a^{i+1})$$内取值划分结果相同，因此把区间的中位点作为候选划分点，考察包含n-1个元素的候选划分点集合：</p>
+<p>$$T_a={ \frac{a^i+a^{i+1}}{2}|i \leq i \leq n-1}$$</p>
+<p>然后选取最优的划分点，如信息增益最大的划分点，那么a属性的信息增益：</p>
+<p>$$Gain(D,a)=\underset {t \in T_a}{\operatorname {max}} \quad Gain(D,a,t)$$<br>
+$$Gain(D,a,t)=Ent(D)-\sum_{\lambda \in {+,-}}
+{\frac {|D_t^{\lambda}|} {|D|} Ent(D_t^{\lambda})}$$</p>
+<p>Gain(D,a,t)表示属性a，t划分点的信息增益。</p>
+<p>注：若当前结点划分属性为连续属性，该属性还 可作为其后代结点的划分属性。</p>
+<h3 id="42-缺失值处理">4.2 缺失值处理</h3>
+<p>两个问题：(1) 如何在属性值缺失的情况进行划分属性选择？(2) 给定划分属性，若样本在该属性上的值缺失如何对样本进行划分？</p>
+<p>对于问题(1)，可根据 D中属性a上没有缺失值的样本子集$$\tilde D$$来判断属性a的优劣。令$$\rho$$表示无缺失值样本所占的比例，$$\tilde{p_k}$$ 表示$$\tilde D$$中第 k 类所占的比例；$$\tilde{r_v}$$则表示$$\tilde D$$中在属性 a 上取值$$a^v$$的样本所占的比例。（若样本有权重根据权重计算）。可将信息增益的计算推广为：</p>
+<p>$$Gain(D,a)=\rho \times Gain(\tilde D,a)$$<br>
+$$Gain(\tilde D,a)=Ent(\tilde D)-\sum_{v=1}^{V}{\tilde{r_v}Ent(\tilde {D^v})}$$<br>
+$$Ent(\tilde D)= -\sum_{k=1}^{|\gamma|}{\tilde{p_k} \log_2\tilde{p_k}}$$</p>
+<p>对问题(2)，取值没有缺失的直接划入对应节点，权重$$w_x$$保持不变。有缺失的样本划入所有节点，样本权重在$$a^v$$节点中调整为$$\tilde {r_v} \cdot w_x$$，这就是让同一个样本以不同的概率划入到不同的子结点中。</p>
+<h2 id="5-多变量决策树">5 多变量决策树</h2>
+<p>把每个属性视为坐标空间中的一个坐标轴，则 d 个属性描述的样本对应了 d 维空间中的一个数据点，对样本分类则意味着在这个坐标空间中寻 找不同类样本之间的分类边界。决策树所形成的分类边界是<code>轴平行(axis-parallel)</code>的，它的分类边界由若干个与坐标轴平行的分段组成。</p>
+<p>在学 习任务的真实分类边界比较复杂时，必须使用很多段划分才能获得较好的近似，此时的决策树会相当复杂。</p>
+<p><code>多变量决策树(multivariate decision tree)</code> 能实现&quot;斜划分&quot;甚至更复杂划分的决策树。非叶结点不再是仅对某个属性，而是对属性的线性组合进行测试，是一个形如 $$\sum_{i=1}^{d}{w_ia_i}=t$$ 的线性分类器。wi是属性ai的权重，wi和 t 可在该结点所含的样本集和属性集上学得。</p>
+<p>在多变量决策树的学习过程中，不是为每个非叶结点寻找一个最优划分属性，而是试图建立一个合适的线性分类器。</p>
+</article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98_%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/>数据挖掘_机器学习</a></section></div><section class="article navigation"><p><a class="link" href="/post/linearmodel/"><span class="li">&rarr;</span>机器学习：线性模型</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>

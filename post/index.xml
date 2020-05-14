@@ -7,10 +7,30 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 Notepadium.</copyright>
-    <lastBuildDate>Tue, 12 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 14 May 2020 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>机器学习：决策树</title>
+      <link>/post/decisiontree/</link>
+      <pubDate>Thu, 14 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/decisiontree/</guid>
+      <description>决策树 1 基本流程 决策树(decision tree)基于树形结构进行决策。一棵决策树包含一个根结点、若干个内部结点和若干个叶结点，叶结点对应于</description>
+      
+    </item>
+    
+    <item>
+      <title>机器学习：线性模型</title>
+      <link>/post/linearmodel/</link>
+      <pubDate>Wed, 13 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/linearmodel/</guid>
+      <description>线性模型 1 基本形式 由d个属性描述的示例 $$\pmb x = (x_1;x_2; \cdots ;x_d)$$，线性模型(linear model)试图学得一个通过属性的线性组合来进行预测的</description>
+      
+    </item>
     
     <item>
       <title>机器学习：模型评估与选择</title>
