@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>机器学习：神经网络&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="机器学习：神经网络" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">机器学习：神经网络</h1><p class="article date">2020-05-15</p></section><article class="article markdown-body"><h1 id="神经网络">神经网络</h1>
+<h2 id="1-神经元模型">1 神经元模型</h2>
+<p><code>神经网络(neural networks)</code>是由具有适应性的简单单元组成的广泛并行互连的网络，它的组织能够模拟生物神经系统对真实世界物体所作出的交互反应。<br>
+<code>神经元(neuron)</code>模型是神经网络中最基本的成分（“简单单元”）。<code>M-P神经元模型</code>：神经元接收到来自n个其他神经元，通过带权重的连接(connection)传递过来的输入信号，神经元将接收到的总输入值与神经元的阀值进行比较，然后通过<code>激活函数(activation function)</code>处理以产生神经元的输出。</p>
+<p>理想的激活函数是阶跃函数，将输入值映射为输出值0（“抑制”）和1（“兴奋”），但不连续、不光滑。实际常用Sigmoid 函数（也称挤压函数(squashing function)）作为激活函数。$$sigmoid(x)=\frac {1}{1+e^{-x}}$$</p>
+<p>可将一个神经网络视为包含了许多参数的数学模型，这个模型是若干个函数（如$$y = f(\sum_{i}{w_ix_i-\theta})$$）相互(嵌套)代入而得。</p>
+<h2 id="2-感知机与多层网络">2 感知机与多层网络</h2>
+<p><code>感知机(Perceptron)</code>由两层神经元组成，输入层接收外界输入信号后传递给输出层，输出层是 M-P神经元，亦称<code>阈值逻辑单元(threshold logic unit)</code>。感知机能容易地实现逻辑与、或、非运算。注：下面对于一个样本会用加粗的向量$$\pmb x或\pmb x_i$$表示，样本中的属性用$$x_i$$表示。</p>
+<h3 id="定义">定义</h3>
+<p>假设输入空间（特征空间）是$$\chi \subseteq {\bf{R}}^d$$，输出空间是$$\gamma={+1,-1}$$。输入$$\pmb x\in\chi$$ 表示实例对应于输入空间的点，输出$$y\in\gamma$$ 表示实例的类别，输入空间到输出空间的函数：</p>
+<p>$$f(x)=sign(\pmb w \cdot \pmb x + b)$$</p>
+<p>称为<strong>感知机</strong>。其中$$\pmb w$$为权值向量，$$b=-\theta$$是偏置，表示阈值的负值。感知机是一种线性分类模型，属于判别模型。</p>
+<p>几何解释：线性方程$$\pmb w \cdot \pmb x + b = 0$$对应特征空间中的一个超平面，<strong>w</strong>是超平面法向量，b是截距。超平面将特征空间划分为两个部分，位于两部分的点（特征向量）分别为正、负两类。</p>
+<p>线性可分：存在超平面将数据集的正、负实例完全正确的分到两侧，则称数据集T为线性可分。</p>
+<h3 id="感知机学习算法">感知机学习算法</h3>
+<p><strong>策略</strong><br>
+定义经验损失函数并将损失函数极小化。<br>
+损失函数的选择：<br>
+1）误分类点总数——不是w，b的连续可导函数，不易优化。<br>
+2）误分类点到超平面S的总距离。（选用）</p>
+<p><strong>损失函数</strong>：<br>
+空间$${\bf{R}}^d$$中一点$$\pmb x_0$$到超平面S的距离：</p>
+<p>$$\frac{1}{\parallel \pmb  w\parallel}| \pmb w\cdot \pmb x_0+b|$$</p>
+<blockquote>
+<p>||<strong>w</strong>||是<strong>w</strong>的L2范数，范数用于衡量向量大小，$$\parallel \pmb x \parallel_p=(\sum_i{|x_i|^p})^{\frac{1}{p}}$$，L2范数即p=2，也称为欧几里得范数。</p>
+</blockquote>
+<p>对于误分类样本$$(\pmb x_i,y_i)$$：<br>
+$$-y_i(\pmb w\cdot \pmb x_i+b)&gt;0$$</p>
+<p>成立，设误分类点集合为M，不考虑$$\frac{1}{\parallel \pmb w\parallel}$$则损失函数（误分类点到S总距离）定义为：</p>
+<p>$$L(\pmb w,b)=-\sum_{x_i\in M}y_i(\pmb w\cdot \pmb x_i+b)$$</p>
+<p><strong>感知机学习算法</strong><br>
+对应于优化问题：$$\min_{w,b}L(w,b)=-\sum_{\pmb x_i\in M}y_i(\pmb w\cdot \pmb x_i+b)$$</p>
+<p>优化方法：随机梯度下降。任意选取一个超平面$$\pmb w_0, b_0$$，不断地极小化目标函数。不是一次使M中所有误分类点的梯度下降，而是一次随机选取一个使其梯度下降。损失函数的梯度由（损失函数求导）：<br>
+$$\nabla_{\pmb w}L(\pmb w,b)=-\sum_{\pmb x_i\in M}{y_i\pmb x_i}$$<br>
+$$\nabla_bL(\pmb w,b)=-\sum_{\pmb x_i\in M}{y_i}$$<br>
+给出。<br>
+随机选取一个误分类点($$\pmb x_i,y_i$$)，对$$\pmb w$$，b进行更新：<br>
+$$\pmb w\leftarrow \pmb w+\eta y_i\pmb x_i$$<br>
+$$b\leftarrow b+\eta y_i$$<br>
+其中$$\eta \in (0,1)$$为学习率。通过不断迭代可以期待损失函数不断减小，直到为0。</p>
+<hr>
+<p>也可将阈值$$\theta$$看作一个固定输入（$$x_{d+1}$$）为-1的<code>哑结点(dummy node)</code>，所对应的连接权重$$w_{d+1}$$。则 
+$$f(x)=sign(\sum_{i=1}^{d+1}{w_ix_i})=sign(\pmb w \cdot \pmb x)$$</p>
+<p>(1)选取初始值$$\pmb w_0$$<br>
+(2)从训练集选取数据$$(\pmb x_i,yi)$$<br>
+(3)如果$$sign(\pmb w_t \cdot \pmb x_i) \neq y_i$$，执行：<br>
+$$\pmb w_{t+1} \leftarrow w_t + y_i\pmb x_i$$<br>
+(4)转到(2)，直到没有误分类点。</p>
+<hr>
+<h3 id="多层网络">多层网络</h3>
+<p>对于线性可分问题，感知机在的学习过程一定会收敛(converge) ，否则感知机学习过程将会发生震荡(fluctuation)，<strong>w</strong>难以稳定。感知机不能解决非线性问题。</p>
+<p>解决非线性可分问题需考虑多层功能神经元。简单的两层感知机就能解决异或问题。多层网络中输出层与输入层之间的神经元层被称为<code>隐层或隐含层(hidden layer)</code>，同输出层神经元一样都是拥有激活函数的功能神经元。</p>
+<p><code>多层前馈神经网络(multi-layer feedforward neural networks)</code>：每层神经元与下层神经元全互连，神经元之间不存在同层连接和跨层连接。<br>
+神经网络的学习过程，就是根据训练数据来调整神经元之间的<code>连接权(connection weight)</code>以及每个功能神经元的阈值。</p>
+<h2 id="3-误差逆传播算法">3 误差逆传播算法</h2>
+<p>感知机的学习规则不适用多层网络的训练，常用<code>误差逆传播(error BackPropagation,BP)算法</code>。BP算法不仅可用于多层前馈神经网络，还可用于其他类型 的神经网络，但通常<code>BP网络</code>是指用 BP 算法训练的多层前馈神经网络。</p>
+<p>1)给定训练集$$D={(\pmb x_1,\pmb y_1),(\pmb x_2,\pmb y_2),\cdots,(\pmb x_m,\pmb y_m)}, \pmb x_i \in {\bf{R}} ^d, \pmb y_i\in {\bf {R}}^l$$；<br>
+2)给定一个包含d个输入、l个输出、q个隐层神经元的多层前馈网络结构；<br>
+3)输出层阈值和隐含层阈值分别为$$\theta_j和\gamma_h$$； <br>
+4)输入层与隐含层之间权重$$v_{ih}$$，隐含层与输出层权重$$w_{hj}$$；<br>
+5)隐层第h个神经元接收到的输入为$$\alpha_h=\sum_{i=1}^{d}{v_{ih}x_i}$$；<br>
+6)输出层第 j 个神经元接收到的输入为$$\beta_j=\sum_{h=1}^{q}{w_{hj}b_h}$$；<br>
+7)$$b_h$$ 为隐层第h个神经元的输出；<br>
+8)激活函数都使用sigmoid函数。</p>
+<div align=center><img src="/dmimg/bp.png" width = "80%" /></div>
+<p>对训练样例$$(\pmb x_k, \pmb y_k)$$，假定神经网络的输山为$$\hat {\pmb y_k}=(\hat y_1^k,\hat y_2^k, \dots, \hat y_l^k)$$，即：<br>
+$$\hat y_j^k=f(\beta_j - \theta)$$
+则网络在该样例上的均方误差为：<br>
+$$E_k=\frac{1}{2}\sum_{j=1}^{l}(\hat y_j^k-y_j^k)^2$$</p>
+<p>该网络有$$(d+l+1)q+l$$个参数需要确定。BP 是一个迭代学习算法，在迭代的每一轮中采用广义的感知机学习规则对参数进行更新估计，任意参数 v 的更新估计式为：<br>
+$$v \leftarrow v + \Delta v$$</p>
+<p>以隐层到输出层的连接权$$w_{hj}$$为例进行推导：<br>
+BP算法基于梯度下降(gradient descent)策略，以目标的负梯度方向对参数进行调整，对于误差$$E_k$$，给定学习率$$\eta$$，有：<br>
+$$\Delta w_{hj}=-\eta \frac{\partial E_K}{\partial w_{hj}}$$<br>
+注意到$$w_{hj}$$先影响到第j个输出层神经元的输入值$$\beta_j$$，再影响到其输出值$$\hat y_j^k$$， 然后影响到 $$E_k$$， 有：<br>
+$$\frac{\partial E_k}{\partial w_{hj}}=
+\frac{\partial E_k}{\partial \hat y_j^k} \cdot 
+\frac{\partial \hat y_j^k}{\partial \beta_j} \cdot 
+\frac{\partial \beta_j}{\partial w_{hj}} 
+$$</p>
+<p>根据$$\beta_j$$的定义，有：<br>
+$$\frac{\partial \beta_j}{\partial w_{hj}} = b_h$$</p>
+<p>Sigmoid 函数有一个很好的性质:<br>
+$$f&rsquo; (x)=f(x)(1-f(x))$$</p>
+<p>根据$$E_k和\hat y_j^k$$定义，有：<br>
+$$g_i =-\frac{\partial E_k}{\partial \hat y_j^k} \cdot 
+\frac{\partial \hat y_j^k}{\partial \beta_j} $$<br>
+$$= -(\hat y_j^k-y_j^k)f&rsquo;(\beta_j-\theta_j) $$<br>
+$$= \hat y_j^k(1-\hat y_j^k)(y_j^k-\hat y_j^k)$$</p>
+<p>综上：<br>
+$$\Delta w_{hj}=\eta g_jb_h$$</p>
+<p>类似可得：</p>
+<p>$$\Delta \theta_{j}=-\eta g_j$$<br>
+$$\Delta v_{ih}=\eta e_hx_i$$<br>
+$$\Delta \gamma_{h}=-\eta e_h$$</p>
+<p>其中：<br>
+$$e_h =-\frac{\partial E_k}{\partial b_h} \cdot \frac{\partial b_h}{\partial \alpha_h} $$</p>
+<p>$$= -\sum_{j=1}^{l}{ 
+\frac{\partial E_k}{\partial \beta_j} \cdot 
+\frac{\partial \beta_j}{\partial b_h}
+f&rsquo;(\alpha_h-\gamma_h)
+} $$<br>
+$$ = \sum_{j=1}^{l}{w_{hj}g_i f&rsquo;(\alpha_h-\gamma_h)} $$<br>
+$$= b_h(1-b_h)\sum_{j=1}^{l}{w_{hj}g_i}$$</p>
+<p>学习率控制着算法每一轮迭代中的更新步长，太大则容易震荡，太小则收敛速度又会过慢。常设置为0.1。</p>
+<p>需注意的是，BP 算法的目标是要最小化训练集 D 上的累积误差：<br>
+$$E=\frac{1}{m}\sum_{k=1}^{m}{E_k}$$</p>
+<p>上述推导是针对单个样本更新权值阈值，可以类似地推导出基于累积误差最小化的更新规则。</p>
+<p>(Hornik et al., 1989)证明，只需一个包含足够多神经元的隐层，多层前馈网 络就能以任意精度逼近任意复杂度的连续函数。但隐层神经元的 个数仍是个未决问题，实际应用中通常靠<code>试错法(trial-by-error)</code>调整。</p>
+<p>正是由于其强大的表示能力，BP 神经网络经常遭遇过拟合。其训练误差持 续降低，但测试误差却可能上升。两种策略：</p>
+<ul>
+<li><code>早停(early stopping)</code>: 若训练集误差降低但验证集误差升高，则停止训练，同时返回具有最小验证集误差的连接权和阈值。</li>
+<li><code>正则化(regularization)</code> 其基本思想是在误差目标函数中增加一个用于描述网络复杂度的部分，例如连接权与阔值的平方和。仍令$$E_k$$表示第 k 个训练样例上的误差，$$w_i$$表示连接权和阈值，则误差目标函数改变为：<br>
+$$E=\lambda\frac{1}{m}\sum_{k=1}^{m}{E_k}+(1-\lambda)\sum_{i}{w_i^2}$$</li>
+</ul>
+<p>其中$$\lambda \in (0,1)$$用于对经验误差与网络复杂度这两项进行折中，常通过交叉验 证法来估计。</p>
+<h2 id="4-全局最小与局部极小">4 全局最小与局部极小</h2>
+<p>神经网络的训练过程可看作一个参数寻优过程，即在参数空间寻找一组最优权值和阈值参数使误差E最小。</p>
+<ul>
+<li><code>局部极小解</code>是参数空间中的某个点，其邻域点的误差函数值均不小于该点的函数值；</li>
+<li><code>全局最小解</code>则是指参数空间中所有点的误差函数值均不小于该点的误差函数值。</li>
+<li>参数空间内梯度为零的点，只要其误差函数值小于邻点的误差函值，就是局部极小点。</li>
+<li>可能存在多个局部极小值，但却只会有一个全局最小值。</li>
+</ul>
+<p>基于梯度的搜索是使用最为广泛的参数寻优方法。从某些初始解出发，迭代寻找最优参数值，每次迭代中先计算误差函数在当前点的梯度，然后根据梯度确定搜索方向。</p>
+<p>若误差函数在当前点的梯度为零，则已达到局部极小，更新量将为零，这意味着参数的迭代更 新将在此停止。如果误差函数具有多个局部极小，则不能保证找到的解是全局最小。应对策略：</p>
+<ul>
+<li>以多组不同参数值初始化多个神经网络，按标准方法训练后，取其中误差最小的解作为最终参数。</li>
+<li>使用 <code>模拟退火(simulated annealing)</code>技术，模拟退火在每一步都以一定的概率接受比当前解更差的结果，从而有助于 &ldquo;跳出&quot;局部极小。在每步迭代过程中，接受&quot;次优解&quot;的概率要随着时间的推移而逐渐降低，从而保证算法稳定。</li>
+<li>使用<code>随机梯度下降</code>。与标准梯度下降法精确计算梯度不同， 随机梯度下降 法在计算梯度时加入了随机因素。即便陷入局部极小点，它计算出的梯度仍可能不为零，这样就有机会跳出局部极小继续搜索。</li>
+<li>遗传算法(genetic algorithms)</li>
+</ul>
+<p>上述用于跳出局部极小的技术大多是 启发式，理论上尚缺乏保障。</p>
+</article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98_%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/>数据挖掘_机器学习</a></section></div><section class="article navigation"><p><a class="link" href="/post/decisiontree/"><span class="li">&rarr;</span>机器学习：决策树</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>
