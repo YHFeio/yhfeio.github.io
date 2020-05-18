@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en"><meta charset="utf-8"><meta name="generator" content="Hugo 0.69.0" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark"><title>机器学习基石：When Can Machines Learn&nbsp;&ndash;&nbsp;YHFeio</title><link rel="stylesheet" href="/css/core.min.7a6dedeee7291c9daf16368afd3f5958f3793b2e6f9fa92597ff1df00f09a979724933f1b5bcf4264af992bb6fbee89c.css" integrity="sha384-em3t7ucpHJ2vFjaK/T9ZWPN5Oy5vn6kll/8d8A8JqXlySTPxtbz0Jkr5krtvvuic"><meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="机器学习基石：When Can Machines Learn" /><body>
+    <div class="base-body"><section id="header" class="site header">
+    <div class="header wrap"><span class="header left-side"><a class="site home" href="/"><img class="site logo" src="/logo.png" alt /><span class="site name">YHFeio</span></a></span>
+        <span class="header right-side"><div class="nav wrap"><nav class="nav"><a class="nav item" href="/categories/">Categories</a><a class="nav item" href="/tags/">Tags</a><a class="nav item" href="/about/">About</a></nav></div></span></div><div class="site slogan"><span class="title">Nice Things</span></div></section><div id="content"><div class="article-container"><section class="article header">
+    <h1 class="article title">机器学习基石：When Can Machines Learn</h1><p class="article date">2020-05-18</p></section><article class="article markdown-body"><h2 id="the-learning-problem">The Learning Problem</h2>
+<p>学习：通过观察积累经验，观察——&gt;学习——&gt;技能。<br>
+机器学习（machine learning）：从数据中计算得到经验，数据——&gt;ML——&gt;技能。</p>
+<p>“技能（skill）”：某一种表现的增进；如通过股票数据获得股票收益的提升。</p>
+<p>为什么要使用机器学习，例：在图片中识别树。</p>
+<ul>
+<li>“定义”树然后手动编写规则是困难的。</li>
+<li>从数据中学习（观察）然后辨认。</li>
+<li>“基于机器学习的识别系统”相对于手动编写规则更容易。</li>
+</ul>
+<p>什么时候使用：</p>
+<ul>
+<li>无法对某一系统手动编写规则解决问题</li>
+<li>无法简单地定义解决问题的方法</li>
+<li>需要更频繁地做出决策</li>
+<li>应用为许多用户提供个性化服务</li>
+</ul>
+<p>三个必要的条件：</p>
+<ul>
+<li>存在潜在的可学习的模式，从而带来“表现”的提高</li>
+<li>这种模式不能通过简单的编写规则来定义</li>
+<li>数据</li>
+</ul>
+<p>机器学习组成部分</p>
+<ul>
+<li><code>输入：</code>$$\pmb x \in \chi$$</li>
+<li><code>输出：</code>$$y \in \gamma$$</li>
+<li><code>目标函数（taget function）</code>需要学习的未知模式）：$$f:\chi -&gt; \gamma$$</li>
+<li><code>数据;训练样本</code>：$$D={(\pmb x_1,y_1),(\pmb x_2, y_2),\cdots,(\pmb x_N,y_N)}$$</li>
+<li><code>假设（hypothesis），技能</code>：通过数据学到的模式，希望其表现很好：$$g:\chi -&gt; \gamma$$</li>
+</ul>
+<div align=center><img src="/dmimg/learn.png" width = "80%" /></div>
+<p>即根据来自未知模式f的数据，通过机器学习学到g，使其尽可能接近f。</p>
+<p>通过数据学习g的过程使从<code>假设空间（hypothesis set）</code>中选择最优的假设g，假设空间包含所有允许的可能的假设，有好有坏。机器学习算法根据输入数据和假设空间进行学习，选出它觉得最好的假设。</p>
+<p>学习算法和假设空间组合起来称为模型。</p>
+<p>机器学习和数据挖掘：机器学习是通过数据计算出接近目标函数f的假设g。数据挖掘通过大量数据挖掘出有价值的关系等。某些情况下两者相同，或者数据挖掘可以帮助到机器学习。数据挖掘也关注如何更高效地处理海量数据<br>
+机器学习和人工智能：人工智能是计算出某种东西表现出智能的行为。如果f是智慧的行为，机器学习可以实现人工智能。<br>
+机器学习和统计：统计通过数据进行推论。统计是一种实现机器学习的方法。传统统计学关注数学假设下可证明的推论，机器学习更重视计算。</p>
+<h2 id="learning-to-answer-yesno">Learning to Answer Yes/No</h2>
+<p>一个简单的假设空间：<code>感知机</code></p>
+<p>例子：是否发信用卡<br>
+对于客户的特征向量$$\pmb x=(x_1,x_2,\cdots,x_d)$$，计算加权分数，并且：<br>
+$$approve \quad if\quad \sum_{i=1}^{d}{w_ix_i} &gt; threshold$$<br>
+$$deny\quad if \quad \sum_{i=1}^{d}{w_ix_i} &lt; threshold$$</p>
+<p><strong>定义：</strong> $$\gamma:{+1(good),-1(bad)}$$，可能的假设$$h\in H$$<br>
+$$h(x)=sign((\sum_{i=1}^{d}{w_ix_i})-threshold)$$</p>
+<p>将阈值扩充到w中作为w0，因此x中x0恒为-1，则写成向量：<br>
+$$h(x)=sign(\pmb w^T \pmb x)$$</p>
+<p>以二维为例：</p>
+<ul>
+<li>顾客特征$$\pmb x$$：平面上的点（多维时，d维空间中的点）</li>
+<li>标签（labels）y：+1,-1</li>
+<li>假设（hypothesis） h：平面中的直线（多维时，空间中的超平面），并且希望正负两类在线的两侧。</li>
+</ul>
+<p><strong>学习算法</strong>（从H选择g）</p>
+<ul>
+<li>目标：$$g\approx f$$</li>
+<li>理想状态：对D中所有数据，$$g(\pmb x_n)=f(\pmb x_n)=y_n$$</li>
+<li>困难：假设空间H是无穷的</li>
+<li>思路：从某个g0开始，修正其在D上的错误，即逐渐修正权值向量w0</li>
+</ul>
+<p>PLA（Perceptron Learning Algorithm）：<br>
+从某个w0开始<br>
+for t=0,1,&hellip;.<br>
+1: 对于$$\pmb w_t$$分类错误的样本$$(\pmb x_{n(t),y_{n(t)}})$$，即：<br>
+$$sign(\pmb w^T \pmb x_{n(t)}) \neq y_{n(t)}$$<br>
+2: 修正错误：<br>
+$$\pmb w_{t+1} \leftarrow \pmb w_t + y_{n(t)}\pmb x_{n(t)}$$<br>
+直到没有误分类，返回最终的w</p>
+<p>PLA算法的问题：</p>
+<ul>
+<li>一定会停下来吗</li>
+<li>停下来之后获得的假设g在D之外的数据表现如何</li>
+</ul>
+<p><strong>线性可分（Linear Separability）</strong></p>
+<p>存在超平面将数据集的正、负实例完全正确的分到两侧，则称数据集D为线性可分。</p>
+<p>PLA可以停下来的必要条件是数据集D是线性可分的。</p>
+<p><strong>PLA Fact</strong><br>
+线性可分数据集D：存在最佳的权值向量$$\pmb w_f$$将所有数据点正确划分。那么所有数据点都会远离正确的划分线： <br>
+$$\min_n y_n\pmb w_f^T \pmb x_n &gt; 0$$</p>
+<p>并且当前误分类点到正确划分线的距离也一定不小于这个最小距离：<br>
+$$y_{n(t)}\pmb w_f^T\pmb x_{n(t)}\geq\min_n y_n\pmb w_f^T \pmb x_n &gt; 0$$</p>
+<p>当对这个误分类点更新后：</p>
+<p>$$\pmb w_f^T\pmb w_{t+1}=\pmb w_f^T(\pmb w_t+y_{n(t)}\pmb x_{n(t)})$$<br>
+$$\geq \pmb w_f^T\pmb w_t + \min_n y_n\pmb w_f^T \pmb x_n $$<br>
+$$&gt; \pmb w_f^T\pmb w_t + 0$$</p>
+<p>即$$\pmb w_f^T\pmb w_t$$内积越来越大，在不考虑向量长度时表示两个向量越来越接近，但长度也是要考虑的。</p>
+<p>我们只对误分类点进行权重更新，对于误分类点：<br>
+$$y_{n(t)}\pmb w_t^T\pmb x_{n(t)} leq 0$$<br>
+又有：<br>
+$$||\pmb w_{t+1}||^2=||\pmb w_t+y_{n(t)}\pmb x_{n(t)}||^2$$<br>
+$$=||\pmb w_t||^2 + 2y_{n(t)}\pmb w_t^T\pmb x_{n(t)} + ||y_{n(t)}\pmb x_{n(t)}||^2$$<br>
+$$\leq ||\pmb w_t||^2 +0+||y_{n(t)}\pmb x_{n(t)}||^2$$</p>
+<p>那么$$\pmb w_t$$每次最多增长$$\max_n ||y_nx_n||^2$$，会慢慢增长</p>
+<p>从$$\pmb w_0= \pmb 0$$开始，T次错误修正后：<br>
+$$\frac{\pmb w_f^T}{||\pmb w_f||} frac{\pmb w_T}{||\pmb w_T||} \geq \sqrt{T} \cdot constant$$</p>
+<p>计算出常数constant。</p>
+<p>$$R^2=\max_n ||\pmb x_n||^2; \rho=\min_n y_n\frac{\pmb w_f^T}{||\pmb w_f||}\pmb x_n$$</p>
+<p>PLA最多$$R^2/\rho ^2$$后停下来。</p>
+<p>对于线性可分数据集，运行PLA算法（针对误分类数据更新）：</p>
+<ul>
+<li>wf和wt的内积增长快，wt的长度增长缓慢</li>
+<li>g这条直线越来越接近wf表示的直线，PLA会最终停下来</li>
+</ul>
+<p>问题：<br>
+1）不知道数据集是否线性可分，只有线性可分才能停下来<br>
+2）线性可分，但多久会停下来，$$\rho$$依赖于$$\pmb w_f$$。</p>
+<p><strong>噪声</strong></p>
+<p>对于含还有少量噪声的数据集，我们寻找犯错误最少的那条线。<br>
+$$\pmb w_g \leftarrow \argmin_{\pmb w}\sum_{n=1}^{N}boolean(y_n \neq sign(\pmb w^T\pmb x_n))$$<br>
+但这是个NP难题。</p>
+<p>贪心算法，（pocket PLA）跟原来的PLA类似，但会存储一个当前最好的权值向量，并且每次是随机的选取一个误分类点，然后执行更新，最后比较更新后的权值和保存的当前最优权值哪个更好就保存那个。直到最大迭代次数停止。</p>
+<h2 id="types-of-learning">Types of Learning</h2>
+<p><strong>分类 Classification</strong><br>
+前面讲到的信用卡应用是以这种是非题，即<code>二分类问题（Binary Classification Problems）</code>。$$\gamma = {+1,-1}$$</p>
+<p><code>多分类问题（Multiclass Classification）</code>，如手写数字识别，标签不再是正反两类，而是多个类别。$$\gamma={1,2,\cdots,K}$$</p>
+<p><strong>回归 Regression</strong><br>
+回归的输出是实数，$$\gamma = {\bf R}$$</p>
+<p><strong>结构化学习 Structured Learning</strong><br>
+如序列标注问题，输入一个句子，输出是每个词的标注序列。</p>
+<hr>
+<p><strong>监督学习 Supervised Learning</strong><br>
+数据集中给出样本的标签。</p>
+<p><strong>无监督学习 Unsupervised Learning</strong><br>
+数据集中样本没有标签。</p>
+<ul>
+<li><code>聚类问题（clustering）</code></li>
+<li><code>密度估计（density estimation）</code></li>
+<li><code>离群点检测（outlier detection）</code></li>
+<li>其他</li>
+</ul>
+<p><strong>半监督学习 Semi-supervised Learning</strong><br>
+只给出一部分样本的标签。</p>
+<p><strong>强化学习 Reinforcement Learning</strong></p>
+<p>例如让狗学会听指令坐下，当对它说“坐下”，但狗狗没有坐下时，给一定的惩罚，如果坐下了则给一定的奖励。即根据系统对输入数据做出的输出正确与否，进行惩罚或奖励。</p>
+<p>如广告系统，根据顾客对广告的行为来学习。还有棋牌游戏。</p>
+<hr>
+<p><strong>批量学习 Batch Learing</strong><br>
+即给算法一批数据获得假设g。</p>
+<p><strong>在线学习 Online</strong><br>
+如在线的垃圾邮件过滤系统，每当接收到一个邮件，根据当前的假设g做出判断，然后接收到用户给出的真实的标签，据次来更新假设g。</p>
+<p>随着不断地接收到新数据来不断提高假设的性能。</p>
+<p><strong>主动学习 Active Learning</strong><br>
+上述两种都是机器学习算法被动接收道数据。主动学习抽象来讲是算法主动问问题，即算法给出x，询问该样本的真实标签。主动学习可通一些技巧，利用较少的询问得到的标记来学习。</p>
+<hr>
+<p><strong>Concrete Features</strong><br>
+如申请信用卡数据中特征都很明确。</p>
+<p><strong>Raw Features</strong><br>
+如手写数字识别，输入16x16的灰阶图像，转换为256维度的向量。<br>
+常见于图像像素、语音数据。<br>
+通常需要特征工程转换为concrete features。</p>
+<p><strong>Abstract Features</strong><br>
+如给定用户id、项目id和评分，来预测某一用户对某个项目id的评分。</p>
+<h2 id="feasibility-of-learning">Feasibility of Learning</h2>
+<p><code>没有免费午餐定理（No Free Lunch）</code>：没有一个学习算法可以在任何领域总是产生最准确的学习器。总误差竟与算法无关，无论算法多好在没有实际背景情况下都不优于随机胡猜。学习不可行？</p>
+<p>罐子里有很多球，包括橘色和绿色两种颜色，那么他们的比例是多少（多到不能一个一个数）。<br>
+从罐子里随机抽取一把，假设：真实的橘色球比例为$$\mu$$，抽取出来的球中橘色球比例为$$v$$，抽样样本量为N，当N很大时，两者会很接近：<br>
+$$P[|v-\mu|&gt;\epsilon] \leq 2\exp(-2\epsilon^2N)$$</p>
+<p>霍夫丁不等式。</p>
+<p>与机器学习对应：</p>
+<ul>
+<li>$$\mu$$对应于目标函数f</li>
+<li>球对应于样本x</li>
+<li>橘色对应于 当前假设h是错误的，h(x)!=f(x)</li>
+<li>绿色对应于 当前假设h是正确的，h(x)=f(x)</li>
+<li>抽样N对应于，h在数据集D上的表现。</li>
+</ul>
+<p>当N特别大是时，可以估计h(x)!=f(x)的几率。</p>
+<p>对于某一固定的假设h，对于大量数据，样本内错误率Ein(h)接近样本外错误率Eout(h)：</p>
+<p>$$P[|E_{in}(h)-E_{out}(h)| &gt; \epsilon] \leq 2\exp(-2\epsilon^2N)$$</p>
+<p>“Ein(h)=Eout(h)&ldquo;是 probably approximately correct，PAC</p>
+<p>如果Ein(h)很小并且学习算法选择该h作为g，那么“g=f”是PAC</p>
+<p>霍夫丁不等式是保证对于特定的h，有很大的几率Ein=Eout，即有很大的几率能够正确评估h的错误率，并且两者差很大的概率是$$2\exp(-2\epsilon^2N)$$。</p>
+<p>当有多个（M个）h可选择，并且按照在D上最小Ein来选择h作为g，那么正好选到的是一个Ein和Eout差别很大的h的概率：<br>
+BAD D for h1 表示h1在D上Ein和Eout差别很大，其概率是$$2\exp(-2\epsilon^2N)$$。</p>
+<p>$$P[BAD\quad D \quad for\quad h_1\quad or \quad \cdots\quad BAD\quad D \quad for\quad h_M]$$<br>
+$$\leq P[BAD\quad D \quad for\quad h_1]+ \cdots + P[BAD\quad D \quad for\quad h_M]$$<br>
+$$=2M\exp(-2\epsilon^2N)$$</p>
+<p>因此，“Ein(g)=Eout(g)”是PAC。</p>
+<p>这就说明如果|H|=M是有限的，当N足够大时，不管算法挑选的g是什么样，都有Eout(g)和Ein(g)很接近。<br>
+如果学习算法挑选的g是Ein(g)接近0，PAC保证Eout(g)也接近0。即保证学习是可行的。</p>
+<p>对于M无限，后面会解决。</p>
+</article><section class="article labels"><a class="category" href=/categories/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98_%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/>数据挖掘_机器学习</a></section></div><section class="article navigation"><p><a class="link" href="/post/nn/"><span class="li">&rarr;</span>机器学习：神经网络</a></p></section></div><section id="footer" class="footer"><div class="footer-wrap">
+    <p class="copyright">©2020 Notepadium.</p>
+    <p class="powerby"><span>Powered by </span><a href="https://gohugo.io" 
+        target="_blank">Hugo</a><span> and the </span><a href="https://themes.gohugo.io/hugo-notepadium/" 
+        target="_blank">Notepadium</a></p>
+</div></section><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/&#43;DiW/UqRcLbRjq" crossorigin="anonymous"><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l&#43;B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd&#43;qj&#43;o24G5ZU2zJz" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+            onload="renderMathInElement(document.body);"></script></div>
+</body>
+
+</html>
